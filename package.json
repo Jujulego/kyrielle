@@ -1,11 +1,11 @@
 {
-  "name": "---",
-  "version": "1.0.0",
+  "name": "kyrielle",
+  "version": "0.0.0",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jujulego/"
+    "url": "https://github.com/jujulego/kyrielle"
   },
   "publishConfig": {
     "access": "public"
