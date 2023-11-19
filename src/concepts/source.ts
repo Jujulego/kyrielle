@@ -1,5 +1,4 @@
-import { Emitter } from './emitter.js';
-import { Observable } from './observable.js';
+import { Emitter, Observable } from '../features/index.js';
 
 /**
  * Simple data source

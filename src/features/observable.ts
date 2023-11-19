@@ -1,4 +1,4 @@
-import { Listener, OffFn } from './common.js';
+import { Listener, OffFn } from '../types/index.js';
 
 /**
  * Object that can be observed

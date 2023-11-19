@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Listener } from '@/src/defs/common.js';
+import { Listener } from '@/src/types/common.js';
 import { source$, SourceObj } from '@/src/source.js';
 
 // Setup
