@@ -1,7 +1,7 @@
 /**
  * Objects emitting data
  */
-export interface Emitter<D = unknown> {
+export interface Emitter<in D = unknown> {
   /**
    * Emits given data
    * @param data

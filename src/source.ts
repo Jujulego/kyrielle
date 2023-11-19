@@ -4,7 +4,7 @@ import { Listener } from './types/index.js';
 /**
  * Source object with registered listeners
  */
-export interface SourceObj<D = unknown> extends Source<D> {
+export interface SourceObj<in out D = unknown> extends Source<D> {
   /**
    * Registered listeners
    */
