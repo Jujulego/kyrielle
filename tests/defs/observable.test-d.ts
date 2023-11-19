@@ -1,4 +1,5 @@
 import { expectTypeOf } from 'vitest';
+
 import { Observable, ObservedValue } from '@/src/defs/observable.js';
 
 describe('ObservedValue', () => {
