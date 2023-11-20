@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { multiplexer$, MultiplexerObj } from '@/src/multiplexer.js';
+import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { source$, SourceObj } from '@/src/source.js';
 
 // Setup

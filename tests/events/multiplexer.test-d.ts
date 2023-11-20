@@ -2,7 +2,7 @@
 import { assertType } from 'vitest';
 
 //import { group$ } from '@/src/group.js';
-import { multiplexer$ } from '@/src/multiplexer.js';
+import { multiplexer$ } from '@/src/events/multiplexer.js';
 import { source$ } from '@/src/source.js';
 
 describe('nested source', () => {

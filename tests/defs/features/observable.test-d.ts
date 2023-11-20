@@ -1,6 +1,6 @@
 import { expectTypeOf } from 'vitest';
 
-import { Observable, ObservedValue } from '@/src/features/observable.js';
+import { Observable, ObservedValue } from '@/src/defs/features/observable.js';
 
 describe('ObservedValue', () => {
   it('should be a number', () => {

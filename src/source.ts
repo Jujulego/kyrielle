@@ -1,5 +1,4 @@
-import { Source } from './concepts/index.js';
-import { Listener } from './types/index.js';
+import { Listener, Source } from './defs/index.js';
 
 /**
  * Source object with registered listeners
