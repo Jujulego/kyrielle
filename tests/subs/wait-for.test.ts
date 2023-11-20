@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-// import { group$, GroupObj } from '@/src/group.js';
+import { group$, GroupObj } from '@/src/events/group.js';
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { source$, SourceObj } from '@/src/source.js';
 import { off$ } from '@/src/subs/off.js';
@@ -9,12 +9,12 @@ import { waitFor$ } from '@/src/subs/wait-for.js';
 // Setup
 let src: SourceObj<number>;
 let mlt: MultiplexerObj<{ src: SourceObj<number> }>;
-// let grp: GroupObj<{ src: SourceObj<number> }>;
+let grp: GroupObj<{ src: SourceObj<number> }>;
 
 beforeEach(() => {
   src = source$();
   mlt = multiplexer$({ src });
-  // grp = group$({ src });
+  grp = group$({ src });
 });
 
 describe('waitFor$', () => {
@@ -61,26 +61,26 @@ describe('waitFor$', () => {
   });
 
   describe('on a listenable observable', () => {
-    // it('should resolve when listenable part emits', async () => {
-    //   setTimeout(() => grp.emit('src', 1), 0);
-    //   vi.spyOn(grp, 'on');
-    //   vi.spyOn(grp, 'subscribe');
-    //
-    //   await expect(waitFor$(grp, 'src')).resolves.toBe(1);
-    //
-    //   expect(grp.on).toHaveBeenCalledWith('src', expect.any(Function));
-    //   expect(grp.subscribe).not.toHaveBeenCalled();
-    // });
-    //
-    // it('should resolve when observable part emits', async () => {
-    //   setTimeout(() => grp.emit('src', 1), 0);
-    //   vi.spyOn(grp, 'on');
-    //   vi.spyOn(grp, 'subscribe');
-    //
-    //   await expect(waitFor$(grp)).resolves.toBe(1);
-    //
-    //   expect(grp.on).toHaveBeenCalledWith('src', expect.any(Function));
-    //   expect(grp.subscribe).toHaveBeenCalled();
-    // });
+    it('should resolve when listenable part emits', async () => {
+      setTimeout(() => grp.emit('src', 1), 0);
+      vi.spyOn(grp, 'on');
+      vi.spyOn(grp, 'subscribe');
+
+      await expect(waitFor$(grp, 'src')).resolves.toBe(1);
+
+      expect(grp.on).toHaveBeenCalledWith('src', expect.any(Function));
+      expect(grp.subscribe).not.toHaveBeenCalled();
+    });
+
+    it('should resolve when observable part emits', async () => {
+      setTimeout(() => grp.emit('src', 1), 0);
+      vi.spyOn(grp, 'on');
+      vi.spyOn(grp, 'subscribe');
+
+      await expect(waitFor$(grp)).resolves.toBe(1);
+
+      expect(grp.on).toHaveBeenCalledWith('src', expect.any(Function));
+      expect(grp.subscribe).toHaveBeenCalled();
+    });
   });
 });
