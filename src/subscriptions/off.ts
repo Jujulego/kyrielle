@@ -1,4 +1,4 @@
-import { OffFn } from './defs/index.js';
+import { OffFn } from '../defs/index.js';
 
 // Types
 export interface OffGroup extends OffFn {
