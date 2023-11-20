@@ -1,7 +1,7 @@
 /**
  * Objects emitting data
  */
-export interface Emitter<in D = unknown> {
+export interface Emitter<in D = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * Emits given data
    * @param data
