@@ -27,10 +27,10 @@
       "import": "./dist/events/index.js",
       "default": "./dist/events/index.js"
     },
-    "./subscriptions": {
-      "types": "./dist/subscriptions/index.d.ts",
-      "import": "./dist/subscriptions/index.js",
-      "default": "./dist/subscriptions/index.js"
+    "./subs": {
+      "types": "./dist/subs/index.d.ts",
+      "import": "./dist/subs/index.js",
+      "default": "./dist/subs/index.js"
     }
   },
   "scripts": {
