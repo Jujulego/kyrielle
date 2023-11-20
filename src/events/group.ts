@@ -3,19 +3,19 @@ import { off$ } from '../subs/off.js';
 import { multiplexer$ } from './multiplexer.js';
 
 /**
- * Group object with mapped sources
+ * Group object with mapped origins
  */
 export interface GroupObj<M extends OriginMap> extends Group<EmittedDataMap<M>, ListenedDataMap<M>> {
   /**
-   * Mapped sources
+   * Mapped origins
    */
-  readonly sources: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
+  readonly origins: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
 }
 
 export type GroupListener<M extends OriginMap> = DataListener<ListenedDataMap<M>>;
 
 /**
- * Builds a group routing events to sources within the given map, and emitting any "child" event
+ * Builds a group routing events to origins within the given map, and emitting any "child" event
  * @param map
  */
 export function group$<M extends OriginMap>(map: M): GroupObj<M> {
@@ -31,6 +31,7 @@ export function group$<M extends OriginMap>(map: M): GroupObj<M> {
 
       return off;
     },
+
     unsubscribe(listener: GroupListener<M>) {
       for (const key of mlt.eventKeys()) {
         mlt.off(key, listener);

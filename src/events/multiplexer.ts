@@ -2,35 +2,35 @@ import { DataKey, EmittedDataMap, ListenedDataMap, Multiplexer, OriginMap } from
 import { _multiplexer$ } from './bases/index.js';
 
 /**
- * Multiplexer object with mapped sources
+ * Multiplexer object with mapped origins
  */
 export interface MultiplexerObj<M extends OriginMap> extends Multiplexer<EmittedDataMap<M>, ListenedDataMap<M>> {
   /**
-   * Mapped sources
+   * Mapped origins
    */
-  readonly sources: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
+  readonly origins: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
 }
 
 /**
- * Builds a multiplexer routing events to sources within the given map
+ * Builds a multiplexer routing events to origins within the given map
  * @param map
  */
 export function multiplexer$<const M extends OriginMap>(map: M): MultiplexerObj<M> {
-  const sources = new Map(Object.entries(map) as [DataKey<M>, M[DataKey<M>]][]);
+  const origins = new Map(Object.entries(map) as [DataKey<M>, M[DataKey<M>]][]);
 
-  function getSource<const K extends DataKey<M>>(key: K): M[K] {
-    const src = sources.get(key);
+  function getOrigin<const K extends DataKey<M>>(key: K): M[K] {
+    const src = origins.get(key);
 
     if (!src) {
-      throw new Error(`Child source ${key} not found`);
+      throw new Error(`Child origin ${key} not found`);
     }
 
     return src as M[K];
   }
 
-  return Object.assign(_multiplexer$<M>(sources, getSource), {
-    get sources() {
-      return sources;
+  return Object.assign(_multiplexer$<M>(origins, getOrigin), {
+    get origins() {
+      return origins;
     }
   });
 }

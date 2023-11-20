@@ -99,7 +99,7 @@ describe('group$', () => {
 
     it('should not emit child event as child doesn\'t exists', () => {
       expect(() => grp.emit('toto' as 'int', 1))
-        .toThrow(new Error('Child source toto not found'));
+        .toThrow(new Error('Child origin toto not found'));
     });
   });
 
@@ -124,7 +124,7 @@ describe('group$', () => {
 
     it('should not subscribe to child event as child doesn\'t exists', () => {
       expect(() => grp.on('toto' as 'int', vi.fn()))
-        .toThrow(new Error('Child source toto not found'));
+        .toThrow(new Error('Child origin toto not found'));
     });
   });
 
@@ -149,7 +149,7 @@ describe('group$', () => {
 
     it('should not unsubscribe from child event as child doesn\'t exists', () => {
       expect(() => grp.off('toto' as 'int', vi.fn()))
-        .toThrow(new Error('Child source toto not found'));
+        .toThrow(new Error('Child origin toto not found'));
     });
   });
 
@@ -181,7 +181,7 @@ describe('group$', () => {
 
     it('should not clear child as child doesn\'t exists', () => {
       expect(() => grp.clear('toto' as 'int'))
-        .toThrow(new Error('Child source toto not found'));
+        .toThrow(new Error('Child origin toto not found'));
     });
   });
 });
