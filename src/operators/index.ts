@@ -1,4 +1,5 @@
 export * from './dynamic.js';
+export * from './flow.js';
 export * from './inherit.js';
 export * from './lazy.js';
 export * from './merge.js';
