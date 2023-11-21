@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
-import { Observable } from '@/src/defs/index.js';
-import { flow$, PipeContext } from '@/src/operators/index.js';
+import { Observable } from '@/src/defs/features/observable.js';
+import { flow$ } from '@/src/operators/flow.js';
+import { PipeContext } from '@/src/operators/pipe.js';
 import { source$ } from '@/src/source.js';
 
 describe('flow$', () => {

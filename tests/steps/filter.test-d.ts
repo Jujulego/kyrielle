@@ -1,7 +1,8 @@
-import { source$ } from '@jujulego/event-tree';
 import { describe, expectTypeOf } from 'vitest';
 
-import { filter$, pipe$ } from '@/src/index.js';
+import { pipe$ } from '@/src/operators/pipe.js';
+import { filter$ } from '@/src/steps/filter.js';
+import { source$ } from '@/src/source.js';
 
 // Tests
 describe('filter$', () => {

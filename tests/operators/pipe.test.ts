@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Observable } from '@/src/defs/index.js';
+import { Observable } from '@/src/defs/features/observable.js';
 import { pipe$, PipeContext } from '@/src/operators/pipe.js';
 import { source$ } from '@/src/source.js';
 
