@@ -23,11 +23,11 @@ export type Lazify<O extends AnyOrigin> = Pick<O, Extract<keyof O, keyof LazyOri
 export function lazy$<O extends AnyOrigin>(cb: () => O): Lazify<O>;
 
 export function lazy$(cb: () => AnyOrigin): LazyOrigin {
-  let _src: AnySource | null = null;
+  let _origin: AnyOrigin | null = null;
 
-  function load(): AnySource {
-    _src ??= cb();
-    return _src;
+  function load(): AnyOrigin {
+    _origin ??= cb();
+    return _origin;
   }
 
   return {
@@ -63,10 +63,10 @@ export function lazy$(cb: () => AnyOrigin): LazyOrigin {
 }
 
 // Utils
-function replaceProp<P extends keyof LazyOrigin>(obj: LazyOrigin, prop: P, emt: AnySource): void {
+function replaceProp<P extends keyof LazyOrigin>(obj: LazyOrigin, prop: P, org: AnyOrigin): void {
   delete obj[prop];
 
-  if (prop in emt) {
-    obj[prop] = (emt as LazyOrigin)[prop];
+  if (prop in org) {
+    obj[prop] = (org as LazyOrigin)[prop];
   }
 }
