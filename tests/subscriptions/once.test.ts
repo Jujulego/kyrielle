@@ -2,8 +2,8 @@ import { vi } from 'vitest';
 
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { source$, SourceObj } from '@/src/source.js';
-import { off$ } from '@/src/subs/off.js';
-import { once$ } from '@/src/subs/once.js';
+import { off$ } from '@/src/subscriptions/off.js';
+import { once$ } from '@/src/subscriptions/once.js';
 
 // Setup
 let src: SourceObj<number>;

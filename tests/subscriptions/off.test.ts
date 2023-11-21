@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { off$ } from '@/src/subs/off.js';
+import { off$ } from '@/src/subscriptions/off.js';
 
 // Tests
 describe('off$', () => {

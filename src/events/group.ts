@@ -1,5 +1,5 @@
 import { DataKey, DataListener, DataValue, EmittedDataMap, Group, ListenedDataMap, OriginMap } from '../defs/index.js';
-import { off$ } from '../subs/off.js';
+import { off$ } from '../subscriptions/off.js';
 import { multiplexer$ } from './multiplexer.js';
 
 /**
