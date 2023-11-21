@@ -6,7 +6,7 @@ import { multiplexer$ } from '@/src/events/multiplexer.js';
 import { source$ } from '@/src/source.js';
 
 // Tests
-describe('multiplexerMap', () => {
+describe('multiplexerMap$', () => {
   it('should return all available keys', () => {
     const mlt = multiplexerMap$(() => multiplexer$({
       int: source$<number>(),
