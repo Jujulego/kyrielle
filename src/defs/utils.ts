@@ -1,5 +1,3 @@
-import { Key } from './common.js';
-
 /**
  * Transforms a union into an intersection:
  * UnionToIntersection<'a' | 'b'> => 'a' & 'b'
@@ -15,6 +13,6 @@ export type MapValueIntersection<M> = UnionToIntersection<M[keyof M]>;
 /**
  * Prepends the given key part to all map's keys
  */
-export type PrependMapKeys<P extends Key, M extends Record<Key, unknown>> = {
-  [MK in keyof M & Key as `${P}.${MK}`]: M[MK]
+export type PrependMapKeys<P extends string, M extends Record<string, unknown>> = {
+  [MK in keyof M & string as `${P}.${MK}`]: M[MK]
 }

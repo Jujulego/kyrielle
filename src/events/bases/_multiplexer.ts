@@ -2,7 +2,6 @@ import {
   DataKey,
   DataMap,
   EmittedDataMap,
-  Key,
   ListenedDataMap,
   Listener,
   Multiplexer,
@@ -12,7 +11,7 @@ import {
 } from '../../defs/index.js';
 import { splitKey } from '../../utils/key.js';
 
-type NextCb<R> = (src: Multiplexer<DataMap, DataMap>, key: Key) => R;
+type NextCb<R> = (src: Multiplexer<DataMap, DataMap>, key: string) => R;
 type EndCb<R> = (src: Source) => R;
 
 export type MapOfOrigins<M extends OriginMap> = Map<DataKey<M>, M[DataKey<M>]>;
@@ -26,7 +25,7 @@ export type GetOriginFn<M extends OriginMap> = <K extends DataKey<M>>(key: K) =>
  * @param getOrigin Callback used when accessing to a precise origin.
  */
 export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M>, getOrigin: GetOriginFn<M>): Multiplexer<EmittedDataMap<M>, ListenedDataMap<M>> {
-  function routeEvent<R>(key: Key, next: NextCb<R>, end: EndCb<R>): R {
+  function routeEvent<R>(key: string, next: NextCb<R>, end: EndCb<R>): R {
     const [part, subkey] = splitKey(key);
     const src = getOrigin(part);
 
@@ -38,7 +37,7 @@ export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M
   }
 
   return {
-    emit(key: Key, data: unknown) {
+    emit(key: string, data: unknown) {
       routeEvent(key,
         (mlt, subkey) => mlt.emit(subkey, data),
         (src) => src.next(data),
@@ -73,7 +72,7 @@ export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M
       );
     },
 
-    clear(key?: Key): void {
+    clear(key?: string): void {
       if (!key) {
         for (const src of origins.values()) {
           if ('clear' in src) src.clear();

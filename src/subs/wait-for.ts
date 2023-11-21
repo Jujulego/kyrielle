@@ -1,4 +1,4 @@
-import { DataKey, DataMap, Key, Listenable, Listener, Observable } from '../defs/index.js';
+import { DataKey, DataMap, Listenable, Listener, Observable } from '../defs/index.js';
 import { OffGroup, off$ } from './off.js';
 import { once$, OnceArgs, OnceOpts } from './once.js';
 
@@ -7,7 +7,7 @@ import { once$, OnceArgs, OnceOpts } from './once.js';
 export type WaitForObservableArgs = [obs: Observable, opts?: OnceOpts | undefined];
 
 /** @internal */
-export type WaitForListenableArgs = [source: Listenable, key: Key, opts?: OnceOpts | undefined];
+export type WaitForListenableArgs = [source: Listenable, key: string, opts?: OnceOpts | undefined];
 
 /** @internal */
 export type WaitForArgs = WaitForObservableArgs | WaitForListenableArgs;
@@ -25,7 +25,7 @@ export function waitFor$<D>(obs: Observable<D>, opts?: OnceOpts): Promise<D>;
  * @param key
  * @param opts
  */
-export function waitFor$<M extends DataMap, K extends DataKey<M>>(source: Listenable<M>, key: K, opts?: OnceOpts): Promise<M[K]>;
+export function waitFor$<const M extends DataMap, const K extends DataKey<M>>(source: Listenable<M>, key: K, opts?: OnceOpts): Promise<M[K]>;
 
 /** @internal */
 export function waitFor$(...args: WaitForArgs): Promise<unknown>;

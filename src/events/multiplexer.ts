@@ -1,4 +1,4 @@
-import { DataKey, EmittedDataMap, ListenedDataMap, Multiplexer, OriginMap } from '../defs/index.js';
+import { DataKey, DataValue, EmittedDataMap, ListenedDataMap, Multiplexer, OriginMap } from '../defs/index.js';
 import { _multiplexer$ } from './bases/index.js';
 
 /**
@@ -8,7 +8,7 @@ export interface MultiplexerObj<M extends OriginMap> extends Multiplexer<Emitted
   /**
    * Mapped origins
    */
-  readonly origins: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
+  readonly origins: ReadonlyMap<DataKey<M>, DataValue<M>>;
 }
 
 /**
@@ -16,7 +16,7 @@ export interface MultiplexerObj<M extends OriginMap> extends Multiplexer<Emitted
  * @param map
  */
 export function multiplexer$<const M extends OriginMap>(map: M): MultiplexerObj<M> {
-  const origins = new Map(Object.entries(map) as [DataKey<M>, M[DataKey<M>]][]);
+  const origins = new Map(Object.entries(map) as [DataKey<M>, DataValue<M>][]);
 
   function getOrigin<const K extends DataKey<M>>(key: K): M[K] {
     const src = origins.get(key);

@@ -1,14 +1,19 @@
-import { Key, Listener } from './common.js';
+import { Listener } from './common.js';
 
 /**
  * Record mapping keys to event data types
  */
-export type DataMap = Record<Key, unknown>;
+export type DataMap = Record<string, unknown>;
 
 /**
  * Extract keys type from an event map
  */
-export type DataKey<M extends DataMap> = keyof M & Key;
+export type DataKey<M extends DataMap> = keyof M & string;
+
+/**
+ * Extract values type from an event map
+ */
+export type DataValue<M extends DataMap, K extends DataKey<M> = DataKey<M>> = M[K];
 
 /**
  * Build listener type for a given key in an event map

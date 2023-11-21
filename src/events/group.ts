@@ -1,4 +1,4 @@
-import { DataKey, DataListener, EmittedDataMap, Group, ListenedDataMap, OriginMap } from '../defs/index.js';
+import { DataKey, DataListener, DataValue, EmittedDataMap, Group, ListenedDataMap, OriginMap } from '../defs/index.js';
 import { off$ } from '../subs/off.js';
 import { multiplexer$ } from './multiplexer.js';
 
@@ -9,7 +9,7 @@ export interface GroupObj<M extends OriginMap> extends Group<EmittedDataMap<M>, 
   /**
    * Mapped origins
    */
-  readonly origins: ReadonlyMap<DataKey<M>, M[DataKey<M>]>;
+  readonly origins: ReadonlyMap<DataKey<M>, DataValue<M>>;
 }
 
 export type GroupListener<M extends OriginMap> = DataListener<ListenedDataMap<M>>;

@@ -1,4 +1,3 @@
-import { Key } from './common.js';
 import { AssertDataMap, DataKey } from './data-map.js';
 import { Emitter, KeyEmitter, Listenable, Observable } from './features/index.js';
 import { MapValueIntersection, PrependMapKeys } from './utils.js';
@@ -11,9 +10,9 @@ export type AnyOrigin = Emitter | KeyEmitter | Observable | Listenable;
 /**
  * Record mapping keys to event sources
  */
-export type OriginMap = Record<Key, AnyOrigin>;
+export type OriginMap = Record<string, AnyOrigin>;
 
-type _EmittedValueRecord<K extends Key, O> =
+type _EmittedValueRecord<K extends string, O> =
   & (O extends KeyEmitter<infer EM> ? PrependMapKeys<K, EM> : unknown)
   & (O extends Emitter<infer D> ? Record<K, D> : unknown);
 
@@ -27,9 +26,9 @@ export type EmittedDataMap<M extends OriginMap> = AssertDataMap<MapValueIntersec
 /**
  * Builds a data map from emitted values of given source, mapped on given key type
  */
-export type EmittedDataRecord<K extends Key, O extends AnyOrigin> = EmittedDataMap<Record<K, O>>;
+export type EmittedDataRecord<K extends string, O extends AnyOrigin> = EmittedDataMap<Record<K, O>>;
 
-type _ListenedDataRecord<K extends Key, O extends AnyOrigin> =
+type _ListenedDataRecord<K extends string, O extends AnyOrigin> =
   & (O extends Listenable<infer LM> ? PrependMapKeys<K, LM> : unknown)
   & (O extends Observable<infer D> ? Record<K, D> : unknown);
 
@@ -43,4 +42,4 @@ export type ListenedDataMap<M extends OriginMap> = AssertDataMap<MapValueInterse
 /**
  * Builds an event map from observed/listened values of given source, mapped on given key type
  */
-export type ListenedDataRecord<K extends Key, O extends AnyOrigin> = ListenedDataMap<Record<K, O>>;
+export type ListenedDataRecord<K extends string, O extends AnyOrigin> = ListenedDataMap<Record<K, O>>;
