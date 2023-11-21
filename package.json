@@ -32,6 +32,11 @@
       "import": "./dist/operators/index.js",
       "default": "./dist/operators/index.js"
     },
+    "./steps": {
+      "types": "./dist/steps/index.d.ts",
+      "import": "./dist/steps/index.js",
+      "default": "./dist/steps/index.js"
+    },
     "./subscriptions": {
       "types": "./dist/subscriptions/index.d.ts",
       "import": "./dist/subscriptions/index.js",

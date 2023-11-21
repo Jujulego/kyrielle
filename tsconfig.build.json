@@ -11,6 +11,7 @@
     "./src/index.ts",
     "./src/events/index.ts",
     "./src/operators/index.ts",
+    "./src/steps/index.ts",
     "./src/subscriptions/index.ts"
   ]
 }
