@@ -1,6 +1,6 @@
 {
   "name": "kyrielle",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": {
@@ -12,7 +12,13 @@
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "./dist",
+    "./collections.d.ts",
+    "./events.d.ts",
+    "./operators.d.ts",
+    "./refs.d.ts",
+    "./steps.d.ts",
+    "./subscriptions.d.ts"
   ],
   "type": "module",
   "module": "./dist/index.js",
