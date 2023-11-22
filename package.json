@@ -20,32 +20,26 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./events": {
       "types": "./dist/events/index.d.ts",
-      "import": "./dist/events/index.js",
       "default": "./dist/events/index.js"
     },
     "./operators": {
       "types": "./dist/operators/index.d.ts",
-      "import": "./dist/operators/index.js",
       "default": "./dist/operators/index.js"
     },
     "./refs": {
       "types": "./dist/refs/index.d.ts",
-      "import": "./dist/refs/index.js",
       "default": "./dist/refs/index.js"
     },
     "./steps": {
       "types": "./dist/steps/index.d.ts",
-      "import": "./dist/steps/index.js",
       "default": "./dist/steps/index.js"
     },
     "./subscriptions": {
       "types": "./dist/subscriptions/index.d.ts",
-      "import": "./dist/subscriptions/index.js",
       "default": "./dist/subscriptions/index.js"
     }
   },
