@@ -16,7 +16,7 @@ export type OnceListenableArgs = [source: Listenable, key: string, listener: Lis
 export type OnceArgs = OnceObservableArgs | OnceListenableArgs;
 
 /**
- * Returns a promise that resolves when the given observable emits
+ * Register a listener that will only be called once.
  * @param obs
  * @param listener
  * @param opts
@@ -24,7 +24,7 @@ export type OnceArgs = OnceObservableArgs | OnceListenableArgs;
 export function once$<D>(obs: Observable<D>, listener: Listener<D>, opts?: OnceOpts): OffFn;
 
 /**
- * Returns a promise that resolves when the given source emits the "key" event
+ * Register a listener to key event that will only be called once.
  * @param source
  * @param key
  * @param listener
