@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Emitter, KeyEmitter, Listenable, Observable } from '@/src/defs/index.js';
+import { Receiver, Emitter, Listenable, Observable } from '@/src/defs/index.js';
 import { multiplexerMap$ } from '@/src/events/multiplexer-map.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
 import { source$ } from '@/src/source.js';
@@ -25,7 +25,7 @@ describe('multiplexerMap$', () => {
 
   describe('emit', () => {
     it('should emit child event', () => {
-      const src: Emitter<number> = {
+      const src: Receiver<number> = {
         next: vi.fn(),
       };
 
@@ -39,7 +39,7 @@ describe('multiplexerMap$', () => {
     });
 
     it('should emit deep child event', () => {
-      const deep: KeyEmitter<{ 'life': number }> = {
+      const deep: Emitter<{ 'life': number }> = {
         emit: vi.fn(),
       };
 

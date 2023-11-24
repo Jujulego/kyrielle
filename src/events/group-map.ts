@@ -1,9 +1,9 @@
 import {
   AnyOrigin, DataListener,
   DataValue,
-  EmittedDataRecord,
+  InputDataRecord,
   Group,
-  ListenedDataRecord,
+  OutputDataRecord,
   Listener
 } from '../defs/index.js';
 import { source$ } from '../source.js';
@@ -12,7 +12,7 @@ import { multiplexerMap$ } from './multiplexer-map.js';
 /**
  * Group map with mapped origins and registered listeners
  */
-export interface GroupMap<K extends string, O extends AnyOrigin> extends Group<EmittedDataRecord<K, O>, ListenedDataRecord<K, O>> {
+export interface GroupMap<K extends string, O extends AnyOrigin> extends Group<InputDataRecord<K, O>, OutputDataRecord<K, O>> {
   /**
    * Mapped origins
    */
@@ -21,7 +21,7 @@ export interface GroupMap<K extends string, O extends AnyOrigin> extends Group<E
   /**
    * Registered group listeners
    */
-  readonly listeners: ReadonlySet<DataListener<ListenedDataRecord<K, O>>>;
+  readonly listeners: ReadonlySet<DataListener<OutputDataRecord<K, O>>>;
 }
 
 // Utils
@@ -44,7 +44,7 @@ function subscribeToAll(target: AnyOrigin, cb: Listener) {
  * @param builder
  */
 export function groupMap$<K extends string, O extends AnyOrigin>(builder: (key: K) => O): GroupMap<K, O> {
-  const src = source$<DataValue<ListenedDataRecord<K, O>>>();
+  const src = source$<DataValue<OutputDataRecord<K, O>>>();
 
   const mlt = multiplexerMap$((key: K) => {
     const child = builder(key);

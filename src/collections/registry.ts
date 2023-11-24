@@ -1,9 +1,9 @@
-import { Listenable, ListenedDataRecord, Observable as Obs } from '../defs/index.js';
+import { Listenable, OutputDataRecord, Observable as Obs } from '../defs/index.js';
 import { _multiplexer$ } from '../events/index.js';
 
 // Types
 export type RegistryFn<K extends string, O extends Obs> = (key: K) => O;
-export type RegistryEventMap<K extends string, O extends Obs> = ListenedDataRecord<K, O>;
+export type RegistryEventMap<K extends string, O extends Obs> = OutputDataRecord<K, O>;
 
 /**
  * Manages a map of observable.

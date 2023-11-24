@@ -1,18 +1,18 @@
-import { DataKey, DataListener, DataValue, EmittedDataMap, Group, ListenedDataMap, OriginMap } from '../defs/index.js';
+import { DataKey, DataListener, DataValue, InputDataMap, Group, OutputDataMap, OriginMap } from '../defs/index.js';
 import { off$ } from '../subscriptions/off.js';
 import { multiplexer$ } from './multiplexer.js';
 
 /**
  * Group object with mapped origins
  */
-export interface GroupObj<M extends OriginMap> extends Group<EmittedDataMap<M>, ListenedDataMap<M>> {
+export interface GroupObj<M extends OriginMap> extends Group<InputDataMap<M>, OutputDataMap<M>> {
   /**
    * Mapped origins
    */
   readonly origins: ReadonlyMap<DataKey<M>, DataValue<M>>;
 }
 
-export type GroupListener<M extends OriginMap> = DataListener<ListenedDataMap<M>>;
+export type GroupListener<M extends OriginMap> = DataListener<OutputDataMap<M>>;
 
 /**
  * Builds a group routing events to origins within the given map, and emitting any "child" event

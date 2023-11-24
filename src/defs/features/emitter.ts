@@ -1,15 +1,15 @@
-/**
- * Objects emitting data
- */
-export interface Emitter<in D = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
-  /**
-   * Emits given data
-   * @param data
-   */
-  next(data: D): void;
-}
+import { DataKey, DataMap } from '../data-map.js';
 
 /**
- * Extract emitted value from an emitter object.
+ * Object emitting multiple events, by keys
  */
-export type EmittedValue<E extends Emitter> = E extends Emitter<infer D> ? D : never;
+export interface Emitter<M extends DataMap = DataMap> {
+  __emit_event_map?: M;
+
+  /**
+   * Emits "key" event, with given data
+   * @param key
+   * @param data
+   */
+  emit<const K extends DataKey<M>>(key: K, data: M[K]): void;
+}

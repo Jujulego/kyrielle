@@ -1,11 +1,11 @@
-import { AnyOrigin, Emitter, KeyEmitter, Listenable, Observable } from '../defs/index.js';
+import { AnyOrigin, Receiver, Emitter, Listenable, Observable } from '../defs/index.js';
 
 /**
  * Origins that can be "lazyfied"
  */
 export type LazyOrigin =
+  & Partial<Receiver>
   & Partial<Emitter>
-  & Partial<KeyEmitter>
   & Partial<Observable>
   & Partial<Listenable>;
 
@@ -15,8 +15,8 @@ export type LazyOrigin =
 export type Lazify<O extends AnyOrigin> = Pick<O, Extract<keyof O, keyof LazyOrigin>>;
 
 /**
- * Defines a lazy source.
- * A lazy source will only be initialized on first access to one of it's source/emitter attribute.
+ * Defines a lazy origin.
+ * A lazy origin will only be initialized on first access to one of its method.
  *
  * @param cb
  */

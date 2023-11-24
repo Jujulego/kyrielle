@@ -4,7 +4,7 @@
 export type Awaitable<T> = T | PromiseLike<T>;
 
 /**
- * Callback for any event emitter object
+ * Callback for handling output data
  */
 export type Listener<D = unknown> = (data: D) => void;
 

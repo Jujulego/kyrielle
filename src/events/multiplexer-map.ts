@@ -1,10 +1,10 @@
 import { _multiplexer$ } from './bases/index.js';
-import { AnyOrigin, EmittedDataRecord, ListenedDataRecord, Multiplexer } from '../defs/index.js';
+import { AnyOrigin, InputDataRecord, OutputDataRecord, Multiplexer } from '../defs/index.js';
 
 /**
  * Multiplexer map, automatically creating requested origins
  */
-export interface MultiplexerMap<K extends string, O extends AnyOrigin> extends Multiplexer<EmittedDataRecord<K, O>, ListenedDataRecord<K, O>> {
+export interface MultiplexerMap<K extends string, O extends AnyOrigin> extends Multiplexer<InputDataRecord<K, O>, OutputDataRecord<K, O>> {
   /**
    * Mapped origins
    */
