@@ -1,11 +1,11 @@
 import { AssertDataMap, DataKey } from './data-map.js';
-import { Receiver, KeyEmitter, Listenable, Observable } from './features/index.js';
+import { Receiver, Emitter, Listenable, Observable } from './features/index.js';
 import { MapValueIntersection, PrependMapKeys } from './utils.js';
 
 /**
  * Matches any kind of data origin
  */
-export type AnyOrigin = Receiver | KeyEmitter | Observable | Listenable;
+export type AnyOrigin = Receiver | Emitter | Observable | Listenable;
 
 /**
  * Record mapping keys to event sources
@@ -13,7 +13,7 @@ export type AnyOrigin = Receiver | KeyEmitter | Observable | Listenable;
 export type OriginMap = Record<string, AnyOrigin>;
 
 type _InputValueRecord<K extends string, O> =
-  & (O extends KeyEmitter<infer EM> ? PrependMapKeys<K, EM> : unknown)
+  & (O extends Emitter<infer EM> ? PrependMapKeys<K, EM> : unknown)
   & (O extends Receiver<infer D> ? Record<K, D> : unknown);
 
 /**

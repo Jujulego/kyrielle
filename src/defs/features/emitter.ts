@@ -3,7 +3,7 @@ import { DataKey, DataMap } from '../data-map.js';
 /**
  * Object emitting multiple events, by keys
  */
-export interface KeyEmitter<M extends DataMap = DataMap> {
+export interface Emitter<M extends DataMap = DataMap> {
   __emit_event_map?: M;
 
   /**

@@ -1,6 +1,6 @@
 import { expectTypeOf } from 'vitest';
 
-import { KeyEmitter, Listenable } from '@/src/defs/index.js';
+import { Emitter, Listenable } from '@/src/defs/index.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
 import { pick$ } from '@/src/operators/pick.js';
 import { source$ } from '@/src/source.js';
@@ -22,7 +22,7 @@ describe('pick$', () => {
   });
 
   it('should return an emitter only type', () => {
-    const ref = pick$(mlt as KeyEmitter<{ life: number }>, 'life');
+    const ref = pick$(mlt as Emitter<{ life: number }>, 'life');
 
     expectTypeOf(ref.next).parameter(0).toBeNumber();
     expectTypeOf(ref).not.toHaveProperty('subscribe');

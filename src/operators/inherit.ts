@@ -6,7 +6,7 @@ import {
   Listener,
   OriginMap,
   DataMap,
-  Listenable, KeyEmitter, DataKey, OutputDataMap, InputDataMap
+  Listenable, Emitter, DataKey, OutputDataMap, InputDataMap
 } from '../defs/index.js';
 import { multiplexer$ } from '../events/index.js';
 import { splitKey } from '../utils/key.js';
@@ -23,7 +23,7 @@ export type Inherit<PO extends AnyOrigin, T extends OriginMap> =
   & (PO extends Receiver<infer D> ? Receiver<D> : unknown)
   & (PO extends Observable<infer D> ? Observable<D> : unknown)
   & (Listenable<PO extends Listenable<infer PLM> ? InheritEventMap<PLM, OutputDataMap<T>> : OutputDataMap<T>>)
-  & (KeyEmitter<PO extends KeyEmitter<infer PEM> ? InheritEventMap<PEM, InputDataMap<T>> : InputDataMap<T>>);
+  & (Emitter<PO extends Emitter<infer PEM> ? InheritEventMap<PEM, InputDataMap<T>> : InputDataMap<T>>);
 
 /**
  * Creates a new multiplexer inheriting events from parent.
