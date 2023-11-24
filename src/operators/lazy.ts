@@ -15,8 +15,8 @@ export type LazyOrigin =
 export type Lazify<O extends AnyOrigin> = Pick<O, Extract<keyof O, keyof LazyOrigin>>;
 
 /**
- * Defines a lazy source.
- * A lazy source will only be initialized on first access to one of it's source/emitter attribute.
+ * Defines a lazy origin.
+ * A lazy origin will only be initialized on first access to one of its method.
  *
  * @param cb
  */

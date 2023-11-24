@@ -12,34 +12,34 @@ export type AnyOrigin = Receiver | KeyEmitter | Observable | Listenable;
  */
 export type OriginMap = Record<string, AnyOrigin>;
 
-type _EmittedValueRecord<K extends string, O> =
+type _InputValueRecord<K extends string, O> =
   & (O extends KeyEmitter<infer EM> ? PrependMapKeys<K, EM> : unknown)
   & (O extends Receiver<infer D> ? Record<K, D> : unknown);
 
 /**
- * Builds a data map from emitted values of each sources in the given source map
+ * Builds a data map from input values of each sources in the given source map
  */
-export type EmittedDataMap<M extends OriginMap> = AssertDataMap<MapValueIntersection<{
-  [K in DataKey<M>]: _EmittedValueRecord<K, M[K]>;
+export type InputDataMap<M extends OriginMap> = AssertDataMap<MapValueIntersection<{
+  [K in DataKey<M>]: _InputValueRecord<K, M[K]>;
 }>>;
 
 /**
- * Builds a data map from emitted values of given source, mapped on given key type
+ * Builds a data map from input values of given source, mapped on given key type
  */
-export type EmittedDataRecord<K extends string, O extends AnyOrigin> = EmittedDataMap<Record<K, O>>;
+export type InputDataRecord<K extends string, O extends AnyOrigin> = InputDataMap<Record<K, O>>;
 
-type _ListenedDataRecord<K extends string, O extends AnyOrigin> =
+type _OutputDataRecord<K extends string, O extends AnyOrigin> =
   & (O extends Listenable<infer LM> ? PrependMapKeys<K, LM> : unknown)
   & (O extends Observable<infer D> ? Record<K, D> : unknown);
 
 /**
- * Builds an event map from observed/listened values of each sources in the given source map
+ * Builds a data map from output values of each sources in the given source map
  */
-export type ListenedDataMap<M extends OriginMap> = AssertDataMap<MapValueIntersection<{
-  [K in DataKey<M>]: _ListenedDataRecord<K, M[K]>;
+export type OutputDataMap<M extends OriginMap> = AssertDataMap<MapValueIntersection<{
+  [K in DataKey<M>]: _OutputDataRecord<K, M[K]>;
 }>>;
 
 /**
- * Builds an event map from observed/listened values of given source, mapped on given key type
+ * Builds a data map from output values of given source, mapped on given key type
  */
-export type ListenedDataRecord<K extends string, O extends AnyOrigin> = ListenedDataMap<Record<K, O>>;
+export type OutputDataRecord<K extends string, O extends AnyOrigin> = OutputDataMap<Record<K, O>>;

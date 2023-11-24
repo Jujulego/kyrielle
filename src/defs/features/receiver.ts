@@ -10,6 +10,6 @@ export interface Receiver<in D = any> { // eslint-disable-line @typescript-eslin
 }
 
 /**
- * Extract received value type from an emitter object.
+ * Extract received value type from a receiver object.
  */
 export type ReceivedValue<R extends Receiver> = R extends Receiver<infer D> ? D : never;

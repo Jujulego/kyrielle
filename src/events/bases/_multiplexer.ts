@@ -1,8 +1,8 @@
 import {
   DataKey,
   DataMap,
-  EmittedDataMap,
-  ListenedDataMap,
+  InputDataMap,
+  OutputDataMap,
   Listener,
   Multiplexer,
   OffFn,
@@ -24,7 +24,7 @@ export type GetOriginFn<M extends OriginMap> = <K extends DataKey<M>>(key: K) =>
  * @param origins Map object storing origins
  * @param getOrigin Callback used when accessing to a precise origin.
  */
-export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M>, getOrigin: GetOriginFn<M>): Multiplexer<EmittedDataMap<M>, ListenedDataMap<M>> {
+export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M>, getOrigin: GetOriginFn<M>): Multiplexer<InputDataMap<M>, OutputDataMap<M>> {
   function routeEvent<R>(key: string, next: NextCb<R>, end: EndCb<R>): R {
     const [part, subkey] = splitKey(key);
     const src = getOrigin(part);
@@ -47,7 +47,7 @@ export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M
     *eventKeys() {
       for (const [key, src] of origins.entries()) {
         if ('subscribe' in src) {
-          yield key as DataKey<ListenedDataMap<M>>;
+          yield key as DataKey<OutputDataMap<M>>;
         }
 
         if ('eventKeys' in src) {
@@ -58,14 +58,14 @@ export function _multiplexer$<const M extends OriginMap>(origins: MapOfOrigins<M
       }
     },
 
-    on<const K extends DataKey<ListenedDataMap<M>>>(key: K, listener: Listener<ListenedDataMap<M>[K]>): OffFn {
+    on<const K extends DataKey<OutputDataMap<M>>>(key: K, listener: Listener<OutputDataMap<M>[K]>): OffFn {
       return routeEvent(key,
         (mlt, subkey) => mlt.on(subkey, listener as Listener),
         (src) => src.subscribe(listener as Listener),
       );
     },
 
-    off<const K extends DataKey<ListenedDataMap<M>>>(key: K, listener: Listener<ListenedDataMap<M>[K]>): void {
+    off<const K extends DataKey<OutputDataMap<M>>>(key: K, listener: Listener<OutputDataMap<M>[K]>): void {
       routeEvent(key,
         (mlt, subkey) => mlt.off(subkey, listener as Listener),
         (src) => src.unsubscribe(listener as Listener),

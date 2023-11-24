@@ -1,10 +1,10 @@
-import { DataKey, DataValue, EmittedDataMap, ListenedDataMap, Multiplexer, OriginMap } from '../defs/index.js';
+import { DataKey, DataValue, InputDataMap, OutputDataMap, Multiplexer, OriginMap } from '../defs/index.js';
 import { _multiplexer$ } from './bases/index.js';
 
 /**
  * Multiplexer object with mapped origins
  */
-export interface MultiplexerObj<M extends OriginMap> extends Multiplexer<EmittedDataMap<M>, ListenedDataMap<M>> {
+export interface MultiplexerObj<M extends OriginMap> extends Multiplexer<InputDataMap<M>, OutputDataMap<M>> {
   /**
    * Mapped origins
    */
