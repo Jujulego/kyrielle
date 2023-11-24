@@ -1,4 +1,4 @@
-import { DataKey, Emitter, KeyEmitter, Listenable, Listener, Observable, OffFn } from '../defs/index.js';
+import { DataKey, Receiver, KeyEmitter, Listenable, Listener, Observable, OffFn } from '../defs/index.js';
 
 /**
  * Event sources that can be picked
@@ -16,7 +16,7 @@ export type PickableKey<S extends PickableOrigin> =
  * Builds a source from "K" key picked from "S" source
  */
 export type PickedSource<S extends PickableOrigin, K extends PickableKey<S>> =
-  & (S extends KeyEmitter<infer M> ? Emitter<M[K]> : unknown)
+  & (S extends KeyEmitter<infer M> ? Receiver<M[K]> : unknown)
   & (S extends Listenable<infer M> ? Observable<M[K]> : unknown);
 
 // Utils

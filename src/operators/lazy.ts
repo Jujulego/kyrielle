@@ -1,10 +1,10 @@
-import { AnyOrigin, Emitter, KeyEmitter, Listenable, Observable } from '../defs/index.js';
+import { AnyOrigin, Receiver, KeyEmitter, Listenable, Observable } from '../defs/index.js';
 
 /**
  * Origins that can be "lazyfied"
  */
 export type LazyOrigin =
-  & Partial<Emitter>
+  & Partial<Receiver>
   & Partial<KeyEmitter>
   & Partial<Observable>
   & Partial<Listenable>;

@@ -1,6 +1,6 @@
 import {
   AnyOrigin,
-  Emitter,
+  Receiver,
   Multiplexer,
   Observable,
   Listener,
@@ -20,7 +20,7 @@ export type InheritEventMap<PM extends DataMap, M extends DataMap> = M & Pick<PM
  * Inherits events from PS (Parent Source) and adds events from T
  */
 export type Inherit<PO extends AnyOrigin, T extends OriginMap> =
-  & (PO extends Emitter<infer D> ? Emitter<D> : unknown)
+  & (PO extends Receiver<infer D> ? Receiver<D> : unknown)
   & (PO extends Observable<infer D> ? Observable<D> : unknown)
   & (Listenable<PO extends Listenable<infer PLM> ? InheritEventMap<PLM, ListenedDataMap<T>> : ListenedDataMap<T>>)
   & (KeyEmitter<PO extends KeyEmitter<infer PEM> ? InheritEventMap<PEM, EmittedDataMap<T>> : EmittedDataMap<T>>);
@@ -47,7 +47,7 @@ export function inherit$(parent: AnyOrigin, map: OriginMap): AnyOrigin {
       return target.emit(key, data);
     },
     next(data: unknown) {
-      return (parent as Emitter).next(data);
+      return (parent as Receiver).next(data);
     },
     subscribe(listener: Listener) {
       return (parent as Observable).subscribe(listener);

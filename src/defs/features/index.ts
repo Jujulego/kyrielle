@@ -1,4 +1,4 @@
-export * from './emitter.js';
+export * from './receiver.js';
 export * from './key-emitter.js';
 export * from './listenable.js';
 export * from './mutable.js';
