@@ -1,4 +1,5 @@
 export * from './defs/index.js';
+export * from './actions.js';
 export * from './source.js';
 
 export * as collections from './collections/index.js';
