@@ -35,11 +35,13 @@ export interface AsyncReadable<out D = unknown> extends Readable<D> {
  * Extract read value type
  */
 export type ReadValue<R extends Readable> =
-  R extends AsyncReadable<infer D>
+  R extends Readable<infer D>
     ? D
-    : R extends SyncReadable<infer D>
+    : R extends AsyncReadable<infer D>
       ? D
-      : never;
+      : R extends SyncReadable<infer D>
+        ? D
+        : never;
 
 /**
  * Build a Readable type with the same synchronicity and the given value type
@@ -47,6 +49,8 @@ export type ReadValue<R extends Readable> =
 export type MapReadValue<R extends Readable, D> =
   R extends AsyncReadable
     ? AsyncReadable<D>
-    : R extends SyncReadable
-      ? SyncReadable<D>
+    : R extends SyncReadable<infer SD>
+      ? Extract<SD, PromiseLike<unknown>> extends never
+        ? SyncReadable<D>
+        : Readable<D>
       : never;
