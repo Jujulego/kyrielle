@@ -9,7 +9,7 @@ import { ref$ } from '@/src/refs/ref.js';
 let map: RefMap<string, number, SyncMutableRef<number>>;
 
 beforeEach(() => {
-  map = map$((key, value) => var$(value));
+  map = map$((_, value) => var$(value));
 });
 
 // Tests
@@ -41,7 +41,7 @@ describe('RefMap.set', () => {
   let builder: RefMapFn<string, number, SyncMutableRef<number>>;
 
   beforeEach(() => {
-    builder = vi.fn((key, value) => var$(value));
+    builder = vi.fn((_, value) => var$(value));
     map = map$(builder);
   });
 
@@ -110,7 +110,7 @@ describe('RefMap.values', () => {
   });
 
   it('should return async iterator on every stored values', async () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((_: string, val: number) => ref$<number, number>({
       read: async () => val,
       mutate: arg => arg
     }));

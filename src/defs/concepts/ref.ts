@@ -1,22 +1,22 @@
 import { Source } from './source.js';
-import { AsyncReadable, MapReadValue, Readable, SyncReadable } from '../features/readable.js';
+import { AsyncReadable, CopyReadableSynchronicity, Readable, SyncReadable } from '../features/readable.js';
 
 /**
  * Readonly reference
  */
-export type Ref<D = unknown, R extends Readable<D> = Readable<D>> = Source<D> & R;
+export interface Ref<in out D = unknown> extends Source<D>, Readable<D> {}
 
 /**
  * Readonly synchronous reference
  */
-export type SyncRef<D = unknown> = Ref<D, SyncReadable<D>>;
+export interface SyncRef<in out D = unknown> extends Source<D>, SyncReadable<D> {}
 
 /**
  * Readonly asynchronous reference
  */
-export type AsyncRef<D = unknown> = Ref<D, AsyncReadable<D>>;
+export interface AsyncRef<in out D = unknown> extends Source<D>, AsyncReadable<D> {}
 
 /**
  * Build a Ref type with the same synchronicity and the given value type
  */
-export type MapRefValue<R extends Readable, D> = Ref<D, MapReadValue<R, D>>;
+export type CopyRefSynchronicity<R extends Readable, D> = Source<D> & CopyReadableSynchronicity<R, D>;

@@ -56,7 +56,7 @@
   "scripts": {
     "lint": "eslint .",
     "clean": "shx rm -r dist",
-    "build": "jill group 'build:esm // build:types'",
+    "build": "jill run 'build:esm // build:types'",
     "build:esm": "swc -d dist src",
     "build:types": "tsc --project tsconfig.build.json",
     "test": "vitest run",

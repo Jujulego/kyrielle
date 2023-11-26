@@ -1,7 +1,6 @@
 import {
-  AsyncMutableRef, AsyncRef, Awaitable,
-  MapMutateArg,
-  MapReadValue, MapRefValue,
+  AsyncMutableRef, AsyncRef, Awaitable, CopyMutableRefSynchronicity,
+  CopyRefSynchronicity,
   Mutable,
   MutableRef,
   Observable as Obs, ObservedValue,
@@ -19,21 +18,21 @@ export type AsyncEachFn<DA, DB> = (arg: DA) => PromiseLike<DB>;
 
 /** Builds an async source type, with same features than A, but a different data type DB */
 export type EachAsyncSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<infer AA>
+  ? A extends Mutable<unknown, infer AA>
     ? AsyncMutableRef<DB, AA>
     : AsyncRef<DB>
   : Source<DB>;
 
 /** Builds a source type, with same features and synchronicity than A, but a different data type DB */
 export type EachSyncSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<infer AA>
-    ? MutableRef<DB, AA, MapReadValue<A, DB>, MapMutateArg<A, DB, AA>>
-    : MapRefValue<A, DB>
+  ? A extends Mutable<unknown, infer AA>
+    ? CopyMutableRefSynchronicity<A, DB, AA>
+    : CopyRefSynchronicity<A, DB>
   : Source<DB>;
 
 /** Builds an awaitable source type, with same features than A, but a different data type DB */
 export type EachSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<infer AA>
+  ? A extends Mutable<unknown, infer AA>
     ? MutableRef<DB, AA>
     : Ref<DB>
   : Source<DB>;
