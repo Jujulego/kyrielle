@@ -1,7 +1,6 @@
 import {
-  AsyncMutableRef, AsyncRef, Awaitable,
-  MapMutateArg,
-  MapReadValue, MapRefValue,
+  AsyncMutableRef, AsyncRef, Awaitable, MapMutableValue,
+  MapRefValue,
   Mutable,
   MutableRef,
   Observable as Obs, ObservedValue,
@@ -27,7 +26,7 @@ export type EachAsyncSource<A extends Obs, DB> = A extends Ref
 /** Builds a source type, with same features and synchronicity than A, but a different data type DB */
 export type EachSyncSource<A extends Obs, DB> = A extends Ref
   ? A extends Mutable<infer AA>
-    ? MutableRef<DB, AA, MapReadValue<A, DB>, MapMutateArg<A, DB, AA>>
+    ? MapMutableValue<A, DB, AA>
     : MapRefValue<A, DB>
   : Source<DB>;
 

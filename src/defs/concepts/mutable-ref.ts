@@ -1,21 +1,20 @@
-import { Ref } from './ref.js';
+import { AsyncRef, MapRefValue, Ref, SyncRef } from './ref.js';
 import { AsyncMutable, MapMutateArg, Mutable, SyncMutable } from '../features/mutable.js';
-import { AsyncReadable, MapReadValue, Readable, SyncReadable } from '../features/readable.js';
 
 /**
  * Mutable reference
  */
-export type MutableRef<D = unknown, A = D, R extends Readable<D> = Readable<D>, M extends Mutable<D, A> = Mutable<D, A>> = Ref<D, R> & M;
+export interface MutableRef<in out D = unknown, in A = D> extends Ref<D>, Mutable<D, A> {}
 
 /**
  * Mutable synchronous reference
  */
-export type SyncMutableRef<D = unknown, A = D> = MutableRef<D, A, SyncReadable<D>, SyncMutable<D, A>>;
+export interface SyncMutableRef<in out D = unknown, in A = D> extends SyncRef<D>, SyncMutable<D, A> {}
 
 /**
  * Mutable asynchronous reference
  */
-export type AsyncMutableRef<D = unknown, A = D> = MutableRef<D, A, AsyncReadable<D>, AsyncMutable<D, A>>;
+export interface AsyncMutableRef<in out D = unknown, in A = D> extends AsyncRef<D>, AsyncMutable<D, A> {}
 
 /**
  * A mutable ref where its mutate accept an argument with the same type as its value.
@@ -25,4 +24,4 @@ export type SymmetricRef<D = unknown> = MutableRef<D, D>;
 /**
  * Build a Mutable type with the same synchronicity and the given value types
  */
-export type MapMutableValue<R extends MutableRef, D, A> = MutableRef<D, A, MapReadValue<R, D>, MapMutateArg<R, D, A>>;
+export type MapMutableValue<R extends MutableRef, D, A> = MapRefValue<R, D> & MapMutateArg<R, D, A>;

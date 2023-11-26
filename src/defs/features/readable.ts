@@ -3,7 +3,7 @@ import { Awaitable } from '../common.js';
 /**
  * Defines an object that can be read
  */
-export interface Readable<D = unknown> {
+export interface Readable<out D = unknown> {
   /**
    * Return current value
    */
@@ -13,7 +13,7 @@ export interface Readable<D = unknown> {
 /**
  * Defines an object that can be synchronously read
  */
-export interface SyncReadable<D = unknown> extends Readable<D> {
+export interface SyncReadable<out D = unknown> extends Readable<D> {
   /**
    * Return current value
    */
@@ -23,7 +23,7 @@ export interface SyncReadable<D = unknown> extends Readable<D> {
 /**
  * Defines an object that can be asynchronously read
  */
-export interface AsyncReadable<D = unknown> extends Readable<D> {
+export interface AsyncReadable<out D = unknown> extends Readable<D> {
   /**
    * Return current value asynchronously
    */

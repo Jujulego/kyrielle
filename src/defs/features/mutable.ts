@@ -3,7 +3,7 @@ import { Awaitable } from '../common.js';
 /**
  * Defines an object that can be mutated
  */
-export interface Mutable<D = unknown, A = D> {
+export interface Mutable<out D = unknown, in A = D> {
   /**
    * Mutate current value
    */
@@ -13,7 +13,7 @@ export interface Mutable<D = unknown, A = D> {
 /**
  * Defines an object that can be synchronously mutated
  */
-export interface SyncMutable<D = unknown, A = D> extends Mutable<D, A> {
+export interface SyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
   /**
    * Mutate current value synchronously
    */
@@ -23,7 +23,7 @@ export interface SyncMutable<D = unknown, A = D> extends Mutable<D, A> {
 /**
  * Defines an object that can be asynchronously mutated
  */
-export interface AsyncMutable<D = unknown, A = D> extends Mutable<D, A> {
+export interface AsyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
   /**
    * Mutate current value asynchronously
    */
