@@ -1,5 +1,5 @@
 import { Source } from './source.js';
-import { AsyncReadable, MapReadValue, Readable, SyncReadable } from '../features/readable.js';
+import { AsyncReadable, CopyReadableSynchronicity, Readable, SyncReadable } from '../features/readable.js';
 
 /**
  * Readonly reference
@@ -19,4 +19,4 @@ export interface AsyncRef<in out D = unknown> extends Source<D>, AsyncReadable<D
 /**
  * Build a Ref type with the same synchronicity and the given value type
  */
-export type MapRefValue<R extends Readable, D> = Source<D> & MapReadValue<R, D>;
+export type CopyRefSynchronicity<R extends Readable, D> = Source<D> & CopyReadableSynchronicity<R, D>;

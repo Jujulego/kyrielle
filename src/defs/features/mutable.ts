@@ -3,7 +3,7 @@ import { Awaitable } from '../common.js';
 /**
  * Defines an object that can be mutated
  */
-export interface Mutable<out D = unknown, in A = D> {
+export interface Mutable<out D = unknown, in A = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * Mutate current value
    */
@@ -13,7 +13,7 @@ export interface Mutable<out D = unknown, in A = D> {
 /**
  * Defines an object that can be synchronously mutated
  */
-export interface SyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
+export interface SyncMutable<out D = unknown, in A = any> extends Mutable<D, A> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * Mutate current value synchronously
    */
@@ -23,7 +23,7 @@ export interface SyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
 /**
  * Defines an object that can be asynchronously mutated
  */
-export interface AsyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
+export interface AsyncMutable<out D = unknown, in A = any> extends Mutable<D, A> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * Mutate current value asynchronously
    */
@@ -34,19 +34,16 @@ export interface AsyncMutable<out D = unknown, in A = D> extends Mutable<D, A> {
 /**
  * Extract mutate value type
  */
-export type MutateArg<M extends Mutable> =
-  M extends AsyncMutable<unknown, infer A>
-    ? A
-    : M extends SyncMutable<unknown, infer A>
-      ? A
-      : never;
+export type MutateArg<M extends Mutable> = M extends Mutable<unknown, infer A> ? A : never;
 
 /**
  * Build a Mutable type with the same synchronicity and the given value type
  */
-export type MapMutateArg<M extends Mutable, D, A> =
+export type CopyMutableSynchronicity<M extends Mutable, D, A> =
   M extends AsyncMutable
     ? AsyncMutable<D, A>
-    : M extends SyncMutable
-      ? SyncMutable<D, A>
+    : M extends SyncMutable<infer SD>
+      ? Extract<SD, PromiseLike<unknown>> extends never
+        ? SyncMutable<D, A>
+        : Mutable<D, A>
       : never;

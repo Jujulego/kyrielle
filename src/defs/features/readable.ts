@@ -46,7 +46,7 @@ export type ReadValue<R extends Readable> =
 /**
  * Build a Readable type with the same synchronicity and the given value type
  */
-export type MapReadValue<R extends Readable, D> =
+export type CopyReadableSynchronicity<R extends Readable, D> =
   R extends AsyncReadable
     ? AsyncReadable<D>
     : R extends SyncReadable<infer SD>

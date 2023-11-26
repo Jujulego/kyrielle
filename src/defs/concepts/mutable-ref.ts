@@ -1,5 +1,5 @@
-import { AsyncRef, MapRefValue, Ref, SyncRef } from './ref.js';
-import { AsyncMutable, MapMutateArg, Mutable, SyncMutable } from '../features/mutable.js';
+import { AsyncRef, CopyRefSynchronicity, Ref, SyncRef } from './ref.js';
+import { AsyncMutable, CopyMutableSynchronicity, Mutable, SyncMutable } from '../features/mutable.js';
 
 /**
  * Mutable reference
@@ -24,4 +24,4 @@ export type SymmetricRef<D = unknown> = MutableRef<D, D>;
 /**
  * Build a Mutable type with the same synchronicity and the given value types
  */
-export type MapMutableValue<R extends MutableRef, D, A> = MapRefValue<R, D> & MapMutateArg<R, D, A>;
+export type CopyMutableRefSynchronicity<R extends MutableRef, D, A> = CopyRefSynchronicity<R, D> & CopyMutableSynchronicity<R, D, A>;

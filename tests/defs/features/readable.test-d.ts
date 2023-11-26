@@ -1,6 +1,6 @@
 import { expectTypeOf } from 'vitest';
 
-import { AsyncReadable, MapReadValue, Readable, ReadValue, SyncReadable } from '@/src/defs/features/readable.js';
+import { AsyncReadable, CopyReadableSynchronicity, Readable, ReadValue, SyncReadable } from '@/src/defs/features/readable.js';
 
 describe('ReadValue', () => {
   it('should be a number (Readable)', () => {
@@ -16,16 +16,16 @@ describe('ReadValue', () => {
   });
 });
 
-describe('MapReadValue', () => {
+describe('CopyReadableSynchronicity', () => {
   it('should be a number (Readable)', () => {
-    expectTypeOf<MapReadValue<Readable<number>, string>>().toEqualTypeOf<Readable<string>>();
+    expectTypeOf<CopyReadableSynchronicity<Readable<number>, string>>().toEqualTypeOf<Readable<string>>();
   });
 
   it('should be a string (SyncReadable)', () => {
-    expectTypeOf<MapReadValue<SyncReadable<number>, string>>().toEqualTypeOf<SyncReadable<string>>();
+    expectTypeOf<CopyReadableSynchronicity<SyncReadable<number>, string>>().toEqualTypeOf<SyncReadable<string>>();
   });
 
   it('should be a string (AsyncReadable)', () => {
-    expectTypeOf<MapReadValue<AsyncReadable<number>, string>>().toEqualTypeOf<AsyncReadable<string>>();
+    expectTypeOf<CopyReadableSynchronicity<AsyncReadable<number>, string>>().toEqualTypeOf<AsyncReadable<string>>();
   });
 });
