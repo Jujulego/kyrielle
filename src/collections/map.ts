@@ -1,26 +1,26 @@
-import { AsyncReadable, MutableRef } from '../defs/index.js';
+import { AsyncReadable, Mutable, MutableRef, Readable } from '../defs/index.js';
 import { asyncIterMapper, iterMapper, yieldMapper } from '../utils/iterator.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types
-export type RefMapFn<K, D, R extends MutableRef<D>> = (key: K, value: D) => R;
+export type RefMapFn<K, D, R extends Readable<D> & Mutable<D, D>> = (key: K, value: D) => R;
 
-export type RefIteratorValue<D, R extends MutableRef<D>> = R extends AsyncReadable ? Promise<D> : D;
+export type RefIteratorValue<D, R extends Readable<D>> = R extends AsyncReadable ? Promise<D> : D;
 
-export type RefIteratorResult<D, R extends MutableRef<any>> = R extends AsyncReadable ? Promise<IteratorResult<D>> : IteratorResult<D>;
+export type RefIteratorResult<D, R extends Readable> = R extends AsyncReadable ? Promise<IteratorResult<D>> : IteratorResult<D>;
 
-export interface RefIterator<D, R extends MutableRef<any>> {
+export interface RefIterator<D, R extends Readable> {
   next(): RefIteratorResult<D, R>;
 }
 
-export interface RefIterableIterator<D, R extends MutableRef<D>> extends RefIterator<D, R> {
+export interface RefIterableIterator<D, R extends Readable<D>> extends RefIterator<D, R> {
   [Symbol.asyncIterator](): AsyncIterableIterator<D>;
   [Symbol.iterator](): IterableIterator<RefIteratorValue<D, R>>;
 }
 
-export type RefEntryIteratorValue<K, D, R extends MutableRef<D>> = [K, RefIteratorValue<D, R>];
+export type RefEntryIteratorValue<K, D, R extends Readable<D>> = [K, RefIteratorValue<D, R>];
 
-export interface RefEntryIterableIterator<K, D, R extends MutableRef<D>> extends RefIterator<[K, D], R> {
+export interface RefEntryIterableIterator<K, D, R extends Readable<D>> extends RefIterator<[K, D], R> {
   [Symbol.asyncIterator](): AsyncIterableIterator<[K, D]>;
   [Symbol.iterator](): IterableIterator<RefEntryIteratorValue<K, D, R>>;
 }
@@ -28,7 +28,7 @@ export interface RefEntryIterableIterator<K, D, R extends MutableRef<D>> extends
 /**
  * Map storing data using mutable references.
  */
-export class RefMap<K, D, R extends MutableRef<D>> {
+export class RefMap<K, D, R extends Readable<D> & Mutable<D, D>> {
   // Attributes
   private readonly _builder: RefMapFn<K, D, R>;
   private readonly _references = new Map<K, R>();
