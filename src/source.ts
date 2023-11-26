@@ -1,4 +1,4 @@
-import { Listener, Observable, Receiver, Source } from './defs/index.js';
+import { Listener, Source } from './defs/index.js';
 
 /**
  * Source object with registered listeners
