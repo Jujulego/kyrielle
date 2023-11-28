@@ -71,12 +71,12 @@ export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<Obs<DA>, Obs<DB>
       Object.assign(out, {
         read: () => awaitedCall<DA, DB>(fn, (obs as Readable<DA>).read()),
       });
+    }
 
-      if ('mutate' in obs) {
-        Object.assign(out, {
-          mutate: (arg: AA) => awaitedCall(fn, awaitedCall((obs as Mutable<DA, AA>).mutate, arg))
-        });
-      }
+    if ('mutate' in obs) {
+      Object.assign(out, {
+        mutate: (arg: AA) => awaitedCall(fn, awaitedCall((obs as Mutable<DA, AA>).mutate, arg))
+      });
     }
 
     off.add(
