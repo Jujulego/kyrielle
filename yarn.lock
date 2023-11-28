@@ -3174,7 +3174,7 @@ __metadata:
     vite-tsconfig-paths: "npm:4.2.1"
     vitest: "npm:0.34.5"
   dependenciesMeta:
-    vitest@0.34.6:
+    vitest@0.34.5:
       unplugged: true
   languageName: unknown
   linkType: soft

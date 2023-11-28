@@ -90,7 +90,7 @@
   },
   "packageManager": "yarn@4.0.2",
   "dependenciesMeta": {
-    "vitest@0.34.6": {
+    "vitest@0.34.5": {
       "unplugged": true
     }
   }
