@@ -5,7 +5,6 @@ import { pipe$ } from '@/src/operators/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
-import { each$ } from '@/src/steps/each.js';
 import { json$ } from '@/src/steps/json.js';
 
 // Test
@@ -62,7 +61,7 @@ describe('json$', () => {
     it('should call fn with mutate resolved result from base', async () => {
       const base = ref$({
         read: () => '42',
-        mutate: async (arg: string) => '42',
+        mutate: async (arg: string) => arg,
       });
       const validate = vi.fn((val) => typeof val === 'number') as unknown as (val: unknown) => val is number;
 
