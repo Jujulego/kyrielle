@@ -3170,7 +3170,7 @@ __metadata:
     jsdom: "npm:23.0.0"
     shx: "npm:0.3.4"
     typescript: "npm:5.3.2"
-    vite: "npm:5.0.3"
+    vite: "npm:5.0.4"
     vite-tsconfig-paths: "npm:4.2.1"
     vitest: "npm:0.34.5"
   dependenciesMeta:
@@ -3972,14 +3972,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^2.1.0":
-  version: 2.3.0
-  resolution: "punycode@npm:2.3.0"
-  checksum: 8e6f7abdd3a6635820049e3731c623bbef3fedbf63bbc696b0d7237fdba4cefa069bc1fa62f2938b0fbae057550df7b5318f4a6bcece27f1907fc75c54160bee
-  languageName: node
-  linkType: hard
-
-"punycode@npm:^2.1.1, punycode@npm:^2.3.1":
+"punycode@npm:^2.1.0, punycode@npm:^2.1.1, punycode@npm:^2.3.1":
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: 14f76a8206bc3464f794fb2e3d3cc665ae416c01893ad7a02b23766eb07159144ee612ad67af5e84fa4479ccfe67678c4feb126b0485651b302babf66f04f9e9
@@ -5004,9 +4997,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:5.0.3, vite@npm:^3.0.0 || ^4.0.0 || ^5.0.0-0, vite@npm:^3.1.0 || ^4.0.0 || ^5.0.0-0":
-  version: 5.0.3
-  resolution: "vite@npm:5.0.3"
+"vite@npm:5.0.4, vite@npm:^3.0.0 || ^4.0.0 || ^5.0.0-0, vite@npm:^3.1.0 || ^4.0.0 || ^5.0.0-0":
+  version: 5.0.4
+  resolution: "vite@npm:5.0.4"
   dependencies:
     esbuild: "npm:^0.19.3"
     fsevents: "npm:~2.3.3"
@@ -5040,7 +5033,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 3864b73586feb66abdc10e9fb21521a1c4ead9513a0b126cad3d59672e62687844ac60c087f61da82423ac3724b6254e0729c35d03840619b2a7d4a0a5cc0bff
+  checksum: 67a0df248af042e75b1ecbf20098096df80a1068a832c5c964a20d7c06853e12b7310989c3c273cb88a9a3a37f4bada0a2115018b36df0fc09a6b6dba9a7d5b5
   languageName: node
   linkType: hard
 
