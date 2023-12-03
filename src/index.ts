@@ -1,5 +1,6 @@
 export * from './defs/index.js';
 export * from './actions.js';
+export * from './bind.js';
 export * from './source.js';
 
 export * as browser from './browser/index.js';
