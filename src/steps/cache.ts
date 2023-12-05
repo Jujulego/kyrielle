@@ -14,6 +14,8 @@ import { awaitedCall, cachedAwaiter } from '../utils/promise.js';
 export interface CacheOrigin<out D = unknown> extends Observable<D>, Readable<D> {}
 export interface CacheTarget<in out D> extends Readable<D | undefined>, Mutable<D> {}
 
+export type CacheFn<D> = () => CacheTarget<D>;
+
 /** Builds cached origin */
 export type CachedOrigin<O extends CacheOrigin, T extends CacheTarget<ObservedValue<O>>> = (
     T extends AsyncReadable
@@ -25,20 +27,38 @@ export type CachedOrigin<O extends CacheOrigin, T extends CacheTarget<ObservedVa
           : SyncReadable<ObservedValue<O>>
   ) & Observable<ObservedValue<O>>;
 
+/**
+ * Uses target as cache for previous origin.
+ * "read" calls will be passed to previous only if target contains "undefined".
+ *
+ * @param target
+ */
 export function cache$<O extends CacheOrigin, T extends CacheTarget<ObservedValue<O>>>(target: T): PipeStep<O, CachedOrigin<O, T>>;
 
-export function cache$<D>(target: CacheTarget<D>): PipeStep<CacheOrigin<D>, CacheOrigin<D>> {
+/**
+ * Uses fn to get cache reference for previous origin.
+ * "read" calls will be passed to previous only if selected target contains "undefined".
+ *
+ * @param fn
+ */
+export function cache$<O extends CacheOrigin, T extends CacheTarget<ObservedValue<O>>>(fn: () => T): PipeStep<O, CachedOrigin<O, T>>;
+
+export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>): PipeStep<CacheOrigin<D>, CacheOrigin<D>> {
   return (origin: CacheOrigin<D>, { off }) => {
     const awaiter = cachedAwaiter();
 
     const res = ref$<D>(() => {
+      const target = typeof arg === 'function' ? arg() : arg;
+
       return awaitedCall<D | undefined, D>(
-        (value) => value !== undefined ? value : awaiter.call(() => awaitedCall(target.mutate, origin.read())),
+        (value) => value ?? awaiter.call(() => awaitedCall(target.mutate, origin.read())),
         target.read(),
       );
     });
 
     off.add(origin.subscribe((value) => {
+      const target = typeof arg === 'function' ? arg() : arg;
+
       awaitedCall(res.next, target.mutate(value));
     }));
 

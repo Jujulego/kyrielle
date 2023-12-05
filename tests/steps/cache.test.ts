@@ -40,4 +40,17 @@ describe('cache$', () => {
     expect(fn).toHaveBeenCalledOnce();
     expect(cache.read()).toStrictEqual({ life: 42 });
   });
+
+  it('should use target function to get cache reference', () => {
+    const fn = vi.fn(() => ({ life: 42 }));
+    const cache = var$<{ life: number }>();
+
+    const ref = pipe$(
+      ref$(fn),
+      cache$(() => cache),
+    );
+
+    expect(ref.read()).toStrictEqual({ life: 42 });
+    expect(cache.read()).toStrictEqual({ life: 42 });
+  });
 });
