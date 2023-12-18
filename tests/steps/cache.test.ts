@@ -31,10 +31,9 @@ describe('cache$', () => {
       cache$(cache),
     );
 
-    await Promise.all([
-      expect(ref.read()).resolves.toStrictEqual({ life: 42 }),
-      expect(ref.read()).resolves.toStrictEqual({ life: 42 })
-    ]);
+    await expect(Promise.all([ref.read(), ref.read()]))
+      .resolves.toStrictEqual([{ life: 42 }, { life: 42 }]);
+
     expect(ref.read()).toStrictEqual({ life: 42 }); // <= synchronous as cache
 
     expect(fn).toHaveBeenCalledOnce();
