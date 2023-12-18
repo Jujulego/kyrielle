@@ -64,8 +64,7 @@
     "build": "jill run 'build:esm // build:types'",
     "build:esm": "swc -d dist src",
     "build:types": "tsc --project tsconfig.build.json",
-    "test": "vitest run",
-    "test:types": "vitest typecheck"
+    "test": "vitest run"
   },
   "dependencies": {
     "immer": "^10.0.3"
