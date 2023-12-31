@@ -8,7 +8,7 @@ import {
 } from '../defs/index.js';
 import { PipeStep } from '../operators/index.js';
 import { ref$ } from '../refs/index.js';
-import { awaitedCall, cachedAwaiter } from '../utils/promise.js';
+import { awaitedCall, dedupedAwaiter } from '../utils/promise.js';
 
 // Types
 export interface CacheOrigin<out D = unknown> extends Observable<D>, Readable<D> {}
@@ -45,7 +45,7 @@ export function cache$<O extends CacheOrigin, T extends CacheTarget<ObservedValu
 
 export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>): PipeStep<CacheOrigin<D>, CacheOrigin<D>> {
   return (origin: CacheOrigin<D>, { off }) => {
-    const awaiter = cachedAwaiter();
+    const awaiter = dedupedAwaiter();
 
     const res = ref$<D>(() => {
       const target = typeof arg === 'function' ? arg() : arg;

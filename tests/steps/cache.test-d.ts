@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Awaitable, describe, expectTypeOf } from 'vitest';
 
 import { pipe$ } from '@/src/operators/index.js';
