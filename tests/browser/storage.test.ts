@@ -4,7 +4,7 @@ import { storage$ } from '@/src/browser/storage.js';
 import { Listener } from '@/src/defs/common.js';
 
 // Setup
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 beforeEach(() => {
   localStorage.clear();
 });
