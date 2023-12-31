@@ -10,7 +10,7 @@ export interface DomEmitter<M> {
  * Wraps an dom element
  * @param element
  */
-export function dom$<M = HTMLElementEventMap>(element: DomEmitter<M>): Listenable<M & Record<never, never>>;
+export function dom$<M = HTMLElementEventMap>(element: DomEmitter<M>): Listenable<M & DataMap>;
 
 export function dom$(element: DomEmitter<DataMap>): Listenable {
   const listeners = listenersMap();
