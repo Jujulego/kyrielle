@@ -67,6 +67,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@swc/helpers": "^0.5.3",
     "immer": "^10.0.3"
   },
   "devDependencies": {
