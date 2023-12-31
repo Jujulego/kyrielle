@@ -15,13 +15,13 @@ export function awaitedCall<A, R>(fn: (arg: A) => Awaitable<R>, arg: Awaitable<A
   return isPromise(arg) ? arg.then(fn) : fn(arg);
 }
 
-export interface CachedAwaiter {
+export interface DedupedAwaiter {
   call<R>(fn: () => PromiseLike<R>): PromiseLike<R>;
   call<R>(fn: () => R): R;
   call<R>(fn: () => Awaitable<R>): Awaitable<R>;
 }
 
-export function cachedAwaiter(): CachedAwaiter {
+export function dedupedAwaiter(): DedupedAwaiter {
   let promise: PromiseLike<unknown> | null = null;
 
   return {
