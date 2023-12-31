@@ -8,6 +8,7 @@
     "coverage/**",
     "dist/**"
   ],
+  "reportUnusedDisableDirectives": true,
   "overrides": [
     {
       "files": "**/*.{js,jsx,ts,tsx}",
