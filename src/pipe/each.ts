@@ -8,8 +8,9 @@ import {
   Ref, Source
 } from '../defs/index.js';
 import { awaitedCall } from '../utils/promise.js';
-import { PipeStep } from '../operators/index.js';
 import { source$ } from '../source.js';
+
+import { PipeStep } from './pipe.js';
 
 // Types
 export type EachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => Awaitable<DB>;

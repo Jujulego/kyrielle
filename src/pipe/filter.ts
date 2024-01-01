@@ -1,6 +1,7 @@
 import { Observable as Obs, Source } from '../defs/index.js';
-import { PipeStep } from '../operators/index.js';
 import { source$ } from '../source.js';
+
+import { PipeStep } from './pipe.js';
 
 // Operator
 export function filter$<DA, DB extends DA>(fn: (arg: DA) => arg is DB): PipeStep<Obs<DA>, Source<DB>>;

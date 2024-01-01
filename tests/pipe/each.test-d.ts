@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expectTypeOf } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
 import { source$ } from '@/src/source.js';
-import { each$ } from '@/src/steps/each.js';
+import { each$ } from '@/src/pipe/each.js';
 
 // Tests
 describe('each$', () => {

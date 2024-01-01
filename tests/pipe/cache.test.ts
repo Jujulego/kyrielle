@@ -1,7 +1,7 @@
 import { expect, vi } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
-import { cache$ } from '@/src/steps/cache.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
+import { cache$ } from '@/src/pipe/cache.js';
 import { ref$, var$ } from '@/src/refs/index.js';
 
 // Tests

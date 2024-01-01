@@ -2,7 +2,7 @@ import { Awaitable, describe, expectTypeOf } from 'vitest';
 
 import { pipe$ } from '@/src/operators/index.js';
 import { ref$ } from '@/src/refs/index.js';
-import { cache$ } from '@/src/steps/cache.js';
+import { cache$ } from '@/src/pipe/cache.js';
 
 // Tests
 describe('cache$', () => {

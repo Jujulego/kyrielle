@@ -4,9 +4,10 @@ import {
   Mutable,
   Readable, Source
 } from '../defs/index.js';
-import { PipeStep } from '../operators/index.js';
 import { source$ } from '../source.js';
 import { awaitedCall } from '../utils/promise.js';
+
+import { PipeStep } from './pipe.js';
 
 // Types
 export type JsonOrigin = Source<string>

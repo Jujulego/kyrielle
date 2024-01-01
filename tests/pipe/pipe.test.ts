@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Observable } from '@/src/defs/features/observable.js';
-import { pipe$, PipeContext } from '@/src/operators/pipe.js';
+import { pipe$, PipeContext } from '@/src/pipe/pipe.js';
 import { source$ } from '@/src/source.js';
 
 describe('pipe$', () => {

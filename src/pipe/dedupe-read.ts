@@ -1,7 +1,7 @@
 import { Observable, Readable } from '../defs/index.js';
-import { PipeStep } from '../operators/index.js';
 import { ref$ } from '../refs/index.js';
 import { dedupedAwaiter } from '../utils/index.js';
+import { PipeStep } from './pipe.js';
 
 // Types
 export interface DedupeReadOrigin<out D = unknown> extends Observable<D>, Readable<D> {}

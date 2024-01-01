@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
-import { json$ } from '@/src/steps/json.js';
+import { json$ } from '@/src/pipe/json.js';
 
 // Test
 describe('json$', () => {

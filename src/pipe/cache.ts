@@ -6,9 +6,9 @@ import {
   Readable,
   ObservedValue, Mutable
 } from '../defs/index.js';
-import { PipeStep } from '../operators/index.js';
 import { ref$ } from '../refs/index.js';
 import { awaitedCall, dedupedAwaiter } from '../utils/promise.js';
+import { PipeStep } from './pipe.js';
 
 // Types
 export interface CacheOrigin<out D = unknown> extends Observable<D>, Readable<D> {}

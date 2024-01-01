@@ -18,7 +18,7 @@
     "./events.d.ts",
     "./operators.d.ts",
     "./refs.d.ts",
-    "./steps.d.ts",
+    "pipe.d.ts",
     "./subscriptions.d.ts"
   ],
   "type": "module",
@@ -45,13 +45,13 @@
       "types": "./dist/operators/index.d.ts",
       "default": "./dist/operators/index.js"
     },
+    "./pipe": {
+      "types": "./dist/pipe/index.d.ts",
+      "default": "./dist/pipe/index.js"
+    },
     "./refs": {
       "types": "./dist/refs/index.d.ts",
       "default": "./dist/refs/index.js"
-    },
-    "./steps": {
-      "types": "./dist/steps/index.d.ts",
-      "default": "./dist/steps/index.js"
     },
     "./subscriptions": {
       "types": "./dist/subscriptions/index.d.ts",
