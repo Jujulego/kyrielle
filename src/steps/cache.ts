@@ -47,12 +47,12 @@ export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>): PipeStep<CacheOrigi
   return (origin: CacheOrigin<D>, { off }) => {
     const awaiter = dedupedAwaiter();
 
-    const res = ref$<D>(() => {
+    const res = ref$<D>((signal) => {
       const target = typeof arg === 'function' ? arg() : arg;
 
       return awaitedCall<D | undefined, D>(
-        (value) => value ?? awaiter.call(() => awaitedCall(target.mutate, origin.read())),
-        target.read(),
+        (value) => value ?? awaiter.call(() => awaitedCall(target.mutate, origin.read(signal)), signal),
+        target.read(signal),
       );
     });
 

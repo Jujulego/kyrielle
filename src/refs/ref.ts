@@ -10,9 +10,9 @@ import { source$ } from '../source.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types
-export type RefFn<D = unknown> = () => Awaitable<D>;
+export type RefFn<D = unknown> = (signal?: AbortSignal) => Awaitable<D>;
 export type SyncRefFn<D = unknown> = () => D;
-export type AsyncRefFn<D = unknown> = () => PromiseLike<D>;
+export type AsyncRefFn<D = unknown> = (signal?: AbortSignal) => PromiseLike<D>;
 
 export type RefOpts<RD = unknown, MD extends RD = RD, A = MD> = Readable<RD> & Partial<Mutable<MD, A>>
 
@@ -68,7 +68,7 @@ export function ref$<RD, MD extends RD = RD, A = MD>(arg: RefFn<RD> | RefOpts<RD
 
     // Reference
     next: (val: RD) => { emit(val); },
-    read: () => awaitedCall(emit, opts.read())
+    read: (signal?: AbortSignal) => awaitedCall(emit, opts.read(signal))
   };
 
   // Add options ;)

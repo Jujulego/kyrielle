@@ -16,18 +16,21 @@ export function awaitedCall<A, R>(fn: (arg: A) => Awaitable<R>, arg: Awaitable<A
 }
 
 export interface DedupedAwaiter {
-  call<R>(fn: () => PromiseLike<R>): PromiseLike<R>;
+  call<R>(fn: () => PromiseLike<R>, signal?: AbortSignal): Promise<R>;
   call<R>(fn: () => R): R;
-  call<R>(fn: () => Awaitable<R>): Awaitable<R>;
+  call<R>(fn: () => Awaitable<R>, signal?: AbortSignal): Awaitable<R>;
 }
 
 export function dedupedAwaiter(): DedupedAwaiter {
   let promise: PromiseLike<unknown> | null = null;
 
   return {
-    call(fn) {
+    call(fn, signal?: AbortSignal) {
       if (promise) {
-        return promise;
+        return new Promise<unknown>((resolve, reject) => {
+          promise!.then(resolve, reject);
+          signal?.addEventListener('abort', () => reject(signal.reason));
+        });
       }
 
       const res = fn();

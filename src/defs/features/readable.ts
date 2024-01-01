@@ -7,7 +7,7 @@ export interface Readable<out D = unknown> {
   /**
    * Return current value
    */
-  read(): Awaitable<D>;
+  read(signal?: AbortSignal): Awaitable<D>;
 }
 
 /**
@@ -27,7 +27,7 @@ export interface AsyncReadable<out D = unknown> extends Readable<D> {
   /**
    * Return current value asynchronously
    */
-  read(): PromiseLike<D>;
+  read(signal?: AbortSignal): PromiseLike<D>;
 }
 
 // Utils

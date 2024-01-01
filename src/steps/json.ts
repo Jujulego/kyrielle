@@ -31,7 +31,7 @@ export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val 
 
     if ('read' in obs) {
       Object.assign(out, {
-        read: () => awaitedCall(parse, (obs as Readable<string>).read())
+        read: (signal?: AbortSignal) => awaitedCall(parse, (obs as Readable<string>).read(signal))
       });
     }
 
