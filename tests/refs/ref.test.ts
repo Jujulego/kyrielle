@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 
 import { ref$ } from '@/src/refs/ref.js';
-import { AbortSignal } from 'happy-dom';
 
 // Tests
 describe('ref$', () => {
