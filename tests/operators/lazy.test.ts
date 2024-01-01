@@ -4,7 +4,7 @@ import { Listenable, Observable } from '@/src/defs/index.js';
 import { group$, GroupObj } from '@/src/events/group.js';
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { lazy$ } from '@/src/operators/lazy.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Setup
 let src: SourceObj<number>;

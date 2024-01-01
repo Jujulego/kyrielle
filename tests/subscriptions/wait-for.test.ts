@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { group$, GroupObj } from '@/src/events/group.js';
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 import { off$ } from '@/src/subscriptions/off.js';
 import { waitFor$ } from '@/src/subscriptions/wait-for.js';
 

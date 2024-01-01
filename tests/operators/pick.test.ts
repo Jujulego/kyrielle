@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { pick$ } from '@/src/operators/pick.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Setup
 let mlt: MultiplexerObj<{ 'life': SourceObj<number> }>;

@@ -1,5 +1,5 @@
 import { Observable as Obs, PipeStep } from '../defs/index.js';
-import { source$ } from '../source.js';
+import { source$ } from '../events/source.js';
 
 /**
  * Filters emitted values using given predicate

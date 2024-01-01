@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Listener } from '@/src/defs/index.js';
 import { group$, GroupObj } from '@/src/events/group.js';
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Setup
 let int: SourceObj<number>;

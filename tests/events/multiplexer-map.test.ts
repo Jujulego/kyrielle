@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Receiver, Emitter, Listenable, Observable } from '@/src/defs/index.js';
 import { multiplexerMap$ } from '@/src/events/multiplexer-map.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('multiplexerMap$', () => {

@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Listener } from '@/src/defs/common.js';
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { inherit$ } from '@/src/operators/inherit.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Setup
 let mlt: MultiplexerObj<{

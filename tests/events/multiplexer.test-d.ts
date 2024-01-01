@@ -5,7 +5,7 @@ import { assertType } from 'vitest';
 
 import { group$ } from '@/src/events/group.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 describe('nested source', () => {
   const mlt = multiplexer$({

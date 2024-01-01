@@ -7,7 +7,7 @@ import {
   Readable,
 } from '../defs/index.js';
 import { awaitedCall } from '../utils/promise.js';
-import { source$ } from '../source.js';
+import { source$ } from '../events/source.js';
 
 // Types
 export type EachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => Awaitable<DB>;

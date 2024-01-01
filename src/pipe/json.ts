@@ -4,7 +4,7 @@ import {
   Mutable, Observable, PipeOrigin, PipeStep,
   Readable
 } from '../defs/index.js';
-import { source$ } from '../source.js';
+import { source$ } from '../events/source.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types

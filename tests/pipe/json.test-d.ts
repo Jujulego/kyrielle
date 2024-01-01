@@ -6,7 +6,7 @@ import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
 import { json$ } from '@/src/pipe/json.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('json$', () => {
