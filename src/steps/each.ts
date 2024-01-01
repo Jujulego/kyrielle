@@ -12,9 +12,9 @@ import { PipeStep } from '../operators/index.js';
 import { source$ } from '../source.js';
 
 // Types
-export type EachFn<DA, DB> = (arg: DA) => Awaitable<DB>;
+export type EachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => Awaitable<DB>;
 export type SyncEachFn<DA, DB> = (arg: DA) => DB;
-export type AsyncEachFn<DA, DB> = (arg: DA) => PromiseLike<DB>;
+export type AsyncEachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => PromiseLike<DB>;
 
 /** Builds an async source type, with same features than A, but a different data type DB */
 export type EachAsyncSource<A extends Obs, DB> = A extends Ref
@@ -69,7 +69,7 @@ export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<Obs<DA>, Obs<DB>
 
     if ('read' in obs) {
       Object.assign(out, {
-        read: () => awaitedCall<DA, DB>(fn, (obs as Readable<DA>).read()),
+        read: (signal?: AbortSignal) => awaitedCall<DA, DB>((arg) => fn(arg, signal), (obs as Readable<DA>).read(signal)),
       });
     }
 

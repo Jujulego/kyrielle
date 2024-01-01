@@ -1,7 +1,7 @@
 import { Observable, Readable } from '../defs/index.js';
 import { PipeStep } from '../operators/index.js';
-import { dedupedAwaiter } from '../utils/index.js';
 import { ref$ } from '../refs/index.js';
+import { dedupedAwaiter } from '../utils/index.js';
 
 // Types
 export interface DedupeReadOrigin<out D = unknown> extends Observable<D>, Readable<D> {}
@@ -18,7 +18,7 @@ export function dedupeRead$<D>(): PipeStep<DedupeReadOrigin<D>, DedupeReadOrigin
   return (origin: DedupeReadOrigin<D>, { off }) => {
     const awaiter = dedupedAwaiter();
 
-    const deduped = ref$<D>(() => awaiter.call(() => origin.read()));
+    const deduped = ref$<D>((signal?: AbortSignal) => awaiter.call(() => origin.read(signal), signal));
 
     if ('mutate' in origin) {
       Object.assign(deduped, { mutate: origin.mutate });

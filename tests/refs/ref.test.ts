@@ -14,11 +14,12 @@ describe('ref$', () => {
     });
 
     it('should call fn and resolve to its result', async () => {
+      const signal = AbortSignal.abort();
       const fn = vi.fn(async () => 42);
       const fn$ = ref$(fn);
 
-      await expect(fn$.read()).resolves.toBe(42);
-      expect(fn).toHaveBeenCalled();
+      await expect(fn$.read(signal)).resolves.toBe(42);
+      expect(fn).toHaveBeenCalledWith(signal);
     });
 
     it('should emit each new result', () => {
@@ -64,14 +65,15 @@ describe('ref$', () => {
 
     describe('asynchronous', () => {
       it('should call read and resolve to its result', async () => {
+        const signal = AbortSignal.abort();
         const read = vi.fn(async () => 42);
         const mutate = vi.fn((v: string) => parseInt(v) + 1);
 
         const fn$ = ref$({ read, mutate });
 
-        await expect(fn$.read()).resolves.toBe(42);
+        await expect(fn$.read(signal)).resolves.toBe(42);
 
-        expect(read).toHaveBeenCalled();
+        expect(read).toHaveBeenCalledWith(signal);
         expect(mutate).not.toHaveBeenCalled();
       });
 
