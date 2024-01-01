@@ -1,7 +1,7 @@
-import { describe, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
-import { filter$ } from '@/src/steps/filter.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
+import { filter$ } from '@/src/pipe/filter.js';
 import { source$ } from '@/src/source.js';
 
 // Test

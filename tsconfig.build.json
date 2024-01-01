@@ -14,7 +14,7 @@
     "./src/events/index.ts",
     "./src/operators/index.ts",
     "./src/refs/index.ts",
-    "./src/steps/index.ts",
+    "./src/pipe/index.ts",
     "./src/subscriptions/index.ts"
   ]
 }

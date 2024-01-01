@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expectTypeOf } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
 import { source$ } from '@/src/source.js';
-import { each$ } from '@/src/steps/each.js';
+import { each$ } from '@/src/pipe/each.js';
 
 // Tests
 describe('each$', () => {
@@ -16,7 +16,7 @@ describe('each$', () => {
       each$((val) => val.toString())
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref).not.toHaveProperty('read');
     expectTypeOf(ref).not.toHaveProperty('mutate');
   });
@@ -27,7 +27,7 @@ describe('each$', () => {
       each$((val) => val.toString())
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref.read).returns.toBeString();
     expectTypeOf(ref).not.toHaveProperty('mutate');
   });
@@ -38,7 +38,7 @@ describe('each$', () => {
       each$((val) => val.toString())
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref.read).returns.toBeString();
     expectTypeOf(ref.mutate).parameter(0).toBeNumber();
     expectTypeOf(ref.mutate).returns.toBeString();
@@ -50,7 +50,7 @@ describe('each$', () => {
       each$(async (val) => val.toString())
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref.read).returns.resolves.toBeString();
     expectTypeOf(ref.mutate).parameter(0).toBeNumber();
     expectTypeOf(ref.mutate).returns.resolves.toBeString();
@@ -65,7 +65,7 @@ describe('each$', () => {
       each$((val) => val.toString()) // <= sync but result is still async because initial ref is async
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref.read).returns.resolves.toBeString();
     expectTypeOf(ref.mutate).parameter(0).toBeNumber();
     expectTypeOf(ref.mutate).returns.toBeString();
@@ -80,7 +80,7 @@ describe('each$', () => {
       each$((val) => val.toString()) // <= sync but result is still async because initial ref is async
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeString();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeString();
     expectTypeOf(ref.read).returns.toBeString();
     expectTypeOf(ref.mutate).parameter(0).toBeNumber();
     expectTypeOf(ref.mutate).returns.resolves.toBeString();

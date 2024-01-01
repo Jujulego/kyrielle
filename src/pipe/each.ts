@@ -1,14 +1,12 @@
 import {
-  AsyncMutableRef, AsyncRef, Awaitable, CopyMutableRefSynchronicity,
-  CopyRefSynchronicity,
+  AsyncMutable,
+  AsyncReadable, Awaitable, CopyMutableSynchronicity, CopyReadableSynchronicity,
   Mutable,
-  MutableRef,
-  Observable as Obs, ObservedValue,
+  Observable,
+  PipedValue, PipeOrigin, PipeStep,
   Readable,
-  Ref, Source
 } from '../defs/index.js';
 import { awaitedCall } from '../utils/promise.js';
-import { PipeStep } from '../operators/index.js';
 import { source$ } from '../source.js';
 
 // Types
@@ -17,25 +15,22 @@ export type SyncEachFn<DA, DB> = (arg: DA) => DB;
 export type AsyncEachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => PromiseLike<DB>;
 
 /** Builds an async source type, with same features than A, but a different data type DB */
-export type EachAsyncSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<unknown, infer AA>
-    ? AsyncMutableRef<DB, AA>
-    : AsyncRef<DB>
-  : Source<DB>;
+export type EachAsyncSource<A extends PipeOrigin, DB> =
+  & (A extends Observable ? Observable<DB> : unknown)
+  & (A extends Readable ? AsyncReadable<DB> : unknown)
+  & (A extends Mutable<unknown, infer AA> ? AsyncMutable<DB, AA> : unknown);
 
 /** Builds a source type, with same features and synchronicity than A, but a different data type DB */
-export type EachSyncSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<unknown, infer AA>
-    ? CopyMutableRefSynchronicity<A, DB, AA>
-    : CopyRefSynchronicity<A, DB>
-  : Source<DB>;
+export type EachSyncSource<A extends PipeOrigin, DB> =
+  & (A extends Observable ? Observable<DB> : unknown)
+  & (A extends Readable ? CopyReadableSynchronicity<A, DB> : unknown)
+  & (A extends Mutable<unknown, infer AA> ? CopyMutableSynchronicity<A, DB, AA> : unknown);
 
 /** Builds an awaitable source type, with same features than A, but a different data type DB */
-export type EachSource<A extends Obs, DB> = A extends Ref
-  ? A extends Mutable<unknown, infer AA>
-    ? MutableRef<DB, AA>
-    : Ref<DB>
-  : Source<DB>;
+export type EachSource<A extends PipeOrigin, DB> =
+  & (A extends Observable ? Observable<DB> : unknown)
+  & (A extends Readable ? Readable<DB> : unknown)
+  & (A extends Mutable<unknown, infer AA> ? Mutable<DB, AA> : unknown);
 
 // Operator
 /**
@@ -46,7 +41,7 @@ export type EachSource<A extends Obs, DB> = A extends Ref
  *
  * @param fn
  */
-export function each$<A extends Obs, DB>(fn: AsyncEachFn<ObservedValue<A>, DB>): PipeStep<A, EachAsyncSource<A, DB>>;
+export function each$<A extends PipeOrigin, DB>(fn: AsyncEachFn<PipedValue<A>, DB>): PipeStep<A, EachAsyncSource<A, DB>>;
 
 /**
  * Applies fn to each emitted value, read result and mutate result.
@@ -54,17 +49,17 @@ export function each$<A extends Obs, DB>(fn: AsyncEachFn<ObservedValue<A>, DB>):
  *
  * @param fn
  */
-export function each$<A extends Obs, DB>(fn: SyncEachFn<ObservedValue<A>, DB>): PipeStep<A, EachSyncSource<A, DB>>;
+export function each$<A extends PipeOrigin, DB>(fn: SyncEachFn<PipedValue<A>, DB>): PipeStep<A, EachSyncSource<A, DB>>;
 
 /**
  * Applies fn to each emitted value, read result and mutate result.
  *
  * @param fn
  */
-export function each$<A extends Obs, DB>(fn: EachFn<ObservedValue<A>, DB>): PipeStep<A, EachSource<A, DB>>;
+export function each$<A extends PipeOrigin, DB>(fn: EachFn<PipedValue<A>, DB>): PipeStep<A, EachSource<A, DB>>;
 
-export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<Obs<DA>, Obs<DB>> {
-  return (obs: Obs<DA>, { off }) => {
+export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<PipeOrigin<DA>, PipeOrigin<DB>> {
+  return (obs: PipeOrigin<DA>) => {
     const out = source$<DB>();
 
     if ('read' in obs) {
@@ -79,9 +74,9 @@ export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<Obs<DA>, Obs<DB>
       });
     }
 
-    off.add(
-      obs.subscribe((data) => awaitedCall(out.next, fn(data)))
-    );
+    if ('subscribe' in obs) {
+      obs.subscribe((data) => awaitedCall(out.next, fn(data)));
+    }
 
     return out;
   };

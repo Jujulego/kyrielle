@@ -1,16 +1,15 @@
 import { vi } from 'vitest';
 
 import { Observable } from '@/src/defs/features/observable.js';
-import { flow$ } from '@/src/operators/flow.js';
-import { PipeContext } from '@/src/operators/pipe.js';
+import { flow$ } from '@/src/pipe/flow.js';
 import { source$ } from '@/src/source.js';
 
 describe('flow$', () => {
   it('should pass down result from op to receiver at the end', () => {
     const ref = source$<string>();
-    const op = vi.fn((base: Observable<string>, { off }: PipeContext) => {
+    const op = vi.fn((base: Observable<string>) => {
       const res = source$<number>();
-      off.add(base.subscribe((v) => res.next(parseInt(v))));
+      base.subscribe((v) => res.next(parseInt(v)));
 
       return res;
     });
@@ -18,9 +17,9 @@ describe('flow$', () => {
     vi.spyOn(rcv, 'next');
 
     // Setup flow
-    const off = flow$(ref, op, rcv);
+    flow$(ref, op, rcv);
 
-    expect(op).toHaveBeenCalledWith(ref, { off });
+    expect(op).toHaveBeenCalledWith(ref);
 
     // Emit some data
     ref.next('42');

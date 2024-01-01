@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, expectTypeOf } from 'vitest';
+import { describe, expectTypeOf, it } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
-import { json$ } from '@/src/steps/index.js';
+import { json$ } from '@/src/pipe/json.js';
 import { source$ } from '@/src/source.js';
 
 // Tests
@@ -16,7 +16,7 @@ describe('json$', () => {
       json$((val): val is number => typeof val === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toEqualTypeOf<number | null>();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref).not.toHaveProperty('read');
     expectTypeOf(ref).not.toHaveProperty('mutate');
   });
@@ -27,7 +27,7 @@ describe('json$', () => {
       json$((val): val is number => typeof val === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toEqualTypeOf<number | null>();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.read).returns.toEqualTypeOf<number | null>();
     expectTypeOf(ref).not.toHaveProperty('mutate');
   });
@@ -38,7 +38,7 @@ describe('json$', () => {
       json$((val): val is number => typeof val === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toEqualTypeOf<number | null>();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.read).returns.toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).returns.toEqualTypeOf<number | null>();
@@ -53,7 +53,7 @@ describe('json$', () => {
       json$((val): val is number => typeof val === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toEqualTypeOf<number | null>();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.read).returns.resolves.toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).returns.toEqualTypeOf<number | null>();
@@ -68,7 +68,7 @@ describe('json$', () => {
       json$((val): val is number => typeof val === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toEqualTypeOf<number | null>();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.read).returns.toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).parameter(0).toEqualTypeOf<number | null>();
     expectTypeOf(ref.mutate).returns.resolves.toEqualTypeOf<number | null>();

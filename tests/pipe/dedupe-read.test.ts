@@ -1,7 +1,7 @@
 import { expect, vi } from 'vitest';
 
-import { pipe$ } from '@/src/operators/pipe.js';
-import { dedupeRead$ } from '@/src/steps/dedupe-read.js';
+import { pipe$ } from '@/src/pipe/pipe.js';
+import { dedupeRead$ } from '@/src/pipe/dedupe-read.js';
 import { ref$ } from '@/src/refs/index.js';
 
 // Tests
