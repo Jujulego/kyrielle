@@ -1,10 +1,8 @@
-import { Observable, Readable } from '../defs/index.js';
-import { ref$ } from '../refs/index.js';
+import { Observable, PipeStep, Readable } from '../defs/index.js';
 import { dedupedAwaiter } from '../utils/index.js';
-import { PipeStep } from './pipe.js';
 
 // Types
-export interface DedupeReadOrigin<out D = unknown> extends Observable<D>, Readable<D> {}
+export interface DedupeReadOrigin<out D = unknown> extends Readable<D>, Partial<Observable<D>> {}
 
 /**
  * Deduplicates calls to origin's read method.
@@ -15,17 +13,12 @@ export interface DedupeReadOrigin<out D = unknown> extends Observable<D>, Readab
 export function dedupeRead$<R extends DedupeReadOrigin>(): PipeStep<R, R>;
 
 export function dedupeRead$<D>(): PipeStep<DedupeReadOrigin<D>, DedupeReadOrigin<D>> {
-  return (origin: DedupeReadOrigin<D>, { off }) => {
+  return (origin: DedupeReadOrigin<D>) => {
     const awaiter = dedupedAwaiter();
+    const originalRead = origin.read.bind(origin);
 
-    const deduped = ref$<D>((signal?: AbortSignal) => awaiter.call(() => origin.read(signal), signal));
-
-    if ('mutate' in origin) {
-      Object.assign(deduped, { mutate: origin.mutate });
-    }
-
-    off.add(origin.subscribe((value) => deduped.next(value)));
-
-    return deduped;
+    return Object.assign(origin, {
+      read: (signal?: AbortSignal) => awaiter.call(() => originalRead(signal), signal)
+    });
   };
 }

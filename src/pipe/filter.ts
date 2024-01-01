@@ -1,22 +1,27 @@
-import { Observable as Obs, Source } from '../defs/index.js';
+import { Observable as Obs, PipeStep } from '../defs/index.js';
 import { source$ } from '../source.js';
 
-import { PipeStep } from './pipe.js';
+/**
+ * Filters emitted values using given predicate
+ * @param predicate
+ */
+export function filter$<DA, DB extends DA>(predicate: (arg: DA) => arg is DB): PipeStep<Obs<DA>, Obs<DB>>;
 
-// Operator
-export function filter$<DA, DB extends DA>(fn: (arg: DA) => arg is DB): PipeStep<Obs<DA>, Source<DB>>;
+/**
+ * Filters emitted values using given predicate
+ * @param predicate
+ */
+export function filter$<D>(predicate: (arg: D) => boolean): PipeStep<Obs<D>, Obs<D>>;
 
-export function filter$<D>(fn: (arg: D) => boolean): PipeStep<Obs<D>, Source<D>>;
-
-export function filter$<D>(fn: (arg: D) => boolean): PipeStep<Obs<D>, Source<D>> {
-  return (obs: Obs<D>, { off }) => {
+export function filter$<D>(predicate: (arg: D) => boolean): PipeStep<Obs<D>, Obs<D>> {
+  return (obs: Obs<D>) => {
     const out = source$<D>();
 
-    off.add(obs.subscribe((data) => {
-      if (fn(data)) {
+    obs.subscribe((data) => {
+      if (predicate(data)) {
         out.next(data);
       }
-    }));
+    });
 
     return out;
   };

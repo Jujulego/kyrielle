@@ -1,20 +1,17 @@
 import {
   CopyMutableSynchronicity,
   CopyReadableSynchronicity,
-  Mutable,
-  Readable, Source
+  Mutable, Observable, PipeOrigin, PipeStep,
+  Readable
 } from '../defs/index.js';
 import { source$ } from '../source.js';
 import { awaitedCall } from '../utils/promise.js';
 
-import { PipeStep } from './pipe.js';
-
 // Types
-export type JsonOrigin = Source<string>
-  & Partial<Readable<string>>
-  & Partial<Mutable<string, string>>;
+export type JsonOrigin = PipeOrigin<string>;
 
-export type JsonResultOrigin<A extends JsonOrigin, D> = Source<D>
+export type JsonResultOrigin<A extends JsonOrigin, D> =
+  & (A extends Observable<string> ? Observable<D> : unknown)
   & (A extends Readable<string> ? CopyReadableSynchronicity<A, D> : unknown)
   & (A extends Mutable<string, string> ? CopyMutableSynchronicity<A, D, D> : unknown)
 
@@ -27,25 +24,25 @@ export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val 
     return validate(val) ? val : null;
   }
 
-  return (obs: A, { off }) => {
+  return (origin: A) => {
     const out = source$<DB | null>();
 
-    if ('read' in obs) {
+    if ('read' in origin) {
       Object.assign(out, {
-        read: (signal?: AbortSignal) => awaitedCall(parse, (obs as Readable<string>).read(signal))
+        read: (signal?: AbortSignal) => awaitedCall(parse, (origin as Readable<string>).read(signal))
       });
     }
 
-    if ('mutate' in obs) {
+    if ('mutate' in origin) {
       Object.assign(out, {
-        mutate: (arg: DB) => awaitedCall(parse, awaitedCall((obs as Mutable<string, string>).mutate, JSON.stringify(arg))),
+        mutate: (arg: DB) => awaitedCall(parse, awaitedCall((origin as Mutable<string, string>).mutate, JSON.stringify(arg))),
       });
     }
 
-    off.add(
-      obs.subscribe((json) => out.next(parse(json)))
-    );
+    if ('subscribe' in origin) {
+      origin.subscribe((json) => out.next(parse(json)));
+    }
 
-    return out as unknown as JsonResultOrigin<A, DB | null>;
+    return out as JsonResultOrigin<A, DB | null>;
   };
 }

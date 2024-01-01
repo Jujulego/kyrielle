@@ -1,4 +1,4 @@
-import { describe, expectTypeOf } from 'vitest';
+import { describe, expectTypeOf, it } from 'vitest';
 
 import { pipe$ } from '@/src/pipe/pipe.js';
 import { filter$ } from '@/src/pipe/filter.js';
@@ -12,7 +12,7 @@ describe('filter$', () => {
       filter$((arg): arg is number => typeof arg === 'number')
     );
 
-    expectTypeOf(ref.next).parameter(0).toBeNumber();
+    expectTypeOf(ref.subscribe).parameter(0).parameter(0).toBeNumber();
     expectTypeOf(ref).not.toHaveProperty('read');
     expectTypeOf(ref).not.toHaveProperty('mutate');
   });
