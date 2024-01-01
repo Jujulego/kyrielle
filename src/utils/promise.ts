@@ -28,8 +28,12 @@ export function dedupedAwaiter(): DedupedAwaiter {
     call(fn, signal?: AbortSignal) {
       if (promise) {
         return new Promise<unknown>((resolve, reject) => {
-          promise!.then(resolve, reject);
-          signal?.addEventListener('abort', () => reject(signal.reason));
+          if (signal?.aborted) {
+            reject(signal.reason);
+          } else {
+            promise!.then(resolve, reject);
+            signal?.addEventListener('abort', () => reject(signal.reason));
+          }
         });
       }
 
