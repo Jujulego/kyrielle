@@ -17,8 +17,8 @@
     "./collections.d.ts",
     "./events.d.ts",
     "./operators.d.ts",
+    "./pipe.d.ts",
     "./refs.d.ts",
-    "pipe.d.ts",
     "./subscriptions.d.ts"
   ],
   "type": "module",

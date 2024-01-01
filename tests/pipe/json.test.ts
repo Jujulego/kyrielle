@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { json$ } from '@/src/pipe/json.js';
 import { pipe$ } from '@/src/pipe/pipe.js';
 import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
-import { json$ } from '@/src/pipe/json.js';
 
 // Test
 describe('json$', () => {
