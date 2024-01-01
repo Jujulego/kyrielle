@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { Observable } from '@/src/defs/features/observable.js';
 import { flow$ } from '@/src/pipe/flow.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 describe('flow$', () => {
   it('should pass down result from op to receiver at the end', () => {

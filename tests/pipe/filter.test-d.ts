@@ -2,7 +2,7 @@ import { describe, expectTypeOf, it } from 'vitest';
 
 import { pipe$ } from '@/src/pipe/pipe.js';
 import { filter$ } from '@/src/pipe/filter.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('filter$', () => {

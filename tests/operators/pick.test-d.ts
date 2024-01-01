@@ -3,7 +3,7 @@ import { expectTypeOf } from 'vitest';
 import { Emitter, Listenable } from '@/src/defs/index.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
 import { pick$ } from '@/src/operators/pick.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Setup
 const mlt = multiplexer$({

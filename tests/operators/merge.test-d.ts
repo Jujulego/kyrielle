@@ -1,7 +1,7 @@
 import { expectTypeOf } from 'vitest';
 
 import { merge$ } from '@/src/operators/merge.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('merge$', () => {

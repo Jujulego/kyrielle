@@ -6,7 +6,7 @@ import {
   SyncMutable,
   SyncReadable, SyncRef
 } from '../defs/index.js';
-import { source$ } from '../source.js';
+import { source$ } from '../events/source.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types

@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { watch$ } from '@/src/subscriptions/watch.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Setup
 let src: SourceObj<number>;

@@ -6,7 +6,7 @@ import {
   OutputDataRecord,
   Listener
 } from '../defs/index.js';
-import { source$ } from '../source.js';
+import { source$ } from './source.js';
 import { multiplexerMap$ } from './multiplexer-map.js';
 
 /**

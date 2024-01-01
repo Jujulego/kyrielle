@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Listener } from '@/src/defs/index.js';
 import { groupMap$ } from '@/src/events/group-map.js';
 import { multiplexer$ } from '@/src/events/multiplexer.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('groupMap$', () => {

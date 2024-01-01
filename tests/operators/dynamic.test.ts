@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
 import { dynamic$ } from '@/src/operators/dynamic.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 
 // Tests
 describe('dynamic$', () => {

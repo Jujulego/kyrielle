@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { Listener } from '@/src/defs/common.js';
 import { merge$ } from '@/src/operators/merge.js';
-import { source$ } from '@/src/source.js';
+import { source$ } from '@/src/events/source.js';
 
 // Tests
 describe('merge$', () => {

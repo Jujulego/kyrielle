@@ -1,7 +1,7 @@
 import { it } from 'vitest';
 
 import { multiplexer$, MultiplexerObj } from '@/src/events/multiplexer.js';
-import { source$, SourceObj } from '@/src/source.js';
+import { source$, SourceObj } from '@/src/events/source.js';
 import { iterate$ } from '@/src/subscriptions/iterate.js';
 import { off$ } from '@/src/subscriptions/off.js';
 
