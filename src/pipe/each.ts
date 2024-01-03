@@ -6,8 +6,9 @@ import {
   PipedValue, PipeOrigin, PipeStep,
   Readable,
 } from '../defs/index.js';
-import { awaitedCall } from '../utils/promise.js';
 import { source$ } from '../events/source.js';
+import { isMutable, isReadable } from '../utils/predicate.js';
+import { awaitedCall } from '../utils/promise.js';
 
 // Types
 export type EachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => Awaitable<DB>;
@@ -62,15 +63,15 @@ export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<PipeOrigin<DA>, 
   return (obs: PipeOrigin<DA>) => {
     const out = source$<DB>();
 
-    if ('read' in obs) {
+    if (isReadable<DA>(obs)) {
       Object.assign(out, {
-        read: (signal?: AbortSignal) => awaitedCall<DA, DB>((arg) => fn(arg, signal), (obs as Readable<DA>).read(signal)),
+        read: (signal?: AbortSignal) => awaitedCall<DA, DB>((arg: DA) => fn(arg, signal), obs.read(signal)),
       });
     }
 
-    if ('mutate' in obs) {
+    if (isMutable<DA, AA>(obs)) {
       Object.assign(out, {
-        mutate: (arg: AA) => awaitedCall(fn, awaitedCall((obs as Mutable<DA, AA>).mutate, arg))
+        mutate: (arg: AA, signal?: AbortSignal) => awaitedCall((arg: DA) => fn(arg, signal), obs.mutate(arg, signal))
       });
     }
 

@@ -5,6 +5,7 @@ import {
   Readable
 } from '../defs/index.js';
 import { source$ } from '../events/source.js';
+import { isMutable, isReadable } from '../utils/predicate.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types
@@ -27,15 +28,15 @@ export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val 
   return (origin: A) => {
     const out = source$<DB | null>();
 
-    if ('read' in origin) {
+    if (isReadable<string>(origin)) {
       Object.assign(out, {
-        read: (signal?: AbortSignal) => awaitedCall(parse, (origin as Readable<string>).read(signal))
+        read: (signal?: AbortSignal) => awaitedCall(parse, origin.read(signal))
       });
     }
 
-    if ('mutate' in origin) {
+    if (isMutable<string, string>(origin)) {
       Object.assign(out, {
-        mutate: (arg: DB) => awaitedCall(parse, awaitedCall((origin as Mutable<string, string>).mutate, JSON.stringify(arg))),
+        mutate: (arg: DB, signal?: AbortSignal) => awaitedCall(parse, origin.mutate(JSON.stringify(arg), signal)),
       });
     }
 

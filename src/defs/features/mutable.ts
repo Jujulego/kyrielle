@@ -7,7 +7,7 @@ export interface Mutable<out D = unknown, in A = any> { // eslint-disable-line @
   /**
    * Mutate current value
    */
-  mutate(arg: A): Awaitable<D>;
+  mutate(arg: A, signal?: AbortSignal): Awaitable<D>;
 }
 
 /**
@@ -27,7 +27,7 @@ export interface AsyncMutable<out D = unknown, in A = any> extends Mutable<D, A>
   /**
    * Mutate current value asynchronously
    */
-  mutate(arg: A): PromiseLike<D>;
+  mutate(arg: A, signal?: AbortSignal): PromiseLike<D>;
 }
 
 // Utils
