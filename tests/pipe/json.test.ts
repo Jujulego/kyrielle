@@ -54,7 +54,7 @@ describe('json$', () => {
 
       expect(ref.mutate(42)).toBe(42);
       expect(validate).toHaveBeenCalledWith(42);
-      expect(base.mutate).toHaveBeenCalledWith('42');
+      expect(base.mutate).toHaveBeenCalledWith('42', undefined);
     });
 
     it('should call fn with mutate resolved result from base', async () => {
@@ -70,7 +70,7 @@ describe('json$', () => {
 
       await expect(ref.mutate(42)).resolves.toBe(42);
       expect(validate).toHaveBeenCalledWith(42);
-      expect(base.mutate).toHaveBeenCalledWith('42');
+      expect(base.mutate).toHaveBeenCalledWith('42', undefined);
     });
   });
 });

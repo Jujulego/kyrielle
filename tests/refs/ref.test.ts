@@ -59,7 +59,7 @@ describe('ref$', () => {
         expect(fn$.mutate('1')).toBe(2);
 
         expect(read).not.toHaveBeenCalled();
-        expect(mutate).toHaveBeenCalledWith('1');
+        expect(mutate).toHaveBeenCalledWith('1', undefined);
       });
     });
 
@@ -86,7 +86,7 @@ describe('ref$', () => {
         await expect(fn$.mutate('1')).resolves.toBe(2);
 
         expect(read).not.toHaveBeenCalled();
-        expect(mutate).toHaveBeenCalledWith('1');
+        expect(mutate).toHaveBeenCalledWith('1', undefined);
       });
     });
   });

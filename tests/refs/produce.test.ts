@@ -28,7 +28,7 @@ describe('produce$', () => {
     vi.spyOn(ref, 'mutate');
 
     expect(produce$(ref, recipe)).toStrictEqual({ id: 'test', life: 0 });
-    expect(ref.mutate).toHaveBeenCalledWith({ id: 'test', life: 0 });
+    expect(ref.mutate).toHaveBeenCalledWith({ id: 'test', life: 0 }, undefined);
   });
 
   it('should pass given signal to read', () => {
