@@ -17,11 +17,6 @@ export interface SyncMutableRef<in out D = unknown, in A = D> extends SyncRef<D>
 export interface AsyncMutableRef<in out D = unknown, in A = D> extends AsyncRef<D>, AsyncMutable<D, A> {}
 
 /**
- * A mutable ref where its mutate accept an argument with the same type as its value.
- */
-export interface SymmetricRef<in out D = unknown> extends MutableRef<D, D> {}
-
-/**
  * Build a Mutable type with the same synchronicity and the given value types
  */
 export type CopyMutableRefSynchronicity<R extends MutableRef, D, A> = CopyRefSynchronicity<R, D> & CopyMutableSynchronicity<R, D, A>;
