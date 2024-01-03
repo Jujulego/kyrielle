@@ -39,5 +39,8 @@ export function produce$<D>(ref: Readable<D> & SyncMutable<D, D>, recipe: Recipe
 export function produce$<D>(ref: Readable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): Awaitable<D>;
 
 export function produce$<D>(ref: Readable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts: ProducerOpts = {}): Awaitable<D> {
-  return awaitedCall(ref.mutate, awaitedCall((old: D) => (opts.immer?.produce ?? produce)(old, recipe), ref.read(opts.signal)));
+  return awaitedCall(
+    (result: D) => ref.mutate(result, opts.signal),
+    awaitedCall((old: D) => (opts.immer?.produce ?? produce)(old, recipe), ref.read(opts.signal))
+  );
 }

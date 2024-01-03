@@ -7,6 +7,7 @@ import {
   SyncReadable, SyncRef
 } from '../defs/index.js';
 import { source$ } from '../events/source.js';
+import { isMutable } from '../utils/predicate.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types
@@ -72,9 +73,9 @@ export function ref$<RD, MD extends RD = RD, A = MD>(arg: RefFn<RD> | RefOpts<RD
   };
 
   // Add options ;)
-  if ('mutate' in opts) {
+  if (isMutable<MD, A>(opts)) {
     return Object.assign(ref, {
-      mutate: (arg: A) => awaitedCall(emit, opts.mutate!(arg))
+      mutate: (arg: A, signal?: AbortSignal) => awaitedCall(emit, opts.mutate(arg, signal))
     });
   }
 

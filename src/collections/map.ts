@@ -3,6 +3,13 @@ import { asyncIterMapper, iterMapper, yieldMapper } from '../utils/iterator.js';
 import { awaitedCall } from '../utils/promise.js';
 
 // Types
+export interface RefMapSetOpts {
+  /**
+   * Signal to pass to ref mutate call (if called)
+   */
+  readonly signal?: AbortSignal;
+}
+
 export type RefMapFn<K, D, R extends Readable<D> & Mutable<D, D>> = (key: K, value: D) => R;
 
 export type RefIteratorValue<D, R extends Readable<D>> = R extends AsyncReadable ? Promise<D> : D;
@@ -47,14 +54,14 @@ export class RefMap<K, D, R extends Readable<D> & Mutable<D, D>> {
     return this._references.has(key);
   }
 
-  set(key: K, value: D): R {
+  set(key: K, value: D, opts: RefMapSetOpts = {}): R {
     let ref = this._references.get(key);
 
     if (!ref) {
       ref = this._builder(key, value);
       this._references.set(key, ref);
     } else {
-      ref.mutate(value);
+      ref.mutate(value, opts.signal);
     }
 
     return ref;
