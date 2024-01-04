@@ -1,1 +1,1 @@
-export * from './dist/steps/index.d.ts';
+export * from './dist/pipe/index.d.ts';
