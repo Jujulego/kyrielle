@@ -73,7 +73,7 @@ export function ref$<RD, MD extends RD = RD, A = MD>(arg: RefFn<RD> | RefOpts<RD
   };
 
   // Add options ;)
-  if (isMutable<MD, A>(opts)) {
+  if (isMutable<Mutable<MD, A>>(opts)) {
     return Object.assign(ref, {
       mutate: (arg: A, signal?: AbortSignal) => awaitedCall(emit, opts.mutate(arg, signal))
     });

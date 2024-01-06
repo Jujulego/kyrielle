@@ -34,7 +34,7 @@ export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val 
       });
     }
 
-    if (isMutable<string, string>(origin)) {
+    if (isMutable<Mutable<string, string>>(origin)) {
       Object.assign(out, {
         mutate: (arg: DB, signal?: AbortSignal) => awaitedCall(parse, origin.mutate(JSON.stringify(arg), signal)),
       });
