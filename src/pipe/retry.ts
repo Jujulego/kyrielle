@@ -6,6 +6,7 @@ import { isMutable } from '../utils/predicate.js';
 export type RetryableMethod = 'read' | 'mutate' | 'both';
 
 export interface RetryableReadableOrigin<out D = unknown> extends AsyncReadable<D>, Partial<Observable<D>> {}
+export interface RetryableMutableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, AsyncMutable<D, A>, Partial<Observable<D>> {}
 export interface RetryableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, Partial<Observable<D> & AsyncMutable<D, A>> {}
 
 export interface RetryOptions {
@@ -29,14 +30,14 @@ export interface RetryOptions {
 /**
  * Retry calls to selected methods.
  */
-export function retry<R extends RetryableReadableOrigin>(method: 'read', options?: RetryOptions): PipeStep<R, R>;
+export function retry$<R extends RetryableReadableOrigin>(method: 'read', options?: RetryOptions): PipeStep<R, R>;
 
 /**
  * Retry calls to selected methods.
  */
-export function retry<R extends RetryableOrigin>(method: RetryableMethod, options?: RetryOptions): PipeStep<R, R>;
+export function retry$<R extends RetryableMutableOrigin>(method: RetryableMethod, options?: RetryOptions): PipeStep<R, R>;
 
-export function retry<D, A>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<RetryableOrigin<D, A>, RetryableOrigin<D, A>> {
+export function retry$<D, A>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<RetryableOrigin<D, A>, RetryableOrigin<D, A>> {
   const { onRetry = () => true, tryTimeout } = options;
 
   async function retryStrategy<D>(fn: (signal?: AbortSignal) => PromiseLike<D>, signal?: AbortSignal): Promise<D> {
