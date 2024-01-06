@@ -7,8 +7,12 @@ export interface DomEmitter<M> {
 }
 
 /**
+ * Wraps an AbortSignal
+ */
+export function dom$(signal: AbortSignal): Listenable<AbortSignalEventMap & DataMap>;
+
+/**
  * Wraps an dom element
- * @param element
  */
 export function dom$<M = HTMLElementEventMap>(element: DomEmitter<M>): Listenable<M & DataMap>;
 
