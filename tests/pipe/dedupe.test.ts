@@ -1,7 +1,7 @@
 import { expect, vi } from 'vitest';
 
 import { pipe$ } from '@/src/pipe/pipe.js';
-import { dedupeRead$ } from '@/src/pipe/dedupe-read.js';
+import { dedupe$ } from '@/src/pipe/dedupe.js';
 import { ref$ } from '@/src/refs/index.js';
 
 // Tests
@@ -11,7 +11,7 @@ describe('dedupeRead$', () => {
 
     const ref = pipe$(
       ref$(fn),
-      dedupeRead$(),
+      dedupe$(),
     );
 
     await expect(Promise.all([ref.read(), ref.read()]))
