@@ -62,7 +62,7 @@ describe('retry$', () => {
     const piped = pipe$(
       ref$({ read }),
       retry$('read', {
-        onRetry: () => new Promise((resolve) => setTimeout(() => resolve(true), 1000)),
+        onRetry: () => new Promise((resolve) => setTimeout(() => resolve(), 1000)),
       }),
     );
 
