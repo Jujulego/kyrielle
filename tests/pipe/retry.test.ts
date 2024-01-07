@@ -26,12 +26,17 @@ describe('retry$', () => {
   });
 
   it('should call twice ref mutate method', async () => {
-    const read = vi.fn(async () => 42);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const mutate = vi.fn(async (_: string) => 42);
     mutate.mockRejectedValueOnce(new Error('Try again !'));
 
-    const piped = pipe$(ref$({ read, mutate }), retry$('mutate'));
+    const piped = pipe$(
+      ref$({
+        read: async () => 42,
+        mutate
+      }),
+      retry$('mutate')
+    );
 
     await expect(piped.mutate('life')).resolves.toBe(42);
     expect(mutate).toHaveBeenCalledTimes(2);

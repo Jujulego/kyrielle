@@ -5,18 +5,36 @@ import { dedupe$ } from '@/src/pipe/dedupe.js';
 import { ref$ } from '@/src/refs/index.js';
 
 // Tests
-describe('dedupeRead$', () => {
-  it('should call fn only once and return result to every caller', async () => {
-    const fn = vi.fn(async () => ({ life: 42 }));
+describe('dedupe$', () => {
+  it('should call read only once and return result to every caller', async () => {
+    const read = vi.fn(async () => ({ life: 42 }));
 
-    const ref = pipe$(
-      ref$(fn),
-      dedupe$(),
+    const deduped = pipe$(
+      ref$({ read }),
+      dedupe$('read'),
     );
 
-    await expect(Promise.all([ref.read(), ref.read()]))
+    await expect(Promise.all([deduped.read(), deduped.read()]))
       .resolves.toStrictEqual([{ life: 42 }, { life: 42 }]);
 
-    expect(fn).toHaveBeenCalledOnce();
+    expect(read).toHaveBeenCalledOnce();
+  });
+
+  it('should call mutate only once and return result to every caller', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const mutate = vi.fn(async (_: string) => ({ life: 42 }));
+
+    const deduped = pipe$(
+      ref$({
+        read: async () => ({ life: 42 }),
+        mutate,
+      }),
+      dedupe$('mutate'),
+    );
+
+    await expect(Promise.all([deduped.mutate('life'), deduped.mutate('life')]))
+      .resolves.toStrictEqual([{ life: 42 }, { life: 42 }]);
+
+    expect(mutate).toHaveBeenCalledOnce();
   });
 });

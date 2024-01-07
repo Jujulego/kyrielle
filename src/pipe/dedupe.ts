@@ -3,7 +3,7 @@ import { dedupedAwaiter } from '../utils/index.js';
 import { isMutable } from '../utils/predicate.js';
 
 // Types
-export type DedupableMethod = 'read' | 'mutable' | 'both';
+export type DedupableMethod = 'read' | 'mutate' | 'both';
 
 export interface DedupableReadableOrigin<out D = unknown> extends AsyncReadable<D>, Partial<Observable<D>> {}
 export interface DedupableMutableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, AsyncMutable<D, A>, Partial<Observable<D>> {}
