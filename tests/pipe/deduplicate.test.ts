@@ -1,17 +1,17 @@
 import { expect, vi } from 'vitest';
 
+import { deduplicate$ } from '@/src/pipe/deduplicate.js';
 import { pipe$ } from '@/src/pipe/pipe.js';
-import { dedupe$ } from '@/src/pipe/dedupe.js';
-import { ref$ } from '@/src/refs/index.js';
+import { ref$ } from '@/src/refs/ref.js';
 
 // Tests
-describe('dedupe$', () => {
+describe('deduplicate$', () => {
   it('should call read only once and return result to every caller', async () => {
     const read = vi.fn(async () => ({ life: 42 }));
 
     const deduped = pipe$(
       ref$({ read }),
-      dedupe$('read'),
+      deduplicate$('read'),
     );
 
     await expect(Promise.all([deduped.read(), deduped.read()]))
@@ -29,7 +29,7 @@ describe('dedupe$', () => {
         read: async () => ({ life: 42 }),
         mutate,
       }),
-      dedupe$('mutate'),
+      deduplicate$('mutate'),
     );
 
     await expect(Promise.all([deduped.mutate('life'), deduped.mutate('life')]))

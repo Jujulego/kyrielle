@@ -3,11 +3,11 @@ import { dedupedAwaiter } from '../utils/index.js';
 import { isMutable } from '../utils/predicate.js';
 
 // Types
-export type DedupableMethod = 'read' | 'mutate' | 'both';
+export type DedupablicableMethod = 'read' | 'mutate' | 'both';
 
-export interface DedupableReadableOrigin<out D = unknown> extends AsyncReadable<D>, Partial<Observable<D>> {}
-export interface DedupableMutableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, AsyncMutable<D, A>, Partial<Observable<D>> {}
-export interface DedupableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, Partial<Observable<D> & AsyncMutable<D, A>> {}
+export interface DeduplicableReadableOrigin<out D = unknown> extends AsyncReadable<D>, Partial<Observable<D>> {}
+export interface DeduplicableMutableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, AsyncMutable<D, A>, Partial<Observable<D>> {}
+export interface DeduplicableOrigin<out D = unknown, in A = D> extends AsyncReadable<D>, Partial<Observable<D> & AsyncMutable<D, A>> {}
 
 /**
  * De-duplicates calls to origin's read method.
@@ -15,7 +15,7 @@ export interface DedupableOrigin<out D = unknown, in A = D> extends AsyncReadabl
  * If read is called again while another read is pending, origin's read won't be called again
  * and its result will be returned to every caller.
  */
-export function dedupe$<R extends DedupableReadableOrigin>(method: 'read'): PipeStep<R, R>;
+export function deduplicate$<R extends DeduplicableReadableOrigin>(method: 'read'): PipeStep<R, R>;
 
 /**
  * De-duplicates calls to origin's selected methods.
@@ -23,10 +23,10 @@ export function dedupe$<R extends DedupableReadableOrigin>(method: 'read'): Pipe
  * If read or mutate is called again while another call on the same method is pending, it won't be called again
  * and its result will be returned to every caller.
  */
-export function dedupe$<R extends DedupableMutableOrigin>(method: DedupableMethod): PipeStep<R, R>;
+export function deduplicate$<R extends DeduplicableMutableOrigin>(method: DedupablicableMethod): PipeStep<R, R>;
 
-export function dedupe$<D, A>(method: DedupableMethod): PipeStep<DedupableOrigin<D, A>, DedupableOrigin<D, A>> {
-  return (origin: DedupableOrigin<D, A>) => {
+export function deduplicate$<D, A>(method: DedupablicableMethod): PipeStep<DeduplicableOrigin<D, A>, DeduplicableOrigin<D, A>> {
+  return (origin: DeduplicableOrigin<D, A>) => {
     if (['read', 'both'].includes(method)) {
       const awaiter = dedupedAwaiter();
       const originalRead = origin.read.bind(origin);
@@ -50,13 +50,13 @@ export function dedupe$<D, A>(method: DedupableMethod): PipeStep<DedupableOrigin
 }
 
 /**
- * Deduplicates calls to origin's read method.
+ * De-duplicates calls to origin's read method.
  *
  * If read is called again while another read is pending, origin's read won't be called again
  * and its result will be returned to every caller.
  *
- * @deprecated Use `dedupe$('read')` instead
+ * @deprecated Use `deduplicate$('read')` instead
  */
-export function dedupeRead$<R extends DedupableReadableOrigin>() {
-  return dedupe$<R>('read');
+export function dedupeRead$<R extends DeduplicableReadableOrigin>() {
+  return deduplicate$<R>('read');
 }
