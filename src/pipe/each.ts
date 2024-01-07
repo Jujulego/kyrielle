@@ -69,7 +69,7 @@ export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<PipeOrigin<DA>, 
       });
     }
 
-    if (isMutable<DA, AA>(obs)) {
+    if (isMutable<Mutable<DA, AA>>(obs)) {
       Object.assign(out, {
         mutate: (arg: AA, signal?: AbortSignal) => awaitedCall((arg: DA) => fn(arg, signal), obs.mutate(arg, signal))
       });

@@ -5,3 +5,4 @@ export * from './flow.js';
 export * from './filter.js';
 export * from './json.js';
 export * from './pipe.js';
+export * from './retry.js';

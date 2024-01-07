@@ -1,6 +1,6 @@
 import { Mutable, Readable } from '../defs/index.js';
 
-export function isMutable<D = unknown, A = unknown>(obj: object): obj is Mutable<D, A> {
+export function isMutable<M extends Mutable = Mutable>(obj: object): obj is M {
   return 'mutate' in obj;
 }
 
