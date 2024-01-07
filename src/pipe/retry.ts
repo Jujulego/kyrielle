@@ -28,12 +28,12 @@ export interface RetryOptions {
 }
 
 /**
- * Retry calls to selected methods.
+ * Retry calls to origin's read method.
  */
 export function retry$<R extends RetryableReadableOrigin>(method: 'read', options?: RetryOptions): PipeStep<R, R>;
 
 /**
- * Retry calls to selected methods.
+ * Retry calls to origin's selected methods.
  */
 export function retry$<R extends RetryableMutableOrigin>(method: RetryableMethod, options?: RetryOptions): PipeStep<R, R>;
 
