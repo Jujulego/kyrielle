@@ -12,14 +12,14 @@ export interface RetryableOrigin<out D = unknown, in A = D> extends AsyncReadabl
 export interface RetryOptions {
   /**
    * Called when origin's call failed, with the error and the count of tries for this retry call.
-   * Should return `true` to allow retry, `false` to make retry call fail. Can return a promise to generate some back-off.
+   * Should return `false` to prevent retry. Can return a promise to generate some back-off.
    *
    * By default, `retry` will always retry, no matter the error or how tries there been until now
    *
    * @param error Error from origin call
    * @param count Number of try
    */
-  onRetry?: (error: unknown, count: number) => Awaitable<boolean>;
+  onRetry?: (error: unknown, count: number) => Awaitable<boolean | void>;
 
   /**
    * Timeout in milliseconds, applied to each try.
@@ -59,8 +59,7 @@ export function retry$<D, A>(method: RetryableMethod, options: RetryOptions = {}
         if (signal?.aborted) throw err;
 
         // No more retries
-        const retry = await onRetry(err, count);
-        if (!retry) throw err;
+        if (await onRetry(err, count) === false) throw err;
       }
     }
 
