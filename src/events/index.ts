@@ -5,3 +5,4 @@ export * from './group-map.js';
 export * from './multiplexer.js';
 export * from './multiplexer-map.js';
 export * from './source.js';
+export * from './timer.js';
