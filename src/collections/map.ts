@@ -1,6 +1,6 @@
 import { AsyncReadable, Mutable, MutableRef, Readable } from '../defs/index.js';
 import { asyncIterMapper, iterMapper, yieldMapper } from '../utils/iterator.js';
-import { awaitedCall } from '../utils/promise.js';
+import { awaitedChain } from '../utils/promise.js';
 
 // Types
 export interface RefMapSetOpts {
@@ -87,7 +87,7 @@ export class RefMap<K, D, R extends Readable<D> & Mutable<D, D>> {
     const refs = this._references.values();
     
     return {
-      next: yieldMapper(refs, (ref) => awaitedCall((value: D) => ({ value }), ref.read())),
+      next: yieldMapper(refs, (ref) => awaitedChain((value: D) => ({ value }), ref.read())),
       [Symbol.asyncIterator]: () => asyncIterMapper(refs, async (ref) => ({ value: await ref.read() })),
       [Symbol.iterator]: () => iterMapper(refs, (ref) => ({ value: ref.read() })),
     } as RefIterableIterator<D, R>;
@@ -97,7 +97,7 @@ export class RefMap<K, D, R extends Readable<D> & Mutable<D, D>> {
     const refs = this._references.entries();
 
     return {
-      next: yieldMapper(refs, ([key, ref]) => awaitedCall((value: D) => ({ value: [key, value] }), ref.read())),
+      next: yieldMapper(refs, ([key, ref]) => awaitedChain((value: D) => ({ value: [key, value] }), ref.read())),
       [Symbol.asyncIterator]: () => asyncIterMapper(refs, async ([key, ref]) => ({ value: [key, await ref.read()] })),
       [Symbol.iterator]: () => iterMapper(refs, ([key, ref]) => ({ value: [key, ref.read()] })),
     } as RefEntryIterableIterator<K, D, R>;

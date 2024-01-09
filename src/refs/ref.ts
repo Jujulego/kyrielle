@@ -1,7 +1,7 @@
 import { AllowedMutateValue, Mutable, MutableRef, Readable, Ref } from '../defs/index.js';
 import { source$ } from '../events/source.js';
 import { isMutable } from '../utils/predicate.js';
-import { awaitedCall } from '../utils/promise.js';
+import { awaitedChain } from '../utils/promise.js';
 
 // Types
 export interface RefOpts<out RD, out MD extends AllowedMutateValue<RD>, in A> extends Readable<RD>, Partial<Mutable<MD, A>> {}
@@ -47,13 +47,13 @@ export function ref$<RD, A>(opts: RefOpts<RD, RD, A>): Ref<RD> | MutableRef<RD, 
 
     // Reference
     next: (val: Awaited<RD>) => { emit(val); },
-    read: (signal?: AbortSignal) => awaitedCall(opts.read(signal), emit)
+    read: (signal?: AbortSignal) => awaitedChain(opts.read(signal), emit)
   };
 
   // Add options ;)
   if (isMutable<Mutable<RD, A>>(opts)) {
     return Object.assign(ref, {
-      mutate: (arg: A, signal?: AbortSignal) => awaitedCall(opts.mutate(arg, signal), emit)
+      mutate: (arg: A, signal?: AbortSignal) => awaitedChain(opts.mutate(arg, signal), emit)
     });
   }
 

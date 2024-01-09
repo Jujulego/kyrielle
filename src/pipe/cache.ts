@@ -1,33 +1,31 @@
-import {
-  AsyncMutable,
-  AsyncReadable,
-  Mutable,
-  Observable,
-  PipeStep,
-  Readable,
-  ReadValue,
-  SyncReadable
-} from '../defs/index.js';
+import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Observable, PipeStep, Readable, ReadValue } from '../defs/index.js';
 import { ref$ } from '../refs/index.js';
-import { awaitedCall, dedupeAwaiter } from '../utils/promise.js';
+import { awaitedChain, dedupeAwaiter } from '../utils/promise.js';
 
 // Types
+/**
+ * Possible cache origins
+ */
 export interface CacheOrigin<out D = unknown> extends Readable<D>, Partial<Observable<D>> {}
-export interface CacheTarget<in out D> extends Readable<D | undefined>, Mutable<D> {}
+
+/**
+ * Possible cache targets
+ */
+export interface CacheTarget<in out D> extends Readable<Awaitable<D | undefined>>, Mutable<Awaitable<D>, D> {}
 
 export type CacheFn<D> = () => CacheTarget<D>;
 
 /** Builds cached origin */
-export type CachedOrigin<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>> =
-  & (O extends Observable ? Observable<ReadValue<O>> : unknown)
+export type CachedOrigin<D, O extends CacheOrigin, T extends CacheTarget<D>> =
+  & (O extends Observable<D> ? Observable<D> : unknown)
   & (
     T extends AsyncReadable
-      ? AsyncReadable<ReadValue<O>>
+      ? AsyncReadable<D>
       : O extends AsyncReadable
-        ? Readable<ReadValue<O>>
+        ? Readable<Awaitable<D>>
         : T extends AsyncMutable
-          ? Readable<ReadValue<O>>
-          : SyncReadable<ReadValue<O>>
+          ? Readable<Awaitable<D>>
+          : Readable<D>
   );
 
 /**
@@ -36,7 +34,7 @@ export type CachedOrigin<O extends CacheOrigin, T extends CacheTarget<ReadValue<
  *
  * @param target
  */
-export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(target: T): PipeStep<O, CachedOrigin<O, T>>;
+export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(target: T): PipeStep<O, CachedOrigin<ReadValue<O>, O, T>>;
 
 /**
  * Uses fn to get cache reference for previous origin.
@@ -44,28 +42,24 @@ export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>
  *
  * @param fn
  */
-export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(fn: () => T): PipeStep<O, CachedOrigin<O, T>>;
+export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(fn: () => T): PipeStep<O, CachedOrigin<ReadValue<O>, O, T>>;
 
-export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>): PipeStep<CacheOrigin<D>, CacheOrigin<D>> {
+export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>) {
   return (origin: CacheOrigin<D>) => {
-    const awaiter = dedupeAwaiter();
+    const awaiter = dedupeAwaiter<Awaitable<D>>();
 
-    const res = ref$<D>((signal) => {
-      const target = typeof arg === 'function' ? arg() : arg;
+    const res = ref$({
+      read(signal) {
+        const target = typeof arg === 'function' ? arg() : arg;
 
-      return awaitedCall<D | undefined, D>(
-        (value) => value ?? awaiter.call(() => awaitedCall(
-          (result: D) => target.mutate(result, signal),
-          origin.read(signal)
-        ), signal),
-        target.read(signal)
-      );
+        return awaitedChain(target.read(signal), (value) => value ?? awaiter.call(() => awaitedChain(origin.read(signal), (result) => target.mutate(result, signal)), signal));
+      }
     });
 
     if ('subscribe' in origin) {
       origin.subscribe((value) => {
         const target = typeof arg === 'function' ? arg() : arg;
-        awaitedCall(res.next, target.mutate(value));
+        awaitedChain(target.mutate(value), res.next);
       });
     }
 

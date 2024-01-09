@@ -1,7 +1,7 @@
 import { Draft, Immer, produce } from 'immer';
 
 import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Readable } from '../defs/index.js';
-import { awaitedCall } from '../utils/index.js';
+import { awaitedChain } from '../utils/index.js';
 
 // Types
 export type RecipeFn<D> = (draft: Draft<D>) => Draft<D> | void;
@@ -34,8 +34,8 @@ export interface ProduceOpts {
  * @param opts
  */
 export function produce$<D, R extends ProduceOrigin<D>>(ref: R, recipe: RecipeFn<D>, opts: ProduceOpts = {}): ProduceResult<D, R> {
-  return awaitedCall(
-    awaitedCall(ref.read(opts.signal), (old) => (opts.immer?.produce ?? produce)(old, recipe)),
+  return awaitedChain(
+    awaitedChain(ref.read(opts.signal), (old) => (opts.immer?.produce ?? produce)(old, recipe)),
     (result) => ref.mutate(result, opts.signal)
   ) as ProduceResult<D, R>;
 }
