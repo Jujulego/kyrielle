@@ -1,6 +1,6 @@
 import {
-  CopyMutableSynchronicity,
-  CopyReadableSynchronicity,
+  AsAwaitableAs,
+  Awaitable,
   Mutable, Observable, PipeOrigin, PipeStep,
   Readable
 } from '../defs/index.js';
@@ -9,34 +9,34 @@ import { isMutable, isReadable } from '../utils/predicate.js';
 import { awaitedChain } from '../utils/promise.js';
 
 // Types
-export type JsonOrigin = PipeOrigin<string>;
+export type JsonOrigin = PipeOrigin<Awaitable<string>>;
 
-export type JsonResultOrigin<A extends JsonOrigin, D> =
-  & (A extends Observable<string> ? Observable<D> : unknown)
-  & (A extends Readable<string> ? CopyReadableSynchronicity<A, D> : unknown)
-  & (A extends Mutable<string, string> ? CopyMutableSynchronicity<A, D, D> : unknown)
+export type JsonResultOrigin<O extends JsonOrigin, D> =
+  & (O extends Observable<string> ? Observable<D> : unknown)
+  & (O extends Readable<infer RD> ? Readable<AsAwaitableAs<RD, D>> : unknown)
+  & (O extends Mutable<infer MD, string> ? Mutable<AsAwaitableAs<MD, D>, D> : unknown)
 
 /**
  * Convert value from base origin
  */
-export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val is DB): PipeStep<A, JsonResultOrigin<A, DB | null>> {
-  function parse(json: string): DB | null {
+export function json$<O extends JsonOrigin, D>(validate: (val: unknown) => val is D): PipeStep<O, JsonResultOrigin<O, D | null>> {
+  function parse(json: string): D | null {
     const val = JSON.parse(json);
     return validate(val) ? val : null;
   }
 
-  return (origin: A) => {
-    const out = source$<DB | null>();
+  return (origin: O) => {
+    const out = source$<D | null>();
 
     if (isReadable<string>(origin)) {
       Object.assign(out, {
-        read: (signal?: AbortSignal) => awaitedChain(parse, origin.read(signal))
+        read: (signal?: AbortSignal) => awaitedChain(origin.read(signal), parse)
       });
     }
 
     if (isMutable<Mutable<string, string>>(origin)) {
       Object.assign(out, {
-        mutate: (arg: DB, signal?: AbortSignal) => awaitedChain(parse, origin.mutate(JSON.stringify(arg), signal)),
+        mutate: (arg: D, signal?: AbortSignal) => awaitedChain(origin.mutate(JSON.stringify(arg), signal), parse),
       });
     }
 
@@ -44,6 +44,6 @@ export function json$<A extends JsonOrigin, DB>(validate: (val: unknown) => val 
       origin.subscribe((json) => out.next(parse(json)));
     }
 
-    return out as JsonResultOrigin<A, DB | null>;
+    return out as JsonResultOrigin<O, D | null>;
   };
 }

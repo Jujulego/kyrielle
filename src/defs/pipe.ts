@@ -3,7 +3,7 @@ import { Observable, ObservedValue, Readable, ReadValue } from './features/index
 /**
  * Origins that can be piped
  */
-export interface PipeOrigin<out D = unknown> extends Partial<Observable<D> & Readable<D>> {}
+export interface PipeOrigin<out D = unknown> extends Partial<Observable<Awaited<D>> & Readable<D>> {}
 
 /**
  * Extract piped value type

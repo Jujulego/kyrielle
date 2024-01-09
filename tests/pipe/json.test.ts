@@ -33,7 +33,7 @@ describe('json$', () => {
     });
 
     it('should call fn with value resolved from base', async () => {
-      const base = ref$(async () => '42');
+      const base = ref$({ read: async () => '42' });
       const validate = vi.fn((val) => typeof val === 'number') as unknown as (val: unknown) => val is number;
 
       const ref = pipe$(base, json$(validate));
