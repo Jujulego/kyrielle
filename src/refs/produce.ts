@@ -1,20 +1,21 @@
 import { Draft, Immer, produce } from 'immer';
 
-import {
-  AsyncMutable,
-  AsyncReadable,
-  Awaitable,
-  Mutable,
-  Readable,
-  SyncMutable,
-  SyncReadable
-} from '../defs/index.js';
+import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Readable } from '../defs/index.js';
 import { awaitedCall } from '../utils/index.js';
 
 // Types
 export type RecipeFn<D> = (draft: Draft<D>) => Draft<D> | void;
 
-export interface ProducerOpts {
+export interface ProduceOrigin<D> extends Readable<Awaitable<D>>, Mutable<Awaitable<D>, D> {}
+
+export type ProduceResult<D, R extends ProduceOrigin<D>> =
+  R extends AsyncReadable
+    ? PromiseLike<D>
+    : R extends AsyncMutable
+      ? PromiseLike<D>
+      : D;
+
+export interface ProduceOpts {
   /**
    * Custom instance of Immer to use. By default, it will use the global instance.
    */
@@ -26,21 +27,15 @@ export interface ProducerOpts {
   signal?: AbortSignal;
 }
 
-export function produce$<D>(ref: AsyncReadable<D> & AsyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): PromiseLike<D>;
-export function produce$<D>(ref: AsyncReadable<D> & SyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): PromiseLike<D>;
-export function produce$<D>(ref: AsyncReadable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): PromiseLike<D>;
-
-export function produce$<D>(ref: SyncReadable<D> & AsyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): PromiseLike<D>;
-export function produce$<D>(ref: SyncReadable<D> & SyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): D;
-export function produce$<D>(ref: SyncReadable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): Awaitable<D>;
-
-export function produce$<D>(ref: Readable<D> & AsyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): PromiseLike<D>;
-export function produce$<D>(ref: Readable<D> & SyncMutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): Awaitable<D>;
-export function produce$<D>(ref: Readable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts?: ProducerOpts): Awaitable<D>;
-
-export function produce$<D>(ref: Readable<D> & Mutable<D, D>, recipe: RecipeFn<D>, opts: ProducerOpts = {}): Awaitable<D> {
+/**
+ * Use an Immer recipe to mutate reference
+ * @param ref
+ * @param recipe
+ * @param opts
+ */
+export function produce$<D, R extends ProduceOrigin<D>>(ref: R, recipe: RecipeFn<D>, opts: ProduceOpts = {}): ProduceResult<D, R> {
   return awaitedCall(
-    (result: D) => ref.mutate(result, opts.signal),
-    awaitedCall((old: D) => (opts.immer?.produce ?? produce)(old, recipe), ref.read(opts.signal))
-  );
+    awaitedCall(ref.read(opts.signal), (old) => (opts.immer?.produce ?? produce)(old, recipe)),
+    (result) => ref.mutate(result, opts.signal)
+  ) as ProduceResult<D, R>;
 }

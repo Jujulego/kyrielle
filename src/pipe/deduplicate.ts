@@ -1,5 +1,5 @@
 import { AsyncMutable, AsyncReadable, Observable, PipeStep } from '../defs/index.js';
-import { dedupedAwaiter } from '../utils/index.js';
+import { dedupeAwaiter } from '../utils/index.js';
 import { isMutable } from '../utils/predicate.js';
 
 // Types
@@ -28,7 +28,7 @@ export function deduplicate$<R extends DeduplicableMutableOrigin>(method: Dedupa
 export function deduplicate$<D, A>(method: DedupablicableMethod): PipeStep<DeduplicableOrigin<D, A>, DeduplicableOrigin<D, A>> {
   return (origin: DeduplicableOrigin<D, A>) => {
     if (['read', 'both'].includes(method)) {
-      const awaiter = dedupedAwaiter();
+      const awaiter = dedupeAwaiter();
       const originalRead = origin.read.bind(origin);
 
       Object.assign(origin, {
@@ -37,7 +37,7 @@ export function deduplicate$<D, A>(method: DedupablicableMethod): PipeStep<Dedup
     }
 
     if (isMutable<AsyncMutable<D, A>>(origin) && ['mutate', 'both'].includes(method)) {
-      const awaiter = dedupedAwaiter();
+      const awaiter = dedupeAwaiter();
       const originalMutate = origin.mutate.bind(origin);
 
       Object.assign(origin, {

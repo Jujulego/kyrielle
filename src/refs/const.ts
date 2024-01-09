@@ -1,7 +1,7 @@
+import { Ref } from '../defs/index.js';
 import { ref$ } from './ref.js';
-import { SyncRef } from '../defs/index.js';
 
 // Builder
-export function const$<const D>(value: D): SyncRef<D> {
-  return ref$(() => value);
+export function const$<const D>(value: D): Ref<D> {
+  return ref$({ read: () => value });
 }

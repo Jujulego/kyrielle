@@ -9,7 +9,7 @@ import {
   SyncReadable
 } from '../defs/index.js';
 import { ref$ } from '../refs/index.js';
-import { awaitedCall, dedupedAwaiter } from '../utils/promise.js';
+import { awaitedCall, dedupeAwaiter } from '../utils/promise.js';
 
 // Types
 export interface CacheOrigin<out D = unknown> extends Readable<D>, Partial<Observable<D>> {}
@@ -48,7 +48,7 @@ export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>
 
 export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>): PipeStep<CacheOrigin<D>, CacheOrigin<D>> {
   return (origin: CacheOrigin<D>) => {
-    const awaiter = dedupedAwaiter();
+    const awaiter = dedupeAwaiter();
 
     const res = ref$<D>((signal) => {
       const target = typeof arg === 'function' ? arg() : arg;

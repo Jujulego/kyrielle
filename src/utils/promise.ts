@@ -5,36 +5,31 @@ export function isPromise<T>(obj: Awaitable<T>): obj is PromiseLike<T> {
   return typeof obj === 'object' && obj !== null && 'then' in obj;
 }
 
-export function awaitedCall<A, R>(fn: (arg: A) => PromiseLike<R>, arg: PromiseLike<A>): PromiseLike<R>;
-export function awaitedCall<A, R>(fn: (arg: A) => R, arg: PromiseLike<A>): PromiseLike<R>;
-export function awaitedCall<A, R>(fn: (arg: A) => PromiseLike<R>, arg: A): PromiseLike<R>;
-export function awaitedCall<A, R>(fn: (arg: A) => R, arg: A): R;
-export function awaitedCall<A, R>(fn: (arg: A) => Awaitable<R>, arg: Awaitable<A>): Awaitable<R>;
+export function awaitedCall<A, R>(arg: PromiseLike<A>, fn: (arg: Awaited<A>) => R): PromiseLike<R>;
+export function awaitedCall<A, R>(arg: A, fn: (arg: Awaited<A>) => R): R;
 
-export function awaitedCall<A, R>(fn: (arg: A) => Awaitable<R>, arg: Awaitable<A>): Awaitable<R> {
+export function awaitedCall<A, R>(arg: Awaitable<A>, fn: (arg: A) => Awaitable<R>): Awaitable<R> {
   return isPromise(arg) ? arg.then(fn) : fn(arg);
 }
 
-export interface DedupedAwaiter {
-  call<R>(fn: () => PromiseLike<R>, signal?: AbortSignal): Promise<R>;
-  call<R>(fn: () => R): R;
-  call<R>(fn: () => Awaitable<R>, signal?: AbortSignal): Awaitable<R>;
+export interface DedupeAwaiter<R> {
+  call(fn: () => R, signal?: AbortSignal): R;
 }
 
-export function dedupedAwaiter(): DedupedAwaiter {
+export function dedupeAwaiter<R>(): DedupeAwaiter<R> {
   let promise: PromiseLike<unknown> | null = null;
 
   return {
-    call(fn, signal?: AbortSignal) {
+    call(fn: () => R, signal?: AbortSignal): R {
       if (promise) {
-        return new Promise<unknown>((resolve, reject) => {
+        return new Promise((resolve, reject) => {
           if (signal?.aborted) {
             reject(signal.reason);
           } else {
             promise!.then(resolve, reject);
             signal?.addEventListener('abort', () => reject(signal.reason));
           }
-        });
+        }) as R;
       }
 
       const res = fn();
