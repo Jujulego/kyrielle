@@ -28,14 +28,14 @@ describe('awaitedCall', () => {
   it('should fn with given arg without creating a promise', () => {
     const fn = vi.fn(() => 42);
 
-    expect(awaitedChain(fn, 'life')).toBe(42);
+    expect(awaitedChain('life', fn)).toBe(42);
     expect(fn).toHaveBeenCalledWith('life');
   });
 
   it('should fn with resolved arg', async () => {
     const fn = vi.fn(() => 42);
 
-    await expect(awaitedChain(fn, Promise.resolve('life'))).resolves.toBe(42);
+    await expect(awaitedChain(Promise.resolve('life'), fn)).resolves.toBe(42);
     expect(fn).toHaveBeenCalledWith('life');
   });
 });
