@@ -48,15 +48,3 @@ export function deduplicate$<D, A>(method: DedupablicableMethod): PipeStep<Dedup
     return origin;
   };
 }
-
-/**
- * De-duplicates calls to origin's read method.
- *
- * If read is called again while another read is pending, origin's read won't be called again
- * and its result will be returned to every caller.
- *
- * @deprecated Use `deduplicate$('read')` instead
- */
-export function dedupeRead$<R extends DeduplicableReadableOrigin>() {
-  return deduplicate$<R>('read');
-}

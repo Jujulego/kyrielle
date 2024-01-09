@@ -1,82 +1,44 @@
-import {
-  AsyncMutable,
-  AsyncReadable, Awaitable, CopyMutableSynchronicity, CopyReadableSynchronicity,
-  Mutable,
-  Observable,
-  PipedValue, PipeOrigin, PipeStep,
-  Readable,
-} from '../defs/index.js';
+import { AsAwaitableAs, Mutable, Observable, PipedValue, PipeOrigin, PipeStep, Readable } from '../defs/index.js';
 import { source$ } from '../events/source.js';
 import { isMutable, isReadable } from '../utils/predicate.js';
 import { awaitedChain } from '../utils/promise.js';
 
 // Types
-export type EachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => Awaitable<DB>;
-export type SyncEachFn<DA, DB> = (arg: DA) => DB;
-export type AsyncEachFn<DA, DB> = (arg: DA, signal?: AbortSignal) => PromiseLike<DB>;
-
-/** Builds an async source type, with same features than A, but a different data type DB */
-export type EachAsyncSource<A extends PipeOrigin, DB> =
-  & (A extends Observable ? Observable<DB> : unknown)
-  & (A extends Readable ? AsyncReadable<DB> : unknown)
-  & (A extends Mutable<unknown, infer AA> ? AsyncMutable<DB, AA> : unknown);
-
-/** Builds a source type, with same features and synchronicity than A, but a different data type DB */
-export type EachSyncSource<A extends PipeOrigin, DB> =
-  & (A extends Observable ? Observable<DB> : unknown)
-  & (A extends Readable ? CopyReadableSynchronicity<A, DB> : unknown)
-  & (A extends Mutable<unknown, infer AA> ? CopyMutableSynchronicity<A, DB, AA> : unknown);
+export type EachFn<A, R> = (arg: A, signal?: AbortSignal) => R;
 
 /** Builds an awaitable source type, with same features than A, but a different data type DB */
-export type EachSource<A extends PipeOrigin, DB> =
-  & (A extends Observable ? Observable<DB> : unknown)
-  & (A extends Readable ? Readable<DB> : unknown)
-  & (A extends Mutable<unknown, infer AA> ? Mutable<DB, AA> : unknown);
-
-// Operator
-/**
- * Applies fn to each emitted value, read result and mutate result.
- * As fn is asynchronous, read and mutate in the final reference will too be asynchronous.
- *
- * WARNING: Order is not guaranteed, results will be emitted as they are resolved not as input comes.
- *
- * @param fn
- */
-export function each$<A extends PipeOrigin, DB>(fn: AsyncEachFn<PipedValue<A>, DB>): PipeStep<A, EachAsyncSource<A, DB>>;
-
-/**
- * Applies fn to each emitted value, read result and mutate result.
- * As fn is synchronous, read and mutate in the final reference will have the same synchronicity as the base ref.
- *
- * @param fn
- */
-export function each$<A extends PipeOrigin, DB>(fn: SyncEachFn<PipedValue<A>, DB>): PipeStep<A, EachSyncSource<A, DB>>;
+export type EachSource<O extends PipeOrigin, R> =
+  & (O extends Observable ? Observable<Awaited<R>> : unknown)
+  & (O extends Readable<infer RD> ? Readable<AsAwaitableAs<RD, R>> : unknown)
+  & (O extends Mutable<infer MD, infer MA> ? Mutable<AsAwaitableAs<MD, R>, MA> : unknown);
 
 /**
  * Applies fn to each emitted value, read result and mutate result.
  *
+ * WARNING: In async context, order is not guaranteed, results will be emitted as they are resolved not as input comes.
+ *
  * @param fn
  */
-export function each$<A extends PipeOrigin, DB>(fn: EachFn<PipedValue<A>, DB>): PipeStep<A, EachSource<A, DB>>;
+export function each$<O extends PipeOrigin, R>(fn: EachFn<PipedValue<O>, R>): PipeStep<O, EachSource<O, R>>;
 
-export function each$<DA, AA, DB>(fn: EachFn<DA, DB>): PipeStep<PipeOrigin<DA>, PipeOrigin<DB>> {
-  return (obs: PipeOrigin<DA>) => {
-    const out = source$<DB>();
+export function each$<D, R>(fn: EachFn<D, R>): PipeStep<PipeOrigin<D>, PipeOrigin<R>> {
+  return (obs: PipeOrigin<D>) => {
+    const out = source$<R>();
 
-    if (isReadable<DA>(obs)) {
+    if (isReadable<D>(obs)) {
       Object.assign(out, {
-        read: (signal?: AbortSignal) => awaitedChain<DA, DB>((arg: DA) => fn(arg, signal), obs.read(signal)),
+        read: (signal?: AbortSignal) => awaitedChain(obs.read(signal), (arg: D) => fn(arg, signal)),
       });
     }
 
-    if (isMutable<Mutable<DA, AA>>(obs)) {
+    if (isMutable<Mutable<D>>(obs)) {
       Object.assign(out, {
-        mutate: (arg: AA, signal?: AbortSignal) => awaitedChain((arg: DA) => fn(arg, signal), obs.mutate(arg, signal))
+        mutate: (arg: unknown, signal?: AbortSignal) => awaitedChain(obs.mutate(arg, signal), (arg: D) => fn(arg, signal))
       });
     }
 
     if ('subscribe' in obs) {
-      obs.subscribe((data) => awaitedChain(out.next, fn(data)));
+      obs.subscribe((data) => awaitedChain(fn(data), out.next));
     }
 
     return out;

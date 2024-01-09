@@ -2,7 +2,6 @@
 import { describe, expectTypeOf } from 'vitest';
 
 import { pipe$ } from '@/src/pipe/pipe.js';
-import { const$ } from '@/src/refs/const.js';
 import { ref$ } from '@/src/refs/ref.js';
 import { var$ } from '@/src/refs/var.js';
 import { source$ } from '@/src/events/source.js';
@@ -23,7 +22,7 @@ describe('each$', () => {
 
   it('should be a sync readonly reference', () => {
     const ref = pipe$(
-      const$(42),
+      ref$({ read: () => 42 }),
       each$((val) => val.toString())
     );
 

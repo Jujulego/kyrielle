@@ -34,7 +34,7 @@ describe('each$', () => {
     });
 
     it('should call fn with value resolved from base', async () => {
-      const base = ref$(async () => 'life');
+      const base = ref$({ read: async () => 'life' });
       const fn = vi.fn(() => 42);
 
       const ref = pipe$(base, each$(fn));
