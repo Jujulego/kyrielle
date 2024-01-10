@@ -1,10 +1,10 @@
-import { SyncMutable, SyncReadable } from './defs/index.js';
+import { Mutable, Readable } from './defs/index.js';
 
 /**
  * Origins that can be bounded
  */
-export type BindOrigin<D> = SyncReadable<D>
-  & Partial<SyncMutable<D, D>>;
+export type BindOrigin<D> = Readable<D>
+  & Partial<Mutable<D, D>>;
 
 /**
  * Bind decorator type

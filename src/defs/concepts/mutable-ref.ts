@@ -1,22 +1,18 @@
-import { AsyncRef, CopyRefSynchronicity, Ref, SyncRef } from './ref.js';
-import { AsyncMutable, CopyMutableSynchronicity, Mutable, SyncMutable } from '../features/mutable.js';
+import { AsyncRef, Ref } from './ref.js';
+import { AsyncMutable, Mutable } from '../features/mutable.js';
+
+/**
+ * Mutate data type limits
+ */
+export type AllowedMutateValue<D> = D
+  | (D extends PromiseLike<infer P> ? P : PromiseLike<D>);
 
 /**
  * Mutable reference
  */
-export interface MutableRef<in out D = unknown, in A = D> extends Ref<D>, Mutable<D, A> {}
-
-/**
- * Mutable synchronous reference
- */
-export interface SyncMutableRef<in out D = unknown, in A = D> extends SyncRef<D>, SyncMutable<D, A> {}
+export interface MutableRef<in out RD = unknown, out MD extends AllowedMutateValue<RD> = RD, in A = Awaited<MD>> extends Ref<RD>, Mutable<MD, A> {}
 
 /**
  * Mutable asynchronous reference
  */
-export interface AsyncMutableRef<in out D = unknown, in A = D> extends AsyncRef<D>, AsyncMutable<D, A> {}
-
-/**
- * Build a Mutable type with the same synchronicity and the given value types
- */
-export type CopyMutableRefSynchronicity<R extends MutableRef, D, A> = CopyRefSynchronicity<R, D> & CopyMutableSynchronicity<R, D, A>;
+export interface AsyncMutableRef<in out RD = unknown, out MD extends RD = RD, in A = MD> extends AsyncRef<RD>, AsyncMutable<MD, A> {}

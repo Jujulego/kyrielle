@@ -4,38 +4,6 @@ import { ref$ } from '@/src/refs/ref.js';
 
 // Tests
 describe('ref$', () => {
-  describe('fn based', () => {
-    it('should call fn and return its result', () => {
-      const fn = vi.fn(() => 42);
-      const fn$ = ref$(fn);
-
-      expect(fn$.read()).toBe(42);
-      expect(fn).toHaveBeenCalled();
-    });
-
-    it('should call fn and resolve to its result', async () => {
-      const signal = AbortSignal.abort();
-      const fn = vi.fn(async () => 42);
-      const fn$ = ref$(fn);
-
-      await expect(fn$.read(signal)).resolves.toBe(42);
-      expect(fn).toHaveBeenCalledWith(signal);
-    });
-
-    it('should emit each new result', () => {
-      const spy = vi.fn();
-
-      const fn$ = ref$(() => 42);
-      fn$.subscribe(spy);
-
-      expect(fn$.read()).toBe(42);
-      expect(fn$.read()).toBe(42);
-
-      expect(spy).toHaveBeenCalledTimes(1); // <= because it is always the same value
-      expect(spy).toHaveBeenCalledWith(42);
-    });
-  });
-
   describe('opts based', () => {
     describe('synchronous', () => {
       it('should call read and return its result', () => {
@@ -95,7 +63,9 @@ describe('ref$', () => {
     it('should emit on next calls', () => {
       const spy = vi.fn();
 
-      const fn$ = ref$(() => 42);
+      const fn$ = ref$({
+        read: () => 42
+      });
       fn$.subscribe(spy);
 
       fn$.next(1);

@@ -1,7 +1,7 @@
-import { Immer } from 'immer';
+import { Draft, Immer } from 'immer';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { SyncMutableRef } from '@/src/defs/concepts/mutable-ref.js';
+import { MutableRef } from '@/src/defs/concepts/mutable-ref.js';
 import { produce$, RecipeFn } from '@/src/refs/produce.js';
 import { var$ } from '@/src/refs/var.js';
 
@@ -12,12 +12,13 @@ interface TestData {
 }
 
 // Setup
-let ref: SyncMutableRef<TestData>;
+let ref: MutableRef<TestData>;
 let recipe: RecipeFn<TestData>;
 
 beforeEach(() => {
   ref = var$({ id: 'test', life: 42 });
-  recipe = vi.fn((old) => {
+
+  recipe = vi.fn((old: Draft<TestData>) => {
     old.life = 0;
   });
 });

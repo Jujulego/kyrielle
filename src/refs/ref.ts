@@ -1,58 +1,36 @@
-import {
-  AsyncMutable,
-  AsyncReadable, AsyncRef, Awaitable,
-  Mutable,
-  Readable, Ref,
-  SyncMutable,
-  SyncReadable, SyncRef
-} from '../defs/index.js';
+import { AllowedMutateValue, Mutable, MutableRef, Readable, Ref } from '../defs/index.js';
 import { source$ } from '../events/source.js';
 import { isMutable } from '../utils/predicate.js';
-import { awaitedCall } from '../utils/promise.js';
+import { awaitedChain } from '../utils/promise.js';
 
 // Types
-export type RefFn<D = unknown> = (signal?: AbortSignal) => Awaitable<D>;
-export type SyncRefFn<D = unknown> = () => D;
-export type AsyncRefFn<D = unknown> = (signal?: AbortSignal) => PromiseLike<D>;
+export interface RefOpts<out RD, out MD extends AllowedMutateValue<RD>, in A> extends Readable<RD>, Partial<Mutable<MD, A>> {}
 
-export type RefOpts<RD = unknown, MD extends RD = RD, A = MD> = Readable<RD> & Partial<Mutable<MD, A>>
+/**
+ * Builds a mutable ref from given read and mutate functions
+ * @param opts
+ */
+export function ref$<RD, MD extends AllowedMutateValue<RD>, A>(opts: Readable<RD> & Mutable<MD, A>): MutableRef<RD, MD, A>;
 
-// Utils
-function parseArg<RD, MD extends RD, A>(arg: RefFn<RD> | RefOpts<RD, MD, A>): RefOpts<RD, MD, A> {
-  return typeof arg === 'function' ? { read: arg } : arg;
-}
-
-// Builder
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: AsyncReadable<RD> & AsyncMutable<MD, A>): AsyncRef<RD> & AsyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: AsyncReadable<RD> & SyncMutable<RD, A>): AsyncRef<RD> & SyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: AsyncReadable<RD> & Mutable<MD, A>): AsyncRef<RD> & Mutable<MD, A>;
-
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: SyncReadable<RD> & AsyncMutable<MD, A>): SyncRef<RD> & AsyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: SyncReadable<RD> & SyncMutable<MD, A>): SyncRef<RD> & SyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: SyncReadable<RD> & Mutable<MD, A>): SyncRef<RD> & Mutable<MD, A>;
-
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: Readable<RD> & AsyncMutable<MD, A>): Ref<RD> & AsyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: Readable<RD> & SyncMutable<MD, A>): Ref<RD> & SyncMutable<MD, A>;
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: Readable<RD> & Mutable<MD, A>): Ref<RD> & Mutable<MD, A>;
-
-export function ref$<D>(opts: AsyncReadable<D>): AsyncRef<D>;
-export function ref$<D>(opts: SyncReadable<D>): SyncRef<D>;
+/**
+ * Builds a ref from given read functions
+ * @param opts
+ */
 export function ref$<D>(opts: Readable<D>): Ref<D>;
 
-export function ref$<D>(fn: AsyncRefFn<D>): AsyncRef<D>;
-export function ref$<D>(fn: SyncRefFn<D>): SyncRef<D>;
-export function ref$<D>(fn: RefFn<D>): Ref<D>;
+/**
+ * Builds a mutable ref from given read and mutate functions
+ * @param opts
+ */
+export function ref$<RD, MD extends AllowedMutateValue<RD>, A>(opts: RefOpts<RD, MD, A>): Ref<RD> | MutableRef<RD, MD, A>;
 
-export function ref$<RD, MD extends RD = RD, A = MD>(opts: RefOpts<RD, MD, A>): Ref<RD> & Mutable<MD, A>;
-
-export function ref$<RD, MD extends RD = RD, A = MD>(arg: RefFn<RD> | RefOpts<RD, MD, A>): Ref<RD> {
-  const opts = parseArg<RD, MD, A>(arg);
-  const events = source$<RD>();
+export function ref$<RD, A>(opts: RefOpts<RD, RD, A>) {
+  const events = source$<Awaited<RD>>();
 
   // Handle emits
-  let last: RD | undefined;
+  let last: Awaited<RD> | undefined;
 
-  function emit(val: RD) {
+  function emit(val: Awaited<RD>) {
     if (val !== last && val !== undefined) {
       last = val;
       events.next(val);
@@ -68,14 +46,14 @@ export function ref$<RD, MD extends RD = RD, A = MD>(arg: RefFn<RD> | RefOpts<RD
     clear: events.clear,
 
     // Reference
-    next: (val: RD) => { emit(val); },
-    read: (signal?: AbortSignal) => awaitedCall(emit, opts.read(signal))
+    next: (val: Awaited<RD>) => { emit(val); },
+    read: (signal?: AbortSignal) => awaitedChain(opts.read(signal), emit)
   };
 
   // Add options ;)
-  if (isMutable<Mutable<MD, A>>(opts)) {
+  if (isMutable<Mutable<RD, A>>(opts)) {
     return Object.assign(ref, {
-      mutate: (arg: A, signal?: AbortSignal) => awaitedCall(emit, opts.mutate(arg, signal))
+      mutate: (arg: A, signal?: AbortSignal) => awaitedChain(opts.mutate(arg, signal), emit)
     });
   }
 
