@@ -1,4 +1,4 @@
-import { describe, assertType } from 'vitest';
+import { describe, expectTypeOf, it } from 'vitest';
 
 import { map$ } from '@/src/collections/map.js';
 import { ref$ } from '@/src/refs/ref.js';
@@ -9,13 +9,11 @@ describe('RefMap.values', () => {
   it('should be a sync iterable iterator on number for synchronous map', () => {
     const map = map$((key: string, value: number) => var$(value));
 
-    assertType<IterableIterator<number>>(map.values());
-  });
+    expectTypeOf(map.values()).toEqualTypeOf<IterableIterator<number>>();
 
-  it('should be an async iterable on number for synchronous map', () => {
-    const map = map$((key: string, value: number) => var$(value));
-
-    assertType<AsyncIterable<number>>(map.values());
+    for (const v of map.values()) {
+      expectTypeOf(v).toBeNumber();
+    }
   });
 
   it('should be a sync iterator on Promise<number> for asynchronous map', () => {
@@ -24,16 +22,22 @@ describe('RefMap.values', () => {
       mutate: (arg: number) => arg
     }));
 
-    assertType<Iterable<Promise<number>>>(map.values());
+    expectTypeOf(map.values()).toEqualTypeOf<IterableIterator<Promise<number>>>();
+
+    for (const v of map.values()) {
+      expectTypeOf(v).resolves.toBeNumber();
+    }
   });
 
-  it('should be an async iterable iterator on number for asynchronous map', () => {
+  it('should be an async iterable iterator on number for asynchronous map', async () => {
     const map = map$((key: string, val: number) => ref$({
       read: async () => val,
       mutate: (arg: number) => arg
     }));
 
-    assertType<AsyncIterableIterator<number>>(map.values());
+    for await (const v of map.values()) {
+      expectTypeOf(v).toBeNumber();
+    }
   });
 });
 
@@ -41,13 +45,21 @@ describe('RefMap.entries', () => {
   it('should be a sync iterable iterator on [string, number] for synchronous map', () => {
     const map = map$((key: string, value: number) => var$(value));
 
-    assertType<IterableIterator<[string, number]>>(map.entries());
+    expectTypeOf(map.entries()).toEqualTypeOf<IterableIterator<readonly [string, number]>>();
+
+    for (const [k, v] of map.entries()) {
+      expectTypeOf(k).toBeString();
+      expectTypeOf(v).toBeNumber();
+    }
   });
 
-  it('should be an async iterable on [string, number] for synchronous map', () => {
+  it('should be an async iterable on [string, number] for synchronous map', async () => {
     const map = map$((key: string, value: number) => var$(value));
 
-    assertType<AsyncIterable<[string, number]>>(map.entries());
+    for await (const [k, v] of map.entries()) {
+      expectTypeOf(k).toBeString();
+      expectTypeOf(v).toBeNumber();
+    }
   });
 
   it('should be a sync iterable on [string, Promise<number>] for asynchronous map', () => {
@@ -56,15 +68,22 @@ describe('RefMap.entries', () => {
       mutate: (arg: number) => arg
     }));
 
-    assertType<Iterable<[string, Promise<number>]>>(map.entries());
+    expectTypeOf(map.entries()).toEqualTypeOf<IterableIterator<PromiseLike<readonly [string, number]>>>();
+
+    for (const p of map.entries()) {
+      expectTypeOf(p).resolves.toEqualTypeOf<readonly [string, number]>();
+    }
   });
 
-  it('should be an async iterable iterator on [string, number] for asynchronous map', () => {
+  it('should be an async iterable iterator on [string, number] for asynchronous map', async () => {
     const map = map$((key: string, val: number) => ref$({
       read: async () => val,
       mutate: (arg: number) => arg
     }));
 
-    assertType<AsyncIterableIterator<[string, number]>>(map.entries());
+    for await (const [k, v] of map.entries()) {
+      expectTypeOf(k).toBeString();
+      expectTypeOf(v).toBeNumber();
+    }
   });
 });

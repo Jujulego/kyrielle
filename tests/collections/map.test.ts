@@ -145,7 +145,7 @@ describe('RefMap.entries', () => {
     map.set('life', 42);
     map.set('toto', 1);
 
-    const entries: [string, number][] = [];
+    const entries: (readonly [string, number])[] = [];
 
     for await (const val of map.entries()) {
       entries.push(val);

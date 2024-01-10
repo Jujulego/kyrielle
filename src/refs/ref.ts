@@ -24,7 +24,7 @@ export function ref$<D>(opts: Readable<D>): Ref<D>;
  */
 export function ref$<RD, MD extends AllowedMutateValue<RD>, A>(opts: RefOpts<RD, MD, A>): Ref<RD> | MutableRef<RD, MD, A>;
 
-export function ref$<RD, A>(opts: RefOpts<RD, RD, A>): Ref<RD> | MutableRef<RD, RD, A> {
+export function ref$<RD, A>(opts: RefOpts<RD, RD, A>) {
   const events = source$<Awaited<RD>>();
 
   // Handle emits

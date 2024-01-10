@@ -17,4 +17,4 @@ export interface AsyncReadable<out D = unknown> extends Readable<PromiseLike<D>>
 /**
  * Extract read value type
  */
-export type ReadValue<R extends Readable> = R extends Readable<infer D> ? Awaited<D> : never;
+export type ReadValue<R extends Readable> = Awaited<ReturnType<R['read']>>;

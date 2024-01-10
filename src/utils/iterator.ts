@@ -1,32 +1,13 @@
-import { Awaitable } from '../defs/index.js';
-
 // Types
-export type YieldMap<V, R> = (val: V) => Awaitable<IteratorResult<R>>;
-export type YieldMapSync<V, R> = (val: V) => IteratorResult<R>;
-export type YieldMapAsync<V, R> = (val: V) => Promise<IteratorResult<R>>;
+export type YieldMap<V, R> = (val: V) => R;
 
 // Utils
-export function asyncIterMapper<V, const R>(it: Iterator<V>, map: YieldMapAsync<V, R>): AsyncIterableIterator<R> {
+export function iterMapper<A, const I>(it: Iterator<A>, map: YieldMap<A, I>): IterableIterator<I> {
   return {
-    next: yieldMapper(it, map),
-    [Symbol.asyncIterator]() { return this; }
-  };
-}
-
-export function iterMapper<V, const R>(it: Iterator<V>, map: YieldMapSync<V, R>): IterableIterator<R> {
-  return {
-    next: yieldMapper(it, map),
+    next() {
+      const next = it.next();
+      return next.done ? next : { value: map(next.value) };
+    },
     [Symbol.iterator]() { return this; }
-  };
-}
-
-export function yieldMapper<V, const R>(it: Iterator<V>, map: YieldMapAsync<V, R>): () => Promise<IteratorResult<R>>;
-export function yieldMapper<V, const R>(it: Iterator<V>, map: YieldMapSync<V, R>): () => IteratorResult<R>;
-export function yieldMapper<V, const R>(it: Iterator<V>, map: YieldMap<V, R>): () => Awaitable<IteratorResult<R>>;
-
-export function yieldMapper<V, const R>(it: Iterator<V>, map: YieldMap<V, R>): () => Awaitable<IteratorResult<R>> {
-  return () => {
-    const next = it.next();
-    return next.done ? next : map(next.value);
   };
 }
