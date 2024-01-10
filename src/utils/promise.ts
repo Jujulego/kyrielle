@@ -5,14 +5,7 @@ export function isPromise<T>(obj: Awaitable<T>): obj is PromiseLike<T> {
   return typeof obj === 'object' && obj !== null && 'then' in obj;
 }
 
-export function awaitedChain<A extends PromiseLike<unknown>, R extends PromiseLike<unknown>>(arg: A, fn: (arg: Awaited<A>) => R): R;
-export function awaitedChain<A extends PromiseLike<unknown>, R extends Awaitable<unknown>>(arg: A, fn: (arg: Awaited<A>) => R): PromiseLike<Awaited<R>>;
-export function awaitedChain<A extends PromiseLike<unknown>, R>(arg: A, fn: (arg: Awaited<A>) => R): PromiseLike<R>;
-export function awaitedChain<A extends Awaitable<unknown>, R extends PromiseLike<unknown>>(arg: A, fn: (arg: Awaited<A>) => R): R;
-export function awaitedChain<A extends Awaitable<unknown>, R extends Awaitable<unknown>>(arg: A, fn: (arg: Awaited<A>) => R): R;
-export function awaitedChain<A extends Awaitable<unknown>, R>(arg: A, fn: (arg: Awaited<A>) => R): Awaitable<R>;
-export function awaitedChain<A, R>(arg: A, fn: (arg: Awaited<A>) => R): R;
-
+export function awaitedChain<A, R>(arg: A, fn: (arg: Awaited<A>) => Awaitable<R>): Awaitable<R>;
 export function awaitedChain<A, R>(arg: Awaitable<A>, fn: (arg: A) => Awaitable<R>): Awaitable<R> {
   return isPromise(arg) ? arg.then(fn) : fn(arg);
 }
