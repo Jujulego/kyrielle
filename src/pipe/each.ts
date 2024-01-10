@@ -21,7 +21,7 @@ export type EachSource<O extends PipeOrigin, R> =
  */
 export function each$<O extends PipeOrigin, R>(fn: EachFn<PipedValue<O>, R>): PipeStep<O, EachSource<O, R>>;
 
-export function each$<D, R>(fn: EachFn<D, R>): PipeStep<PipeOrigin<D>, PipeOrigin<R>> {
+export function each$<D, R>(fn: EachFn<D, R>) {
   return (obs: PipeOrigin<D>) => {
     const out = source$<R>();
 

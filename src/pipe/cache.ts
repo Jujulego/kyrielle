@@ -1,4 +1,12 @@
-import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Observable, PipeStep, Readable, ReadValue } from '../defs/index.js';
+import {
+  AsAwaitableAs,
+  Awaitable,
+  Mutable,
+  Observable,
+  PipeStep,
+  Readable,
+  ReadValue
+} from '../defs/index.js';
 import { ref$ } from '../refs/index.js';
 import { awaitedChain, dedupeAwaiter } from '../utils/promise.js';
 
@@ -16,16 +24,14 @@ export interface CacheTarget<in out D> extends Readable<Awaitable<D | undefined>
 export type CacheFn<D> = () => CacheTarget<D>;
 
 /** Builds cached origin */
-export type CachedOrigin<D, O extends CacheOrigin, T extends CacheTarget<D>> =
+export type CachedOrigin<D, O extends CacheOrigin, TRD extends Awaitable<D | undefined>, TMD extends Awaitable<D>> =
   & (O extends Observable<D> ? Observable<D> : unknown)
   & (
-    T extends AsyncReadable
-      ? AsyncReadable<D>
-      : O extends AsyncReadable
-        ? Readable<Awaitable<D>>
-        : T extends AsyncMutable
-          ? Readable<Awaitable<D>>
-          : Readable<D>
+    TRD extends PromiseLike<D | undefined>
+      ? Readable<PromiseLike<D>>
+      : O extends Readable<infer ORD>
+        ? Readable<AsAwaitableAs<ORD, D> | AsAwaitableAs<TRD, D> | AsAwaitableAs<TMD, D>>
+        : never
   );
 
 /**
@@ -34,7 +40,7 @@ export type CachedOrigin<D, O extends CacheOrigin, T extends CacheTarget<D>> =
  *
  * @param target
  */
-export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(target: T): PipeStep<O, CachedOrigin<ReadValue<O>, O, T>>;
+export function cache$<O extends CacheOrigin, TRD extends Awaitable<ReadValue<O> | undefined>, TMD extends Awaitable<ReadValue<O>>>(target: Readable<TRD> & Mutable<TMD, ReadValue<O>>): PipeStep<O, CachedOrigin<ReadValue<O>, O, TRD, TMD>>;
 
 /**
  * Uses fn to get cache reference for previous origin.
@@ -42,7 +48,7 @@ export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>
  *
  * @param fn
  */
-export function cache$<O extends CacheOrigin, T extends CacheTarget<ReadValue<O>>>(fn: () => T): PipeStep<O, CachedOrigin<ReadValue<O>, O, T>>;
+export function cache$<O extends CacheOrigin, TRD extends Awaitable<ReadValue<O> | undefined>, TMD extends Awaitable<ReadValue<O>>>(fn: () => Readable<TRD> & Mutable<TMD, ReadValue<O>>): PipeStep<O, CachedOrigin<ReadValue<O>, O, TRD, TMD>>;
 
 export function cache$<D>(arg: CacheTarget<D> | CacheFn<D>) {
   return (origin: CacheOrigin<D>) => {

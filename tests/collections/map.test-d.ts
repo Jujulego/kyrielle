@@ -19,18 +19,18 @@ describe('RefMap.values', () => {
   });
 
   it('should be a sync iterator on Promise<number> for asynchronous map', () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((key: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     assertType<Iterable<Promise<number>>>(map.values());
   });
 
   it('should be an async iterable iterator on number for asynchronous map', () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((key: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     assertType<AsyncIterableIterator<number>>(map.values());
@@ -51,18 +51,18 @@ describe('RefMap.entries', () => {
   });
 
   it('should be a sync iterable on [string, Promise<number>] for asynchronous map', () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((key: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     assertType<Iterable<[string, Promise<number>]>>(map.entries());
   });
 
   it('should be an async iterable iterator on [string, number] for asynchronous map', () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((key: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     assertType<AsyncIterableIterator<[string, number]>>(map.entries());

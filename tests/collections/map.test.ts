@@ -1,12 +1,12 @@
 import { beforeEach, expect } from 'vitest';
 
 import { map$, RefMapFn, RefMap } from '@/src/collections/map.js';
-import { SyncMutableRef } from '@/src/defs/concepts/mutable-ref.js';
+import { MutableRef } from '@/src/defs/concepts/mutable-ref.js';
 import { var$ } from '@/src/refs/var.js';
 import { ref$ } from '@/src/refs/ref.js';
 
 // Setup
-let map: RefMap<string, number, SyncMutableRef<number>>;
+let map: RefMap<string, number, MutableRef<number>>;
 
 beforeEach(() => {
   map = map$((_, value) => var$(value));
@@ -38,7 +38,7 @@ describe('RefMap.has', () => {
 });
 
 describe('RefMap.set', () => {
-  let builder: RefMapFn<string, number, SyncMutableRef<number>>;
+  let builder: RefMapFn<string, number, MutableRef<number>>;
 
   beforeEach(() => {
     builder = vi.fn((_, value) => var$(value));
@@ -110,9 +110,9 @@ describe('RefMap.values', () => {
   });
 
   it('should return async iterator on every stored values', async () => {
-    const map = map$((_: string, val: number) => ref$<number, number>({
+    const map = map$((_: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     map.set('life', 42);
@@ -137,9 +137,9 @@ describe('RefMap.entries', () => {
   });
 
   it('should return async iterator on every stored key-value pairs', async () => {
-    const map = map$((key: string, val: number) => ref$<number, number>({
+    const map = map$((key: string, val: number) => ref$({
       read: async () => val,
-      mutate: arg => arg
+      mutate: (arg: number) => arg
     }));
 
     map.set('life', 42);

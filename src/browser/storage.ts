@@ -1,24 +1,24 @@
-import { SyncMutableRef } from '../defs/index.js';
+import { MutableRef } from '../defs/index.js';
 import { ref$ } from '../refs/ref.js';
 
 /**
  * Reference on data stored in a browser's storage (either localStorage or sessionStorage).
  */
-export function storage$<D extends string>(storage: Storage, key: string): SyncMutableRef<D | null>;
+export function storage$<D extends string>(storage: Storage, key: string): MutableRef<D | null>;
 
 /**
  * Reference on data stored in a browser's storage (either localStorage or sessionStorage).
  * Stores initial data only if nothing is found in storage.
  */
-export function storage$<D extends string>(storage: Storage, key: string, initial: D): SyncMutableRef<D>;
+export function storage$<D extends string>(storage: Storage, key: string, initial: D): MutableRef<D>;
 
 /**
  * Reference on data stored in a browser's storage (either localStorage or sessionStorage).
  * Stores initial data only if nothing is found in storage.
  */
-export function storage$<D extends string>(storage: Storage, key: string, initial?: D): SyncMutableRef<D | null>;
+export function storage$<D extends string>(storage: Storage, key: string, initial?: D): MutableRef<D | null>;
 
-export function storage$<D extends string>(storage: Storage, key: string, initial?: D): SyncMutableRef<D | null> {
+export function storage$<D extends string>(storage: Storage, key: string, initial?: D): MutableRef<D | null> {
   // Set initial data
   if (storage.getItem(key) === null && initial !== undefined && initial !== null) {
     storage.setItem(key, initial);
@@ -41,7 +41,7 @@ export function storage$<D extends string>(storage: Storage, key: string, initia
   // Watch for changes
   window.addEventListener('storage', (event) => {
     if (event.storageArea === storage && event.key === key) {
-      ref.next(event.newValue as D | null);
+      ref.next(event.newValue as Awaited<D> | null);
     }
   });
 
