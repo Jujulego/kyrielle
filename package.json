@@ -79,7 +79,7 @@
     "@types/node": "18.19.8",
     "@typescript-eslint/eslint-plugin": "6.19.0",
     "@typescript-eslint/parser": "6.19.0",
-    "@vitest/coverage-v8": "1.2.0",
+    "@vitest/coverage-v8": "1.2.1",
     "eslint": "8.56.0",
     "eslint-plugin-vitest": "0.3.20",
     "happy-dom": "13.1.4",
@@ -87,11 +87,11 @@
     "typescript": "5.3.3",
     "vite": "5.0.11",
     "vite-tsconfig-paths": "4.3.1",
-    "vitest": "1.2.0"
+    "vitest": "1.2.1"
   },
   "packageManager": "yarn@4.0.2",
   "dependenciesMeta": {
-    "vitest@1.2.0": {
+    "vitest@1.2.1": {
       "unplugged": true
     }
   }
