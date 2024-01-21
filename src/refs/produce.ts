@@ -1,19 +1,19 @@
 import { Draft, Immer, produce } from 'immer';
 
-import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Readable } from '../defs/index.js';
+import { AsyncMutable, AsyncReadable, Mutable, Readable, ReadValue } from '../defs/index.js';
 import { awaitedChain } from '../utils/index.js';
 
 // Types
-export type RecipeFn<D> = (draft: Draft<D>) => Draft<D> | void;
+export type RecipeFn<in out D> = (draft: Draft<D>) => Draft<D> | void;
 
-export interface ProduceOrigin<D> extends Readable<Awaitable<D>>, Mutable<Awaitable<D>, D> {}
+export interface ProduceOrigin<in out D = unknown> extends Readable<D>, Mutable<D, Awaited<D>> {}
 
-export type ProduceResult<D, R extends ProduceOrigin<D>> =
+export type ProduceResult<R extends ProduceOrigin> =
   R extends AsyncReadable
-    ? PromiseLike<D>
+    ? PromiseLike<Awaited<ReadValue<R>>>
     : R extends AsyncMutable
-      ? PromiseLike<D>
-      : D;
+      ? PromiseLike<Awaited<ReadValue<R>>>
+      : ReadValue<R>;
 
 export interface ProduceOpts {
   /**
@@ -33,9 +33,9 @@ export interface ProduceOpts {
  * @param recipe
  * @param opts
  */
-export function produce$<D, R extends ProduceOrigin<D>>(ref: R, recipe: RecipeFn<D>, opts: ProduceOpts = {}): ProduceResult<D, R> {
+export function produce$<R extends ProduceOrigin>(ref: R, recipe: RecipeFn<Awaited<ReadValue<R>>>, opts: ProduceOpts = {}): ProduceResult<R> {
   return awaitedChain(
     awaitedChain(ref.read(opts.signal), (old) => (opts.immer?.produce ?? produce)(old, recipe)),
     (result) => ref.mutate(result, opts.signal)
-  ) as ProduceResult<D, R>;
+  ) as ProduceResult<R>;
 }

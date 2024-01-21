@@ -1,6 +1,6 @@
 {
   "name": "kyrielle",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": {
@@ -64,7 +64,7 @@
     "build": "jill run 'build:esm // build:types'",
     "build:esm": "swc -d dist src",
     "build:types": "tsc --project tsconfig.build.json",
-    "test": "vitest run"
+    "test": "vitest run --typecheck"
   },
   "dependencies": {
     "@swc/helpers": "^0.5.3",
