@@ -82,7 +82,7 @@
     "@vitest/coverage-v8": "1.2.2",
     "eslint": "8.56.0",
     "eslint-plugin-vitest": "0.3.20",
-    "happy-dom": "13.3.1",
+    "happy-dom": "13.3.4",
     "shx": "0.3.4",
     "typescript": "5.3.3",
     "vite": "5.0.12",
