@@ -7,7 +7,7 @@ import '../symbols.js';
  * Lazy and composable push based data sources.
  */
 export interface Observable<out D> {
-  [Symbol.observable]: this;
+  [Symbol.observable]: Observable<D>;
 
   /**
    * Subscribe to observable using an observer.
