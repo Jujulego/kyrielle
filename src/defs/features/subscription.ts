@@ -1,7 +1,7 @@
 /**
- * Represents an active subscription to an observable
+ * Represents an active subscription to an observable.
  */
-export interface Subscription {
+export interface Subscription extends Disposable {
   /**
    * Cancels subscription
    */
