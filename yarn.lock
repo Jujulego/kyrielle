@@ -1842,13 +1842,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "entities@npm:4.5.0"
-  checksum: 10c0/5b039739f7621f5d1ad996715e53d964035f75ad3b9a4d38c6b3804bb226e282ffeae2443624d8fdd9c47d8e926ae9ac009c54671243f0c3294c26af7cc85250
-  languageName: node
-  linkType: hard
-
 "env-paths@npm:^2.2.0, env-paths@npm:^2.2.1":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
@@ -2560,17 +2553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:13.3.8":
-  version: 13.3.8
-  resolution: "happy-dom@npm:13.3.8"
-  dependencies:
-    entities: "npm:^4.5.0"
-    webidl-conversions: "npm:^7.0.0"
-    whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10c0/0be04ecde7f57c7d9a899f8720e431fa9f02ac45ece528c22b41dc88872923a1be3ad13917b8a7d8b9b15ee7febb1f1681d0e545fceb8b14523122fa3fd411f1
-  languageName: node
-  linkType: hard
-
 "has-flag@npm:^3.0.0":
   version: 3.0.0
   resolution: "has-flag@npm:3.0.0"
@@ -3120,8 +3102,6 @@ __metadata:
     "@vitest/coverage-v8": "npm:1.2.2"
     eslint: "npm:8.56.0"
     eslint-plugin-vitest: "npm:0.3.21"
-    happy-dom: "npm:13.3.8"
-    immer: "npm:^10.0.3"
     shx: "npm:0.3.4"
     typescript: "npm:5.3.3"
     vite: "npm:5.0.12"
@@ -5034,20 +5014,6 @@ __metadata:
   bin:
     vitest: vitest.mjs
   checksum: 10c0/085cb62146191b32dc98fac1a5b0de6d1c63c44cc1e7946a7d38309dd4135539432ec27b4bfad38ce79736688a0ce20d9b93f58de4ce4a41677cb3c5ca6ad980
-  languageName: node
-  linkType: hard
-
-"webidl-conversions@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "webidl-conversions@npm:7.0.0"
-  checksum: 10c0/228d8cb6d270c23b0720cb2d95c579202db3aaf8f633b4e9dd94ec2000a04e7e6e43b76a94509cdb30479bd00ae253ab2371a2da9f81446cc313f89a4213a2c4
-  languageName: node
-  linkType: hard
-
-"whatwg-mimetype@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "whatwg-mimetype@npm:3.0.0"
-  checksum: 10c0/323895a1cda29a5fb0b9ca82831d2c316309fede0365047c4c323073e3239067a304a09a1f4b123b9532641ab604203f33a1403b5ca6a62ef405bcd7a204080f
   languageName: node
   linkType: hard
 

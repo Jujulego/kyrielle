@@ -9,12 +9,5 @@
   },
   "files": [
     "./src/index.ts",
-    "./src/browser/index.ts",
-    "./src/collections/index.ts",
-    "./src/events/index.ts",
-    "./src/operators/index.ts",
-    "./src/refs/index.ts",
-    "./src/pipe/index.ts",
-    "./src/subscriptions/index.ts"
   ]
 }
