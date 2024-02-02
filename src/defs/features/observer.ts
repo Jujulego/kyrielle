@@ -20,7 +20,7 @@ export interface Observer<in D> {
    * Called when an error occurs in the observable
    * @param err
    */
-  error(err: Error): void;
+  error(err: unknown): void;
 
   /**
    * Called when the observable completes. No other data or error will then be received.
