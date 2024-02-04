@@ -15,7 +15,7 @@ const enum State {
 
 /**
  * Creates an observable using fn's logic
- * @param fn
+ * @param fn subscriber function
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   const observers = new Set<Observer<D>>();
@@ -91,6 +91,8 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 }
 
 // Utils
+const noop = () => { /* noop */ };
+
 function parseSubscribeArgs<D>(args: [Observer<D>] | SubscribeCallbacks<D>): Observer<D> {
   if (typeof args[0] === 'object') {
     return args[0];
@@ -99,8 +101,8 @@ function parseSubscribeArgs<D>(args: [Observer<D>] | SubscribeCallbacks<D>): Obs
   return {
     start() {},
     next: args[0],
-    error: args[1] ?? (() => {}),
-    complete: args[2] ?? (() => {}),
+    error: args[1] ?? noop,
+    complete: args[2] ?? noop,
   };
 }
 
