@@ -1,7 +1,25 @@
 import { Observable, Observer, Subscription } from './defs/index.js';
 
 // Types
-export interface SubscriberObserver<in D> extends Omit<Observer<D>, 'start'> {}
+export interface SubscriberObserver<in D = unknown> {
+  /**
+   * Emits given value
+   * @param data
+   */
+  next(data: D): void;
+
+  /**
+   * Emits given error
+   * @param err
+   */
+  error(err: unknown): void;
+
+  /**
+   * Completes the observable and closes all subscriptions
+   */
+  complete(): never;
+}
+
 export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
 
 export type SubscribeCallbacks<D> = [onNext: (data: D) => void, onError?: ((error: Error) => void) | undefined, onComplete?: (() => void) | undefined];
@@ -11,6 +29,13 @@ const enum State {
   Inactive,
   Activating,
   Active,
+}
+
+// Errors
+export class SubscriberCompleted extends Error {
+  constructor() {
+    super('Subscriber completed');
+  }
 }
 
 /**
@@ -33,24 +58,29 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       }
     },
     complete() {
-      for (const obs of observers) {
-        obs.complete();
-      }
+      throw new SubscriberCompleted();
     }
   };
 
   // Inner state
   let state = State.Inactive;
-  const controller = new AbortController();
+  let controller: AbortController;
 
   async function activate() {
+    if (state !== State.Activating) {
+      return;
+    }
+
     try {
       state = State.Active;
+      controller = new AbortController();
 
       await fn(observer, controller.signal);
     } catch (err: unknown) {
-      for (const obs of observers) {
-        obs.error(err);
+      if (!(err instanceof SubscriberCompleted)) {
+        for (const obs of observers) {
+          obs.error(err);
+        }
       }
     } finally {
       state = State.Inactive;
@@ -58,6 +88,8 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       for (const obs of observers) {
         obs.complete();
       }
+
+      observers.clear();
     }
   }
 
@@ -70,13 +102,20 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       }
 
       const observer = parseSubscribeArgs(args);
-      const sub = buildSubscription(() => {
-        observers.delete(observer);
+      const sub = buildSubscription(
+        () => {
+          observers.delete(observer);
 
-        if (observers.size === 0) {
-          controller.abort();
-        }
-      });
+          if (observers.size === 0) {
+            if (state === State.Active) {
+              controller.abort();
+            }
+
+            state = State.Inactive;
+          }
+        },
+        () => !observers.has(observer)
+      );
 
       observers.add(observer);
       observer.start(sub);
@@ -106,19 +145,17 @@ function parseSubscribeArgs<D>(args: [Observer<D>] | SubscribeCallbacks<D>): Obs
   };
 }
 
-function buildSubscription(unsubscribe: () => void): Subscription {
-  let closed = false;
-
-  unsubscribe = () => {
-    unsubscribe();
-    closed = true;
-  };
-
-  return {
+function buildSubscription(unsubscribe: () => void, isClosed: () => boolean): Subscription {
+  const subscription = {
     [Symbol.dispose ?? Symbol.for('Symbol.dispose')]: unsubscribe,
     unsubscribe,
-    get closed() {
-      return closed;
-    }
   };
+
+  Object.defineProperty(subscription, 'closed', {
+    get: isClosed,
+    configurable: false,
+    enumerable: true,
+  });
+
+  return subscription as Subscription;
 }
