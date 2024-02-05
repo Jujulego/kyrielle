@@ -3,8 +3,7 @@
     "target": "esnext",
     "externalHelpers": true,
     "parser": {
-      "syntax": "typescript",
-      "decorators": true
+      "syntax": "typescript"
     }
   },
   "module": {
