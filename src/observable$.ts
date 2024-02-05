@@ -118,7 +118,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       );
 
       observers.add(observer);
-      observer.start(sub);
+      observer.start?.(sub);
 
       return sub;
     }
@@ -138,7 +138,6 @@ function parseSubscribeArgs<D>(args: [Observer<D>] | SubscribeCallbacks<D>): Obs
   }
 
   return {
-    start() {},
     next: args[0],
     error: args[1] ?? noop,
     complete: args[2] ?? noop,
