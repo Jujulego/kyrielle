@@ -1,4 +1,6 @@
 import { Observable, Observer, Subscription } from './defs/index.js';
+import { parseSubscribeArgs } from './utils/subscribe.js';
+import { buildSubscription } from './utils/subscription.js';
 
 // Types
 export interface SubscriberObserver<in D = unknown> {
@@ -39,7 +41,8 @@ export class SubscriberCompleted extends Error {
 }
 
 /**
- * Creates an observable using fn's logic
+ * Creates an observable using fn's logic.
+ *
  * @param fn subscriber function
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
@@ -102,8 +105,8 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       }
 
       const observer = parseSubscribeArgs(args);
-      const sub = buildSubscription(
-        () => {
+      const subscription = buildSubscription({
+        onUnsubscribe: () => {
           observers.delete(observer);
 
           if (observers.size === 0) {
@@ -114,48 +117,17 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
             state = State.Inactive;
           }
         },
-        () => !observers.has(observer)
-      );
+        isClosed: () => !observers.has(observer)
+      });
 
       observers.add(observer);
-      observer.start(sub);
+      observer.start?.(subscription);
 
-      return sub;
+      return subscription;
     }
   };
 
   Object.assign(observable, { [Symbol.observable ?? Symbol.for('observable')]: observable });
 
   return observable as Observable<D>;
-}
-
-// Utils
-const noop = () => { /* noop */ };
-
-function parseSubscribeArgs<D>(args: [Observer<D>] | SubscribeCallbacks<D>): Observer<D> {
-  if (typeof args[0] === 'object') {
-    return args[0];
-  }
-
-  return {
-    start() {},
-    next: args[0],
-    error: args[1] ?? noop,
-    complete: args[2] ?? noop,
-  };
-}
-
-function buildSubscription(unsubscribe: () => void, isClosed: () => boolean): Subscription {
-  const subscription = {
-    [Symbol.dispose ?? Symbol.for('Symbol.dispose')]: unsubscribe,
-    unsubscribe,
-  };
-
-  Object.defineProperty(subscription, 'closed', {
-    get: isClosed,
-    configurable: false,
-    enumerable: true,
-  });
-
-  return subscription as Subscription;
 }
