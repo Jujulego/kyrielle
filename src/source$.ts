@@ -44,7 +44,7 @@ export function source$<D>(): Source<D> {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),
-        isClosed: () => observers.has(observer)
+        isClosed: () => !observers.has(observer)
       });
 
       observers.add(observer);

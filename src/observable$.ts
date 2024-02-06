@@ -117,7 +117,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
             state = State.Inactive;
           }
         },
-        isClosed: () => observers.has(observer)
+        isClosed: () => !observers.has(observer)
       });
 
       observers.add(observer);
