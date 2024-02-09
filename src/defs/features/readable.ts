@@ -8,3 +8,8 @@ export interface Readable<out D = unknown> {
    */
   read(signal?: AbortSignal): D;
 }
+
+/**
+ * Object that can be asynchronously read.
+ */
+export interface AsyncReadable<out D = unknown> extends Readable<PromiseLike<D>> {}
