@@ -4,7 +4,7 @@ import { Subscription } from './subscription.js';
 import '../symbols.js';
 
 /**
- * Lazy and composable push based data sources.
+ * Lazy and composable push based data source.
  */
 export interface Observable<out D = unknown> {
   [Symbol.observable]: Observable<D>;
