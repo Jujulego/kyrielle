@@ -36,6 +36,8 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
   // Build readable
   return {
     read(signal?: AbortSignal): D {
+      signal?.throwIfAborted();
+
       // Execute
       if (!promise) {
         controller = new AbortController();
@@ -57,6 +59,11 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
           signals.add(signal);
           signal.addEventListener('abort', cancel, { once: true });
         }
+
+        return <D>Promise.race([
+          promise,
+          new Promise<never>((_, reject) => signal!.addEventListener('abort', () => reject(signal!.reason), { once: true }))
+        ]);
       } else {
         ++calls;
       }
