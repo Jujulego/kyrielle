@@ -1,6 +1,6 @@
 import { Readable } from './defs/index.js';
-import { waitForAbort } from './utils/abort.js';
 import { isPromise } from './utils/promise.js';
+import { Query } from './utils/query.js';
 
 /**
  * Builds a Readable object around fn. Produced object will deduplicate calls to fn, meaning that all read calls made
@@ -9,28 +9,7 @@ import { isPromise } from './utils/promise.js';
  * @param fn
  */
 export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
-  let calls = 0;
-  let controller: AbortController;
-  let promise: (D & PromiseLike<unknown>) | null = null;
-  const signals = new Set<AbortSignal>();
-
-  // Utils
-  function cancel(this: AbortSignal) {
-    if (--calls === 0) {
-      controller.abort(this.reason);
-    }
-  }
-
-  function cleanup() {
-    calls = 0;
-    promise = null;
-
-    for (const signal of signals) {
-      signal.removeEventListener('abort', cancel);
-    }
-
-    signals.clear();
-  }
+  let query: Query | null = null;
 
   // Build readable
   return {
@@ -38,13 +17,12 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
       signal?.throwIfAborted();
 
       // Execute
-      if (!promise) {
-        controller = new AbortController();
+      if (!query || query.completed) {
+        const controller = new AbortController();
         const result = fn(controller.signal);
 
         if (isPromise(result)) {
-          promise = result;
-          promise.then(cleanup, cleanup);
+          query = new Query(result, controller);
         } else {
           return result;
         }
@@ -52,19 +30,12 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
 
       // Manage signal
       if (signal) {
-        if (!signals.has(signal)) {
-          ++calls;
-
-          signal.addEventListener('abort', cancel, { once: true });
-          signals.add(signal);
-        }
-
-        return <D> Promise.race([promise, waitForAbort(signal)]);
+        return <D> query.registerSignal(signal);
       } else {
-        ++calls;
+        query.preventCancel();
       }
 
-      return promise;
+      return <D> query.promise;
     }
   };
 }
