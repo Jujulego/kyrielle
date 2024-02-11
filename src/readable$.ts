@@ -1,4 +1,5 @@
 import { Readable } from './defs/index.js';
+import { waitForAbort } from './utils/abort.js';
 import { isPromise } from './utils/promise.js';
 
 /**
@@ -15,9 +16,7 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
 
   // Utils
   function cancel(this: AbortSignal) {
-    --calls;
-
-    if (calls === 0) {
+    if (--calls === 0) {
       controller.abort(this.reason);
     }
   }
@@ -56,16 +55,11 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
         if (!signals.has(signal)) {
           ++calls;
 
-          signals.add(signal);
           signal.addEventListener('abort', cancel, { once: true });
+          signals.add(signal);
         }
 
-        return <D>Promise.race([
-          promise,
-          new Promise<never>((_, reject) => {
-            signal.addEventListener('abort', () => reject(signal.reason), { once: true });
-          })
-        ]);
+        return <D> Promise.race([promise, waitForAbort(signal)]);
       } else {
         ++calls;
       }
