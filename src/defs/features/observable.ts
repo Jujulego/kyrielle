@@ -23,3 +23,8 @@ export interface Observable<out D = unknown> {
    */
   subscribe(onNext: (data: D) => void, onError?: (error: Error) => void, onComplete?: () => void): Subscription;
 }
+
+/**
+ * Extract value type emitted by observable.
+ */
+export type ObservedValue<O extends Observable> = O extends Observable<infer D> ? D : never;
