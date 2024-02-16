@@ -19,7 +19,7 @@ export interface SubscriberObserver<in D = unknown> {
   /**
    * Completes the observable and closes all subscriptions
    */
-  complete(): never;
+  complete(): void;
 }
 
 export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
@@ -29,7 +29,6 @@ export type SubscribeCallbacks<D> = [onNext: (data: D) => void, onError?: ((erro
 // Enum
 const enum State {
   Inactive,
-  Activating,
   Active,
 }
 
@@ -49,7 +48,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   const observers = new Set<Observer<D>>();
 
   // Subscriber
-  const observer: SubscriberObserver<D> = {
+  const subscriber: SubscriberObserver<D> = {
     next(data: D) {
       for (const obs of observers) {
         obs.next(data);
@@ -61,7 +60,11 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       }
     },
     complete() {
-      throw new SubscriberCompleted();
+      for (const obs of observers) {
+        obs.complete();
+      }
+
+      observers.clear();
     }
   };
 
@@ -70,25 +73,16 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   let controller: AbortController;
 
   async function activate() {
-    if (state !== State.Activating) {
-      return;
-    }
-
     try {
       state = State.Active;
       controller = new AbortController();
 
-      await fn(observer, controller.signal);
+      await fn(subscriber, controller.signal);
     } catch (err: unknown) {
-      if (!(err instanceof SubscriberCompleted)) {
-        for (const obs of observers) {
-          obs.error(err);
-        }
-      }
-    } finally {
       state = State.Inactive;
 
       for (const obs of observers) {
+        obs.error(err);
         obs.complete();
       }
 
@@ -99,12 +93,11 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   // Build observable
   const observable = {
     subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): Subscription {
-      if (state === State.Inactive) {
-        queueMicrotask(activate);
-        state = State.Activating;
-      }
-
+      // Parse args
       const observer = parseSubscribeArgs(args);
+      observers.add(observer);
+
+      // Prepare subscription
       const subscription = buildSubscription({
         onUnsubscribe: () => {
           observers.delete(observer);
@@ -119,9 +112,12 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
         },
         isClosed: () => !observers.has(observer)
       });
-
-      observers.add(observer);
       observer.start?.(subscription);
+
+      // Activate observable
+      if (state === State.Inactive) {
+        activate();
+      }
 
       return subscription;
     }
