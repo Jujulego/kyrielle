@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { filter$ } from '@/src/filter$.js';
+import { each$ } from '@/src/each$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
 import { observable$ } from '@/src/observable$.js';
 
 // Tests
-describe('filter$', () => {
-  it('should subscribe to source and filter emitted values', () => {
+describe('each$', () => {
+  it('should subscribe to source and transform emitted values', () => {
     const src = source$<number>();
     vi.spyOn(src, 'subscribe');
 
     // Setup
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(src, each$((n) => n.toString()));
     expect(src.subscribe).not.toHaveBeenCalled();
 
     // Subscribe
@@ -25,13 +25,13 @@ describe('filter$', () => {
     src.next(12);
     src.next(42);
 
-    expect(fn).not.toHaveBeenCalledWith(12);
-    expect(fn).toHaveBeenCalledWith(42);
+    expect(fn).toHaveBeenCalledWith('12');
+    expect(fn).toHaveBeenCalledWith('42');
   });
 
   it('should complete when source completes', () => {
     const src = source$<number>();
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(src, each$((n) => n.toString()));
 
     const subscription = res.subscribe(vi.fn());
     expect(subscription.closed).toBe(false);
@@ -45,7 +45,7 @@ describe('filter$', () => {
     const src = observable$<number>((_, signal) => {
       signal.addEventListener('abort', fn, { once: true });
     });
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(src, each$((n) => n.toString()));
 
     const subscription = res.subscribe(vi.fn());
     expect(fn).not.toHaveBeenCalled();

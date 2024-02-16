@@ -1,5 +1,6 @@
 export * from './defs/index.js';
 
+export * from './each$.js';
 export * from './filter$.js';
 export * from './flow$.js';
 export * from './mutable$.js';
