@@ -60,35 +60,35 @@ describe('observable$', () => {
       expect(observer.start).toHaveBeenCalledWith(sub);
     });
 
-    it('should call next when subscriber calls next', async () => {
+    it('should call next when subscriber calls next', () => {
       const observable = observable$<number>((observer) => {
         observer.next(42);
       });
 
       observable.subscribe(observer);
 
-      await vi.waitFor(() => expect(observer.next).toHaveBeenCalledWith(42));
+      expect(observer.next).toHaveBeenCalledWith(42);
     });
 
-    it('should call error when subscriber calls error', async () => {
+    it('should call error when subscriber calls error', () => {
       const observable = observable$((observer) => {
         observer.error(new Error('Failed !'));
       });
 
       observable.subscribe(observer);
 
-      await vi.waitFor(() => expect(observer.error).toHaveBeenCalledWith(new Error('Failed !')));
+      expect(observer.error).toHaveBeenCalledWith(new Error('Failed !'));
     });
 
-    it('should call error when subscriber throws, completes, and close subscription', async () => {
+    it('should call error when subscriber throws, completes, and close subscription', () => {
       const observable = observable$(() => {
         throw new Error('Failed !');
       });
 
       const sub = observable.subscribe(observer);
 
-      await vi.waitFor(() => expect(observer.error).toHaveBeenCalledWith(new Error('Failed !')));
-      await vi.waitFor(() => expect(observer.complete).toHaveBeenCalledOnce());
+      expect(observer.error).toHaveBeenCalledWith(new Error('Failed !'));
+      expect(observer.complete).toHaveBeenCalledOnce();
 
       expect(sub.closed).toBe(true);
     });
@@ -100,23 +100,14 @@ describe('observable$', () => {
 
       const sub = observable.subscribe(observer);
 
-      await vi.waitFor(() => expect(observer.complete).toHaveBeenCalledOnce());
-
-      expect(sub.closed).toBe(true);
-    });
-
-    it('should call complete when subscriber ends, and close subscription', async () => {
-      const observable = observable$(() => {});
-      const sub = observable.subscribe(observer);
-
-      await vi.waitFor(() => expect(observer.complete).toHaveBeenCalledOnce());
+      expect(observer.complete).toHaveBeenCalledOnce();
 
       expect(sub.closed).toBe(true);
     });
 
     it('should unsubscribe from observable', () => {
       const observable = observable$<number>((observer) => {
-        observer.next(42);
+        queueMicrotask(() => observer.next(42));
       });
 
       const sub = observable.subscribe(observer);

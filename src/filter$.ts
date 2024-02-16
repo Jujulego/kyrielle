@@ -17,14 +17,15 @@ export function filter$<D>(predicate: (val: D) => boolean): PipeStep<Observable<
 export function filter$(predicate: (val: unknown) => boolean): PipeStep {
   return (origin) => observable$((observer, signal) => {
     const subscription = origin.subscribe({
-      ...observer,
       next(val) {
         if (predicate(val)) {
           observer.next(val);
         }
       },
+      error: observer.error,
       complete() {
         signal.removeEventListener('abort', subscription.unsubscribe);
+        observer.complete();
       }
     });
 
