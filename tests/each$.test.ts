@@ -4,6 +4,8 @@ import { each$ } from '@/src/each$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
 import { observable$ } from '@/src/observable$.js';
+import { resourceBuilder$ } from '@/src/resource-builder$.js';
+import { readable$ } from '@/src/readable$.js';
 
 // Tests
 describe('each$', () => {
@@ -27,6 +29,28 @@ describe('each$', () => {
 
     expect(fn).toHaveBeenCalledWith('12');
     expect(fn).toHaveBeenCalledWith('42');
+  });
+
+  it('should transform read result', () => {
+    const src = resourceBuilder$<number>()
+      .add(source$<number>())
+      .add(readable$(() => 42))
+      .build();
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    expect(res.read()).toBe('42');
+  });
+
+  it('should transform async read result', async () => {
+    const src = resourceBuilder$<number>()
+      .add(source$<number>())
+      .add(readable$(async () => 42))
+      .build();
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    await expect(res.read()).resolves.toBe('42');
   });
 
   it('should complete when source completes', () => {

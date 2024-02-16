@@ -19,6 +19,15 @@ describe('resourceBuilder$', () => {
     expectTypeOf(res.read).returns.toBeNumber();
   });
 
+  it('should add async readable methods to final object type', () => {
+    const res = resourceBuilder$()
+      .add({ read: async () => 42 })
+      .build();
+
+    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res.read).returns.resolves.toBeNumber();
+  });
+
   it('should override common methods in final object type', () => {
     const res = resourceBuilder$()
       .add({ read: () => 42 })

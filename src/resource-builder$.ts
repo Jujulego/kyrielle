@@ -1,8 +1,8 @@
-import { Observable, Readable, Mutable } from './defs/index.js';
+import { Observable, Readable, Mutable, Awaitable } from './defs/index.js';
 
 // Types
 export type EmptyResource = Record<string, never>;
-export type AddFeature<R, F> = Omit<R, keyof F> & F;
+export type AddFeature<R, F> = R & F;
 
 /**
  * Helper to build complex resource types.
@@ -24,7 +24,7 @@ export interface ResourceBuilder<D, R extends object = EmptyResource> {
    * Add defined readable feature to built resource
    * @param readable
    */
-  add<const F extends Readable<D>>(readable: F): ResourceBuilder<D, AddFeature<R, F>>;
+  add<const F extends Readable<Awaitable<D>>>(readable: F): ResourceBuilder<D, AddFeature<R, F>>;
 
   /**
    * Return final resource object.
