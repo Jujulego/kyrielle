@@ -42,7 +42,7 @@ describe('filter$', () => {
 
   it('should complete source completes', () => {
     const fn = vi.fn();
-    const src = observable$((_, signal) => {
+    const src = observable$<number>((_, signal) => {
       signal.addEventListener('abort', fn, { once: true });
     });
     const res = pipe$(src, filter$((n) => n === 42));
