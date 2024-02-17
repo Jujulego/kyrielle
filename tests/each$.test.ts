@@ -1,3 +1,4 @@
+import { mutable$ } from '@/src/mutable$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { each$ } from '@/src/each$.js';
@@ -51,6 +52,34 @@ describe('each$', () => {
     const res = pipe$(src, each$((n) => n.toString()));
 
     await expect(res.read()).resolves.toBe('42');
+  });
+
+  it('should transform mutate result', () => {
+    const src = resourceBuilder$<number>()
+      .add(source$<number>())
+      .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+      .build();
+
+    vi.spyOn(src, 'mutate');
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    expect(res.mutate('life')).toBe('42');
+    expect(src.mutate).toHaveBeenCalledWith('life', undefined);
+  });
+
+  it('should transform async mutate result', async () => {
+    const src = resourceBuilder$<number>()
+      .add(source$<number>())
+      .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+      .build();
+
+    vi.spyOn(src, 'mutate');
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    await expect(res.mutate('life')).resolves.toBe('42');
+    expect(src.mutate).toHaveBeenCalledWith('life', undefined);
   });
 
   it('should complete when source completes', () => {

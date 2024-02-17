@@ -12,7 +12,7 @@ export interface ResourceBuilder<D, R extends object = EmptyResource> {
    * Adds defined mutable feature to built resource.
    * @param mutable
    */
-  add<const F extends Mutable<any, D>>(mutable: F): ResourceBuilder<D, AddFeature<R, F>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  add<const F extends Mutable<any, Awaitable<D>>>(mutable: F): ResourceBuilder<D, AddFeature<R, F>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
    * Adds defined observable feature to built resource.

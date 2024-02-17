@@ -1,3 +1,4 @@
+import { mutable$ } from '@/src/mutable$.js';
 import { describe, expectTypeOf, it } from 'vitest';
 
 import { each$ } from '@/src/each$.js';
@@ -17,6 +18,8 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
+    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('mutate');
     expectTypeOf(res.read).returns.toBeString();
   });
 
@@ -29,6 +32,38 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
+    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('mutate');
     expectTypeOf(res.read).returns.resolves.toBeString();
+  });
+
+  it('should have a synchronous mutate method', () => {
+    const res = pipe$(
+      resourceBuilder$<number>()
+        .add(source$<number>())
+        .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+        .build(),
+      each$((n) => n.toString())
+    );
+
+    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('mutate');
+    expectTypeOf(res.mutate).parameter(0).toBeString();
+    expectTypeOf(res.mutate).returns.toBeString();
+  });
+
+  it('should have an asynchronous mutate method', () => {
+    const res = pipe$(
+      resourceBuilder$<number>()
+        .add(source$<number>())
+        .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+        .build(),
+      each$((n) => n.toString())
+    );
+
+    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('mutate');
+    expectTypeOf(res.mutate).parameter(0).toBeString();
+    expectTypeOf(res.mutate).returns.resolves.toBeString();
   });
 });
