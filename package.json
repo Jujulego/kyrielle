@@ -13,13 +13,6 @@
   "sideEffects": false,
   "files": [
     "./dist",
-    "./browser.d.ts",
-    "./collections.d.ts",
-    "./events.d.ts",
-    "./operators.d.ts",
-    "./pipe.d.ts",
-    "./refs.d.ts",
-    "./subscriptions.d.ts"
   ],
   "type": "module",
   "module": "./dist/index.js",
