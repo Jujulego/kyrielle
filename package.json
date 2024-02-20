@@ -12,7 +12,7 @@
   },
   "sideEffects": false,
   "files": [
-    "./dist",
+    "./dist"
   ],
   "type": "module",
   "module": "./dist/index.js",
