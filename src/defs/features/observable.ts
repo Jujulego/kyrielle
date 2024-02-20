@@ -1,5 +1,5 @@
 import { Observer } from './observer.js';
-import { Subscription } from './subscription.js';
+import { KyrielleSubscription, Subscription } from './subscription.js';
 
 import '../symbols.js';
 
@@ -22,6 +22,24 @@ export interface Observable<out D = unknown> {
    * @param onComplete Called when the observable completes. No other data or error will then be received.
    */
   subscribe(onNext: (data: D) => void, onError?: (error: Error) => void, onComplete?: () => void): Subscription;
+}
+
+export interface KyrielleObservable<out D = unknown> extends Observable<D> {
+  [Symbol.observable]: KyrielleObservable<D>;
+
+  /**
+   * Subscribe to observable using an observer.
+   * @param observer
+   */
+  subscribe(observer: Observer<D>): KyrielleSubscription;
+
+  /**
+   * Subscribe to observable using callbacks.
+   * @param onNext Called with each emitted value
+   * @param onError Called when an error occurs in the observable
+   * @param onComplete Called when the observable completes. No other data or error will then be received.
+   */
+  subscribe(onNext: (data: D) => void, onError?: (error: Error) => void, onComplete?: () => void): KyrielleSubscription;
 }
 
 /**

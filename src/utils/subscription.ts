@@ -1,4 +1,4 @@
-import { Subscription } from '../defs/index.js';
+import { KyrielleSubscription } from '../defs/index.js';
 
 export interface SubscriptionProps {
   /**
@@ -15,7 +15,7 @@ export interface SubscriptionProps {
 /**
  * Builds a subscription object.
  */
-export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps): Subscription {
+export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps): KyrielleSubscription {
   const subscription = {
     [Symbol.dispose ?? Symbol.for('Symbol.dispose')]: onUnsubscribe,
     unsubscribe: onUnsubscribe,
@@ -27,5 +27,5 @@ export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps
     enumerable: true,
   });
 
-  return subscription as Subscription;
+  return subscription as KyrielleSubscription;
 }

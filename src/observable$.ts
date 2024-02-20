@@ -1,4 +1,4 @@
-import { Observable, Observer, Subscription } from './defs/index.js';
+import { KyrielleObservable, KyrielleSubscription, Observer } from './defs/index.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
@@ -44,7 +44,7 @@ export class SubscriberCompleted extends Error {
  *
  * @param fn subscriber function
  */
-export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
+export function observable$<D>(fn: SubscriberFn<D>): KyrielleObservable<D> {
   const observers = new Set<Observer<D>>();
 
   // Subscriber
@@ -92,7 +92,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
   // Build observable
   const observable = {
-    subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): KyrielleSubscription {
       // Parse args
       const observer = parseSubscribeArgs(args);
       observers.add(observer);
@@ -125,5 +125,5 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
   Object.assign(observable, { [Symbol.observable ?? Symbol.for('observable')]: observable });
 
-  return observable as Observable<D>;
+  return observable as KyrielleObservable<D>;
 }
