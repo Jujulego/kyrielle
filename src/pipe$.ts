@@ -1,17 +1,15 @@
-import { Observable as Obs } from './defs/index.js';
-
 // Types
-export type PipeStep<in O extends Obs = Obs, out R extends Obs = Obs> = (origin: O) => R;
+export type PipeStep<in O = unknown, out R = unknown> = (origin: O) => R;
 
 /**
  * Run step on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs>(observable: A, stepA: PipeStep<A, B>): B;
+export function pipe$<A, B>(observable: A, stepA: PipeStep<A, B>): B;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs>(
+export function pipe$<A, B, C>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>
@@ -20,7 +18,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs>(
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs>(
+export function pipe$<A, B, C, D>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -30,7 +28,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs>(
+export function pipe$<A, B, C, D, E>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -41,7 +39,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs>(
+export function pipe$<A, B, C, D, E, F>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -53,7 +51,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs>(
+export function pipe$<A, B, C, D, E, F, G>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -66,7 +64,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs>(
+export function pipe$<A, B, C, D, E, F, G, H>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -80,7 +78,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs>(
+export function pipe$<A, B, C, D, E, F, G, H, I>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -95,7 +93,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs, J extends Obs>(
+export function pipe$<A, B, C, D, E, F, G, H, I, J>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -111,7 +109,7 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs, J extends Obs, K extends Obs>(
+export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -128,6 +126,6 @@ export function pipe$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  */
-export function pipe$(observable: Obs, ...steps: PipeStep[]): Obs {
-  return steps.reduce((obs, step) => step(obs), observable);
+export function pipe$(value: unknown, ...steps: PipeStep[]): unknown {
+  return steps.reduce((val, step) => step(val), value);
 }

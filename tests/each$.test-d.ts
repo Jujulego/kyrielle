@@ -4,14 +4,14 @@ import { describe, expectTypeOf, it } from 'vitest';
 import { each$ } from '@/src/each$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
-import { resourceBuilder$ } from '@/src/resource-builder$.js';
+import { resource$ } from '@/src/resource$.js';
 import { readable$ } from '@/src/readable$.js';
 
 // Tests
 describe('each$', () => {
   it('should have a synchronous read method', () => {
     const res = pipe$(
-      resourceBuilder$<number>()
+      resource$<number>()
         .add(source$<number>())
         .add(readable$(() => 42))
         .build(),
@@ -25,7 +25,7 @@ describe('each$', () => {
 
   it('should have an asynchronous read method', () => {
     const res = pipe$(
-      resourceBuilder$<number>()
+      resource$<number>()
         .add(source$<number>())
         .add(readable$(async () => 42))
         .build(),
@@ -39,7 +39,7 @@ describe('each$', () => {
 
   it('should have a synchronous mutate method', () => {
     const res = pipe$(
-      resourceBuilder$<number>()
+      resource$<number>()
         .add(source$<number>())
         .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
         .build(),
@@ -54,7 +54,7 @@ describe('each$', () => {
 
   it('should have an asynchronous mutate method', () => {
     const res = pipe$(
-      resourceBuilder$<number>()
+      resource$<number>()
         .add(source$<number>())
         .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
         .build(),

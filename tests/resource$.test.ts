@@ -1,12 +1,12 @@
 import { Mutable, Readable } from '@/src/defs/index.js';
 import { describe, expect, it } from 'vitest';
 
-import { resourceBuilder$ } from '@/src/resource-builder$.js';
+import { resource$ } from '@/src/resource$.js';
 
 // Tests
 describe('resourceBuilder$', () => {
   it('should return an empty object', () => {
-    expect(resourceBuilder$().build()).toStrictEqual({});
+    expect(resource$().build()).toStrictEqual({});
   });
 
   it('should add methods from given readable feature', () => {
@@ -16,7 +16,7 @@ describe('resourceBuilder$', () => {
       }
     };
 
-    const resource = resourceBuilder$<number>()
+    const resource = resource$<number>()
       .add(readable)
       .build();
 
@@ -30,7 +30,7 @@ describe('resourceBuilder$', () => {
       }
     };
 
-    const resource = resourceBuilder$<number>()
+    const resource = resource$<number>()
       .add(mutable)
       .build();
 
@@ -50,7 +50,7 @@ describe('resourceBuilder$', () => {
       }
     };
 
-    const resource = resourceBuilder$<number>()
+    const resource = resource$<number>()
       .add(readable)
       .add(mutable)
       .build();

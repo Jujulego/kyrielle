@@ -1,16 +1,16 @@
-import { Observable as Obs, ObservedValue, Observer, Subscription } from './defs/index.js';
+import { Observable, ObservedValue, Observer, Subscription } from './defs/index.js';
 import { PipeStep } from './pipe$.js';
 
 /**
  * Given observer subscribes to result given observable.
  */
-export function flow$<A extends Obs>(observable: A, observer: Observer<ObservedValue<A>>): Subscription;
+export function flow$<A extends Observable>(observable: A, observer: Observer<ObservedValue<A>>): Subscription;
 
 /**
  * Run step on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs>(
+export function flow$<A, B extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   observer: Observer<ObservedValue<B>>
@@ -20,7 +20,7 @@ export function flow$<A extends Obs, B extends Obs>(
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs>(
+export function flow$<A, B, C extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -31,7 +31,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs>(
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs>(
+export function flow$<A, B, C, D extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -43,7 +43,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs>(
+export function flow$<A, B, C, D, E extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -56,7 +56,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs>(
+export function flow$<A, B, C, D, E, F extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -70,7 +70,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs>(
+export function flow$<A, B, C, D, E, F, G extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -85,7 +85,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs>(
+export function flow$<A, B, C, D, E, F, G, H extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -101,7 +101,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs>(
+export function flow$<A, B, C, D, E, F, G, H, I extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -118,7 +118,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs, J extends Obs>(
+export function flow$<A, B, C, D, E, F, G, H, I, J extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -136,7 +136,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs, E extends Obs, F extends Obs, G extends Obs, H extends Obs, I extends Obs, J extends Obs, K extends Obs>(
+export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Observable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -155,7 +155,7 @@ export function flow$<A extends Obs, B extends Obs, C extends Obs, D extends Obs
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$(observable: Obs, ...rest: [...PipeStep[], observer: Observer]): Subscription {
+export function flow$(value: unknown, ...rest: [...PipeStep[], observer: Observer]): Subscription {
   const observer = rest.pop() as Observer;
-  return (rest as PipeStep[]).reduce((obs, step) => step(obs), observable).subscribe(observer);
+  return ((rest as PipeStep[]).reduce((obs, step) => step(obs), value) as Observable).subscribe(observer);
 }

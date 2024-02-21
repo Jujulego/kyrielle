@@ -1,5 +1,5 @@
 import { Mutable } from './defs/index.js';
-import { isPromise } from './utils/promise.js';
+import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 
 /**
@@ -10,7 +10,7 @@ import { Query } from './utils/query.js';
  * @param fn
  */
 export function mutable$<A, D>(fn: (arg: A, signal: AbortSignal) => D): Mutable<A, D> {
-  const queries = new Map<A, Query>();
+  const queries = new Map<A, Query<D>>();
 
   // Build mutable
   return {
@@ -24,7 +24,7 @@ export function mutable$<A, D>(fn: (arg: A, signal: AbortSignal) => D): Mutable<
         const controller = new AbortController();
         const result = fn(arg, controller.signal);
 
-        if (isPromise(result)) {
+        if (isPromise<D>(result)) {
           query = new Query(result, controller, () => queries.delete(arg));
           queries.set(arg, query);
         } else {
