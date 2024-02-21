@@ -8,5 +8,5 @@ export * from './observable$.js';
 export * from './observer$.js';
 export * from './pipe$.js';
 export * from './readable$.js';
-export * from './resource-builder$.js';
+export * from './resource$.js';
 export * from './source$.js';
