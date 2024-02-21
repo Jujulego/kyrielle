@@ -92,6 +92,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
   // Build observable
   const observable = {
+    [Symbol.observable ?? '@@observable']: () => observable,
     subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): Subscription {
       // Parse args
       const observer = parseSubscribeArgs(args);
@@ -123,7 +124,5 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
     }
   };
 
-  Object.assign(observable, { [Symbol.observable ?? Symbol.for('observable')]: observable });
-
-  return observable as Observable<D>;
+  return observable;
 }

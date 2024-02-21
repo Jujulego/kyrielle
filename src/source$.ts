@@ -14,6 +14,7 @@ export function source$<D>(): Source<D> {
 
   // Build source
   const source = {
+    [Symbol.observable ?? '@@observable']: () => source,
     next(data: D) {
       assert(!isCompleted, 'Completed source cannot emit data');
 
@@ -51,10 +52,11 @@ export function source$<D>(): Source<D> {
       observer.start?.(subscription);
 
       return subscription;
+    },
+    get isCompleted() {
+      return isCompleted;
     }
   };
 
-  Object.assign(source, { [Symbol.observable ?? Symbol.for('observable')]: source });
-
-  return source as Source<D>;
+  return source;
 }
