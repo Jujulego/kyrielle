@@ -1,5 +1,5 @@
 import { Readable } from './defs/index.js';
-import { isPromise } from './utils/promise.js';
+import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 
 /**
@@ -9,7 +9,7 @@ import { Query } from './utils/query.js';
  * @param fn
  */
 export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
-  let query: Query | null = null;
+  let query: Query<D> | null = null;
 
   // Build readable
   return {
@@ -21,7 +21,7 @@ export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
         const controller = new AbortController();
         const result = fn(controller.signal);
 
-        if (isPromise(result)) {
+        if (isPromise<D>(result)) {
           query = new Query(result, controller);
         } else {
           return result;

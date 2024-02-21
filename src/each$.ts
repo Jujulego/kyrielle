@@ -1,20 +1,22 @@
-import { AsAwaitableAs, Awaitable, Mutable, Observable, ObservedValue, Readable } from './defs/index.js';
+import { AsyncMutable, AsyncReadable, Awaitable, Mutable, Observable, ObservedValue, Readable } from './defs/index.js';
+import { isMutable, isObservable, isPromise, isReadable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import { PipeStep } from './pipe$.js';
-import { resourceBuilder$ } from './resource-builder$.js';
-import { isPromise } from './utils/promise.js';
+import { resource$ } from './resource$.js';
 
 // Types
-export type EachOrigin<D = unknown> = Observable<D>
-  & Partial<
-    & Readable<Awaitable<D>>
-    & Mutable<any, Awaitable<D>> // eslint-disable-line @typescript-eslint/no-explicit-any
-  >;
+export type EachOrigin<D = unknown> =
+  | Observable<D>
+  | Readable<Awaitable<D>>
+  | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type EachResult<O extends Observable, R> =
-  & Observable<R>
-  & (O extends Readable<infer RD> ? Readable<AsAwaitableAs<RD, R>> : unknown)
-  & (O extends Mutable<infer A, infer RD> ? Mutable<A, AsAwaitableAs<RD, R>> : unknown);
+export type EachMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutable<A, D> : Mutable<A, D>;
+export type EachReadable<O extends Readable, D> = O extends AsyncReadable ? AsyncReadable<D> : Readable<D>;
+
+export type EachResult<O extends EachOrigin, R> =
+  & (O extends Observable ? Observable<R> : unknown)
+  & (O extends Readable ? EachReadable<O, R> : unknown)
+  & (O extends Mutable<infer A> ? EachMutable<O, A, R> : unknown);
 
 /**
  * Applies given function on every emitted values,
@@ -22,10 +24,12 @@ export type EachResult<O extends Observable, R> =
  */
 export function each$<O extends Observable, R>(fn: (arg: ObservedValue<O>) => R): PipeStep<O, EachResult<O, R>>;
 
-export function each$<A, R>(fn: (arg: A) => R): PipeStep<EachOrigin<A>, EachOrigin<R>> {
-  return (origin) => {
-    const builder = resourceBuilder$<R>()
-      .add(observable$<R>((observer, signal) => {
+export function each$<A, R>(fn: (arg: A) => R) {
+  return (origin: unknown) => {
+    const builder = resource$<R>();
+
+    if (isObservable<A>(origin)) {
+      builder.add(observable$<R>((observer, signal) => {
         const subscription = origin.subscribe({
           next(val) {
             observer.next(fn(val));
@@ -37,16 +41,16 @@ export function each$<A, R>(fn: (arg: A) => R): PipeStep<EachOrigin<A>, EachOrig
           }
         });
 
-        signal.addEventListener('abort', subscription.unsubscribe, { once: true });
-      })
-    );
+          signal.addEventListener('abort', subscription.unsubscribe, { once: true });
+      }));
+    }
 
-    if ('read' in origin) {
+    if (isReadable<A>(origin)) {
       builder.add({
         read(signal) {
-          const res = origin.read!(signal);
+          const res = origin.read(signal);
 
-          if (isPromise(res)) {
+          if (isPromise<A>(res)) {
             return res.then(fn);
           } else {
             return fn(res);
@@ -55,12 +59,12 @@ export function each$<A, R>(fn: (arg: A) => R): PipeStep<EachOrigin<A>, EachOrig
       });
     }
 
-    if ('mutate' in origin) {
+    if (isMutable<unknown, A>(origin)) {
       builder.add({
         mutate(arg, signal) {
-          const res = origin.mutate!(arg, signal);
+          const res = origin.mutate(arg, signal);
 
-          if (isPromise(res)) {
+          if (isPromise<A>(res)) {
             return res.then(fn);
           } else {
             return fn(res);

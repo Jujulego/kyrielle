@@ -2,11 +2,11 @@ import { mutable$ } from '@/src/mutable$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { each$ } from '@/src/each$.js';
+import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
-import { observable$ } from '@/src/observable$.js';
-import { resourceBuilder$ } from '@/src/resource-builder$.js';
 import { readable$ } from '@/src/readable$.js';
+import { resource$ } from '@/src/resource$.js';
 
 // Tests
 describe('each$', () => {
@@ -33,7 +33,7 @@ describe('each$', () => {
   });
 
   it('should transform read result', () => {
-    const src = resourceBuilder$<number>()
+    const src = resource$<number>()
       .add(source$<number>())
       .add(readable$(() => 42))
       .build();
@@ -44,7 +44,7 @@ describe('each$', () => {
   });
 
   it('should transform async read result', async () => {
-    const src = resourceBuilder$<number>()
+    const src = resource$<number>()
       .add(source$<number>())
       .add(readable$(async () => 42))
       .build();
@@ -55,7 +55,7 @@ describe('each$', () => {
   });
 
   it('should transform mutate result', () => {
-    const src = resourceBuilder$<number>()
+    const src = resource$<number>()
       .add(source$<number>())
       .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
       .build();
@@ -69,7 +69,7 @@ describe('each$', () => {
   });
 
   it('should transform async mutate result', async () => {
-    const src = resourceBuilder$<number>()
+    const src = resource$<number>()
       .add(source$<number>())
       .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
       .build();
