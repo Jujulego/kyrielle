@@ -21,8 +21,8 @@ export type EachOrigin<D = unknown> =
 export type EachMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutable<A, D> : Mutable<A, D>;
 export type EachReadable<O extends Readable, D> = O extends AsyncReadable ? AsyncReadable<D> : Readable<D>;
 
-export type EachOriginValue<O> =
-  | O extends Subscribable<infer D> ? D : unknown
+export type EachOriginValue<O extends EachOrigin> =
+  | (O extends Subscribable<infer D> ? D : unknown)
   | (O extends Readable<infer D> ? Awaited<D> : unknown)
   | (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
