@@ -1,4 +1,5 @@
 export * from './defs/index.js';
+export { extractObservable } from './utils/observable.js';
 
 export * from './each$.js';
 export * from './filter$.js';
