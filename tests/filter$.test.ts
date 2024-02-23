@@ -31,7 +31,7 @@ describe('filter$', () => {
 
   it('should complete when source completes', () => {
     const src = source$<number>();
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(src, filter$((n): n is 42 => n === 42));
 
     const subscription = res.subscribe(vi.fn());
     expect(subscription.closed).toBe(false);

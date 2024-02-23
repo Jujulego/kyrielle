@@ -93,7 +93,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   // Build observable
   const observable = {
     [Symbol.observable ?? '@@observable']: () => observable,
-    subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
       // Parse args
       const observer = parseSubscribeArgs(args);
       observers.add(observer);

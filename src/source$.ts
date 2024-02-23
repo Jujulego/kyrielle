@@ -39,7 +39,7 @@ export function source$<D>(): Source<D> {
 
       observers.clear();
     },
-    subscribe(...args: [Observer<D>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
       assert(!isCompleted, 'Cannot subscribe to completed source');
 
       const observer = parseSubscribeArgs(args);

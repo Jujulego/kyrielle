@@ -1,4 +1,4 @@
-import { Subscription } from './subscription.js';
+import { Subscription } from '../subscription.js';
 
 /**
  * Object receiving data from an observable.

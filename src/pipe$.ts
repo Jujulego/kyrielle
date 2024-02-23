@@ -2,34 +2,34 @@
 export type PipeStep<in O = unknown, out R = unknown> = (origin: O) => R;
 
 /**
- * Run step on input observable allowing to change its shape or emitted data.
+ * Run step on input value allowing to change its shape or emitted data.
  */
-export function pipe$<A, B>(observable: A, stepA: PipeStep<A, B>): B;
+export function pipe$<A, B>(value: A, stepA: PipeStep<A, B>): B;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>
 ): C;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>
 ): D;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -37,10 +37,10 @@ export function pipe$<A, B, C, D, E>(
 ): E;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -49,10 +49,10 @@ export function pipe$<A, B, C, D, E, F>(
 ): F;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F, G>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -62,10 +62,10 @@ export function pipe$<A, B, C, D, E, F, G>(
 ): G;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F, G, H>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -76,10 +76,10 @@ export function pipe$<A, B, C, D, E, F, G, H>(
 ): H;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F, G, H, I>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -91,10 +91,10 @@ export function pipe$<A, B, C, D, E, F, G, H, I>(
 ): I;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F, G, H, I, J>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -107,10 +107,10 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J>(
 ): J;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
-  observable: A,
+  value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
@@ -124,7 +124,7 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
 ): K;
 
 /**
- * Runs all steps one after another on input observable allowing to change its shape or emitted data.
+ * Runs all steps one after another on input value allowing to change its shape or emitted data.
  */
 export function pipe$(value: unknown, ...steps: PipeStep[]): unknown {
   return steps.reduce((val, step) => step(val), value);

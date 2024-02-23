@@ -1,76 +1,76 @@
-import { Observable, ObservedValue, Observer, Subscription } from './defs/index.js';
+import { ObservedValue, Observer, Subscribable, Unsubscribable } from './defs/index.js';
 import { PipeStep } from './pipe$.js';
 
 /**
  * Given observer subscribes to result given observable.
  */
-export function flow$<A extends Observable>(observable: A, observer: Observer<ObservedValue<A>>): Subscription;
+export function flow$<A extends Subscribable>(observable: A, observer: Partial<Observer<ObservedValue<A>>>): ReturnType<A['subscribe']>;
 
 /**
  * Run step on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B extends Observable>(
+export function flow$<A, B extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
-  observer: Observer<ObservedValue<B>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<B>>>
+): ReturnType<B['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C extends Observable>(
+export function flow$<A, B, C extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
-  observer: Observer<ObservedValue<C>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<C>>>
+): ReturnType<C['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D extends Observable>(
+export function flow$<A, B, C, D extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
-  observer: Observer<ObservedValue<D>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<D>>>
+): ReturnType<D['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E extends Observable>(
+export function flow$<A, B, C, D, E extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
-  observer: Observer<ObservedValue<E>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<E>>>
+): ReturnType<E['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F extends Observable>(
+export function flow$<A, B, C, D, E, F extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
-  observer: Observer<ObservedValue<F>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<F>>>
+): ReturnType<F['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F, G extends Observable>(
+export function flow$<A, B, C, D, E, F, G extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -78,14 +78,14 @@ export function flow$<A, B, C, D, E, F, G extends Observable>(
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
-  observer: Observer<ObservedValue<G>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<G>>>
+): ReturnType<G['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F, G, H extends Observable>(
+export function flow$<A, B, C, D, E, F, G, H extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -94,14 +94,14 @@ export function flow$<A, B, C, D, E, F, G, H extends Observable>(
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
-  observer: Observer<ObservedValue<H>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<H>>>
+): ReturnType<H['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F, G, H, I extends Observable>(
+export function flow$<A, B, C, D, E, F, G, H, I extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -111,14 +111,14 @@ export function flow$<A, B, C, D, E, F, G, H, I extends Observable>(
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
-  observer: Observer<ObservedValue<I>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<I>>>
+): ReturnType<I['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F, G, H, I, J extends Observable>(
+export function flow$<A, B, C, D, E, F, G, H, I, J extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -129,14 +129,14 @@ export function flow$<A, B, C, D, E, F, G, H, I, J extends Observable>(
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
-  observer: Observer<ObservedValue<J>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<J>>>
+): ReturnType<J['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Observable>(
+export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
@@ -148,14 +148,14 @@ export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Observable>(
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
   stepJ: PipeStep<J, K>,
-  observer: Observer<ObservedValue<K>>
-): Subscription;
+  observer: Partial<Observer<ObservedValue<K>>>
+): ReturnType<K['subscribe']>;
 
 /**
  * Runs all steps one after another on input observable allowing to change its shape or emitted data.
  * Then given observer will subscribe to result observable.
  */
-export function flow$(value: unknown, ...rest: [...PipeStep[], observer: Observer]): Subscription {
-  const observer = rest.pop() as Observer;
-  return ((rest as PipeStep[]).reduce((obs, step) => step(obs), value) as Observable).subscribe(observer);
+export function flow$(value: unknown, ...rest: [...PipeStep[], observer: Partial<Observer>]): Unsubscribable {
+  const observer = rest.pop() as Partial<Observer>;
+  return ((rest as PipeStep[]).reduce((obs, step) => step(obs), value) as Subscribable).subscribe(observer);
 }
