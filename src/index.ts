@@ -10,4 +10,5 @@ export * from './observer$.js';
 export * from './pipe$.js';
 export * from './readable$.js';
 export * from './resource$.js';
+export * from './retry$.js';
 export * from './source$.js';
