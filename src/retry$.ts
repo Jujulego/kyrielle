@@ -1,12 +1,16 @@
 import { Awaitable } from 'vitest';
 
-import { AsyncMutable, AsyncReadable, Readable } from './defs/index.js';
+import { AsyncMutable, AsyncReadable, Mutable, Readable } from './defs/index.js';
 import { PipeStep } from './pipe$.js';
 import { abortSignalAny } from './utils/abort.js';
 import { isMutable, isReadable } from './utils/predicates.js';
 
 // Types
 export type RetryableMethod = 'read' | 'mutate' | 'both';
+
+export type RetriedReadable<O> = O extends AsyncReadable<infer D> ? Readable<Promise<D>> : never;
+export type RetriedMutable<O> = O extends AsyncMutable<infer A, infer D> ? Mutable<A, Promise<D>> : never;
+
 export type OnRetryResult = Awaitable<boolean | void> | Readable<Awaitable<boolean | void>>;
 
 export interface RetryOptions {
@@ -30,17 +34,17 @@ export interface RetryOptions {
 /**
  * Retry calls to origin's read method.
  */
-export function retry$<O extends AsyncReadable>(method: 'read', options?: RetryOptions): PipeStep<O, O>
+export function retry$<O extends AsyncReadable>(method: 'read', options?: RetryOptions): PipeStep<O, Omit<O, 'read'> & RetriedReadable<O>>
 
 /**
  * Retry calls to origin's mutate method.
  */
-export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, O>
+export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, Omit<O, 'mutate'> & RetriedMutable<O>>
 
 /**
  * Retry calls to origin's both read & mutate methods.
  */
-export function retry$<O extends AsyncReadable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, O>
+export function retry$<O extends AsyncReadable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, Omit<O, 'read' | 'mutate'> & RetriedReadable<O> & RetriedMutable<O>>
 
 /**
  * Retry calls to origin's read method.
