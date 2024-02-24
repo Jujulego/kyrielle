@@ -1,8 +1,13 @@
 import { Awaitable } from 'vitest';
 
-import { AsyncReadable } from './defs/index.js';
+import { AsyncMutable, AsyncReadable, Readable } from './defs/index.js';
 import { PipeStep } from './pipe$.js';
 import { abortSignalAny } from './utils/abort.js';
+import { isMutable, isReadable } from './utils/predicates.js';
+
+// Types
+export type RetryableMethod = 'read' | 'mutate' | 'both';
+export type OnRetryResult = Awaitable<boolean | void> | Readable<Awaitable<boolean | void>>;
 
 export interface RetryOptions {
   /**
@@ -14,7 +19,7 @@ export interface RetryOptions {
    * @param error Error from origin call
    * @param count Number of try
    */
-  onRetry?: (error: unknown, count: number) => Awaitable<boolean | void>;
+  onRetry?: (error: unknown, count: number) => OnRetryResult;
 
   /**
    * Timeout in milliseconds, applied to each try.
@@ -25,10 +30,25 @@ export interface RetryOptions {
 /**
  * Retry calls to origin's read method.
  */
-export function retry$<O extends AsyncReadable>(options: RetryOptions = {}): PipeStep<O, O> {
+export function retry$<O extends AsyncReadable>(method: 'read', options?: RetryOptions): PipeStep<O, O>
+
+/**
+ * Retry calls to origin's mutate method.
+ */
+export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, O>
+
+/**
+ * Retry calls to origin's both read & mutate methods.
+ */
+export function retry$<O extends AsyncReadable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, O>
+
+/**
+ * Retry calls to origin's read method.
+ */
+export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<O, O> {
   const { onRetry = () => true, tryTimeout } = options;
 
-  async function retryStrategy<D>(fn: (signal?: AbortSignal) => PromiseLike<D>, signal?: AbortSignal): Promise<D> {
+  async function retryStrategy(fn: (signal?: AbortSignal) => PromiseLike<unknown>, signal?: AbortSignal): Promise<unknown> {
     let count = 0;
 
     while (!signal?.aborted) {
@@ -49,7 +69,7 @@ export function retry$<O extends AsyncReadable>(options: RetryOptions = {}): Pip
         }
 
         // No more retries
-        if (await onRetry(err, count) === false) {
+        if (await shouldStop(onRetry(err, count), signal)) {
           throw err;
         }
       }
@@ -59,12 +79,30 @@ export function retry$<O extends AsyncReadable>(options: RetryOptions = {}): Pip
   }
 
   return (origin: O) => {
-    const originalRead = origin.read.bind(origin);
+    if (isReadable<PromiseLike<unknown>>(origin) && ['read', 'both'].includes(method)) {
+      const originalRead = origin.read.bind(origin);
 
-    Object.assign(origin, {
-      read: (signal?: AbortSignal) => retryStrategy(originalRead, signal)
-    });
+      Object.assign(origin, {
+        read: (signal?: AbortSignal) => retryStrategy(originalRead, signal)
+      });
+    }
+
+    if (isMutable<unknown, PromiseLike<unknown>>(origin) && ['mutate', 'both'].includes(method)) {
+      const originalMutate = origin.mutate.bind(origin);
+
+      Object.assign(origin, {
+        mutate: (arg: unknown, signal?: AbortSignal) => retryStrategy((sig) => originalMutate(arg, sig), signal)
+      });
+    }
 
     return origin;
   };
+}
+
+async function shouldStop(result: OnRetryResult, signal?: AbortSignal): Promise<boolean> {
+  if (isReadable(result)) {
+    result = result.read(signal);
+  }
+
+  return !(await result ?? true);
 }
