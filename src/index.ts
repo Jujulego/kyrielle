@@ -4,6 +4,7 @@ export { extractObservable } from './utils/observable.js';
 export * from './each$.js';
 export * from './filter$.js';
 export * from './flow$.js';
+export * from './interval$.js';
 export * from './mutable$.js';
 export * from './observable$.js';
 export * from './observer$.js';
