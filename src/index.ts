@@ -12,3 +12,4 @@ export * from './readable$.js';
 export * from './resource$.js';
 export * from './retry$.js';
 export * from './source$.js';
+export * from './timeout$.js';
