@@ -580,6 +580,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@repeaterjs/repeater@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "@repeaterjs/repeater@npm:3.0.5"
+  checksum: 10c0/e6e1aca2bbfe0b8e974bc5185a6839f9e78ec8acb96b6d6911a9dfc958443689f9bc38bcc6d554e6c8598f597f0151841aafbd1ee3ef16262ee93d18b2c1d4b5
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.2.0":
   version: 4.2.0
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.2.0"
@@ -3186,6 +3193,7 @@ __metadata:
     "@jujulego/jill": "npm:2.5.2"
     "@jujulego/vite-plugin-swc": "npm:1.1.1"
     "@microsoft/eslint-formatter-sarif": "npm:3.0.0"
+    "@repeaterjs/repeater": "npm:^3.0.5"
     "@swc/cli": "npm:0.3.9"
     "@swc/core": "npm:1.4.2"
     "@swc/helpers": "npm:^0.5.3"
