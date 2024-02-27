@@ -30,6 +30,7 @@
     "test": "vitest run --typecheck"
   },
   "dependencies": {
+    "@repeaterjs/repeater": "^3.0.5",
     "@swc/helpers": "^0.5.3"
   },
   "devDependencies": {
