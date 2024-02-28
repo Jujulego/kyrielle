@@ -1,4 +1,4 @@
-import { Mutable, Subscribable, Readable, ObservableHolder } from '../defs/index.js';
+import { Mutable, Subscribable, Readable, SubscribableHolder } from '../defs/index.js';
 
 /**
  * Tests if given value is a Mutable object
@@ -12,21 +12,6 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
  */
 export function isNonNullObject(value: unknown): value is object {
   return typeof value === 'object' && value !== null;
-}
-
-/**
- * Tests if given value is an ObservableHolder object
- */
-export function isObservableHolder<D = unknown>(value: unknown): value is ObservableHolder<D> {
-  if (!isNonNullObject(value)) {
-    return false;
-  }
-
-  if (Symbol.observable && Symbol.observable in value && typeof value[Symbol.observable] === 'function') {
-    return true;
-  }
-
-  return '@@observable' in value && typeof value['@@observable'] === 'function';
 }
 
 /**
@@ -48,4 +33,19 @@ export function isReadable<D = unknown>(value: unknown): value is Readable<D> {
  */
 export function isSubscribable<D = unknown>(value: unknown): value is Subscribable<D> {
   return isNonNullObject(value) && 'subscribe' in value && typeof value['subscribe'] === 'function';
+}
+
+/**
+ * Tests if given value is an ObservableHolder object
+ */
+export function isSubscribableHolder<D = unknown>(value: unknown): value is SubscribableHolder<D> {
+  if (!isNonNullObject(value)) {
+    return false;
+  }
+
+  if (Symbol.observable && Symbol.observable in value && typeof value[Symbol.observable] === 'function') {
+    return true;
+  }
+
+  return '@@observable' in value && typeof value['@@observable'] === 'function';
 }

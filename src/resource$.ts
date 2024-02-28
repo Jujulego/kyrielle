@@ -1,5 +1,5 @@
-import { Awaitable, Mutable, Subscribable, Readable, ObservableHolder } from './defs/index.js';
-import { isObservableHolder } from './utils/predicates.js';
+import { Awaitable, Mutable, Subscribable, Readable, SubscribableHolder } from './defs/index.js';
+import { isSubscribableHolder } from './utils/predicates.js';
 
 // Types
 export type ResourceFeature<D> =
@@ -21,7 +21,7 @@ export interface ResourceBuilder<D, R = unknown> {
    * Adds subscribable feature based on given holder.
    * @param holder
    */
-  add<F extends ObservableHolder<D>>(holder: F): ResourceBuilder<D, R & Subscribable<D>>;
+  add<F extends SubscribableHolder<D>>(holder: F): ResourceBuilder<D, R & Subscribable<D>>;
 
   /**
    * Return final resource object.
@@ -37,7 +37,7 @@ export function resource$<D>(): ResourceBuilder<D> {
 
   return {
     add(feature: unknown): ResourceBuilder<D> {
-      if (isObservableHolder(feature)) {
+      if (isSubscribableHolder(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
       } else {
         Object.assign(resource, feature);

@@ -1,6 +1,6 @@
 import { DataKey, DataListener, DataMap, DataValue } from '../data-map.js';
-import { Unsubscribable } from '../subscription.js';
 import { Observer } from './observer.js';
+import { Unsubscribable } from './unsubscribable.js';
 
 /**
  * Object registering listeners for multiple events

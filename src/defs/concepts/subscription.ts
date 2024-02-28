@@ -1,12 +1,4 @@
-/**
- * Represents an active subscription to an observable.
- */
-export interface Unsubscribable {
-  /**
-   * Cancels subscription
-   */
-  unsubscribe(): void;
-}
+import { Unsubscribable } from '../features/index.js';
 
 /**
  * Represents an active subscription to an observable.

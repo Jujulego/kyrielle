@@ -1,32 +1,11 @@
-import { Observer } from './observer.js';
-import { Subscription, Unsubscribable } from '../subscription.js';
-
+import { SubscribableHolder, Observer, Subscribable } from '../features/index.js';
+import { Subscription } from './subscription.js';
 import '../symbols.js';
 
 /**
- * Object that can be observed using `[Symbol.observable]` method.
- */
-export interface ObservableHolder<out D = unknown> {
-  [Symbol.observable](): Subscribable<D>;
-}
-
-/**
  * Lazy and composable push based data source.
  */
-export interface Subscribable<out D = unknown> {
-  __type?: D;
-
-  /**
-   * Subscribe to observable using an observer.
-   * @param observer
-   */
-  subscribe(observer: Partial<Observer<D>>): Unsubscribable;
-}
-
-/**
- * Lazy and composable push based data source.
- */
-export interface Observable<out D = unknown> extends ObservableHolder<D>, Subscribable<D> {
+export interface Observable<out D = unknown> extends SubscribableHolder<D>, Subscribable<D> {
   [Symbol.observable](): Observable<D>;
 
   /**
