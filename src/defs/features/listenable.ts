@@ -11,9 +11,11 @@ export interface Listenable<M extends Mapping = any> { // eslint-disable-line @t
   /**
    * Registers listener on given "key" event
    * @param key
-   * @param listener
+   * @param onNext Called with each emitted value
+   * @param onError Called when an error occurs in the listenable.
+   * @param onComplete Called when the listenable completes. No other data or error will then be received.
    */
-  on<const K extends MappingKey<M>>(key: K, listener: (event: M[K]) => void): Unsubscribable;
+  on<const K extends MappingKey<M>>(key: K, onNext: (event: M[K]) => void, onError?: (error: Error) => void, onComplete?: () => void): Unsubscribable;
 
   /**
    * Registers observer on given "key" event

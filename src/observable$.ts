@@ -1,4 +1,4 @@
-import { Observable, Observer, Subscription } from './defs/index.js';
+import { Observable, Observer, SubscribeCallbacks, Subscription } from './defs/index.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
@@ -23,8 +23,6 @@ export interface SubscriberObserver<in D = unknown> {
 }
 
 export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
-
-export type SubscribeCallbacks<D> = [onNext: (data: D) => void, onError?: ((error: Error) => void) | undefined, onComplete?: (() => void) | undefined];
 
 // Enum
 const enum State {

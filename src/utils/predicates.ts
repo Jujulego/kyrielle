@@ -1,4 +1,27 @@
-import { Mutable, Subscribable, Readable, SubscribableHolder } from '../defs/index.js';
+import {
+  Mutable,
+  Subscribable,
+  Readable,
+  SubscribableHolder,
+  Observer,
+  Mapping,
+  Emitter,
+  Listenable
+} from '../defs/index.js';
+
+/**
+ * Tests if given value is an Emitter object
+ */
+export function isEmitter<M extends Mapping = Mapping>(value: unknown): value is Emitter<M> {
+  return isNonNullObject(value) && 'emit' in value && typeof value['emit'] === 'function';
+}
+
+/**
+ * Tests if given value is a Listenable object
+ */
+export function isListenable<M extends Mapping = Mapping>(value: unknown): value is Listenable<M> {
+  return isNonNullObject(value) && 'on' in value && typeof value['on'] === 'function';
+}
 
 /**
  * Tests if given value is a Mutable object
@@ -15,10 +38,17 @@ export function isNonNullObject(value: unknown): value is object {
 }
 
 /**
+ * Tests if given value is an Observer object
+ */
+export function isObserver<T = unknown>(value: unknown): value is Observer<T> {
+  return isNonNullObject(value) && 'next' in value && typeof value['next'] === 'function';
+}
+
+/**
  * Tests if given value is a PromiseLike object
  */
 export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> {
-  return isNonNullObject(value) && 'then' in value;
+  return isNonNullObject(value) && 'then' in value && typeof value['then'] === 'function';
 }
 
 /**
