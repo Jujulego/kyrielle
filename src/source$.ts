@@ -1,7 +1,6 @@
 import assert from 'node:assert';
 
-import { Observer, Source, Subscription } from './defs/index.js';
-import { SubscribeCallbacks } from './observable$.js';
+import { Observer, Source, SubscribeCallbacks, Subscription } from './defs/index.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 

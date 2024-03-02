@@ -1,8 +1,8 @@
 import { Emitter, Listenable } from '../features/index.js';
-import { Mapping } from '../mapping.js';
+import { InputMapping, Mapping, OutputMapping } from '../mapping.js';
 
 /**
  * Object managing multiple events
  */
-export interface Multiplexer<IM extends Mapping = Mapping, OM extends Mapping = Mapping>
-  extends Emitter<IM>, Listenable<OM> {}
+export interface Multiplexer<M extends Mapping = Mapping>
+  extends Emitter<InputMapping<M>>, Listenable<OutputMapping<M>> {}

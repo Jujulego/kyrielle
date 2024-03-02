@@ -1,11 +1,4 @@
-import {
-  InputMapping,
-  Mapping,
-  Multiplexer, Observer,
-  OutputMapping,
-  SubscribeCallbacks,
-  Unsubscribable
-} from '../defs/index.js';
+import { Mapping, Multiplexer, Observer, SubscribeCallbacks, Unsubscribable } from '../defs/index.js';
 import { splitKey } from '../utils/key.js';
 import { isEmitter, isListenable, isObserver, isSubscribable } from '../utils/predicates.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
@@ -16,7 +9,7 @@ import { parseSubscribeArgs } from '../utils/subscribe.js';
  *
  * @param getOrigin Callback used when accessing to a precise origin.
  */
-export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unknown): Multiplexer<InputMapping<M>, OutputMapping<M>> {
+export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unknown): Multiplexer<M> {
   return {
     emit(key: string, event: unknown) {
       const [part, rest] = splitKey(key);
@@ -29,6 +22,8 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
       if (!rest && isObserver(origin)) {
         return origin.next(event);
       }
+
+      throw new Error(`Unsupported emit key ${key}`);
     },
     on(key: string, ...args: [Partial<Observer>] | SubscribeCallbacks): Unsubscribable {
       const [part, rest] = splitKey(key);
@@ -42,7 +37,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
         return origin.subscribe(parseSubscribeArgs(args));
       }
 
-      throw new Error(`Unsupported key ${key}`);
+      throw new Error(`Unsupported listen key ${key}`);
     }
   };
 }
