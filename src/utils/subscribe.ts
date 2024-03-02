@@ -1,5 +1,4 @@
-import { Observer } from '../defs/index.js';
-import { SubscribeCallbacks } from '../observable$.js';
+import { Observer, SubscribeCallbacks } from '../defs/index.js';
 
 // Utils
 const noop = () => { /* noop */ };

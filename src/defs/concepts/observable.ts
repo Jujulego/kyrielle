@@ -2,6 +2,9 @@ import { SubscribableHolder, Observer, Subscribable } from '../features/index.js
 import { Subscription } from './subscription.js';
 import '../symbols.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type SubscribeCallbacks<D = any> = [onNext: (data: D) => void, onError?: ((error: Error) => void) | undefined, onComplete?: (() => void) | undefined];
+
 /**
  * Lazy and composable push based data source.
  */
