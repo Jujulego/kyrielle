@@ -16,3 +16,4 @@ export * from './resource$.js';
 export * from './retry$.js';
 export * from './source$.js';
 export * from './timeout$.js';
+export * from './validate$.js';
