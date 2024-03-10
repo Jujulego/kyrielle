@@ -1,4 +1,5 @@
 import { Observable, ObservedValue, Subscribable } from './defs/index.js';
+import { PredicateFn } from './defs/utils.js';
 import { observable$ } from './observable$.js';
 import { PipeStep } from './pipe$.js';
 
@@ -6,7 +7,7 @@ import { PipeStep } from './pipe$.js';
  * Filters emitted values using given predicate
  * @param predicate
  */
-export function filter$<O extends Subscribable, R extends ObservedValue<O>>(predicate: (val: ObservedValue<O>) => val is R): PipeStep<O, Observable<R>>;
+export function filter$<O extends Subscribable, R extends ObservedValue<O>>(predicate: PredicateFn<ObservedValue<O>, R>): PipeStep<O, Observable<R>>;
 
 /**
  * Filters emitted values using given predicate
