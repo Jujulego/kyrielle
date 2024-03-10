@@ -1,5 +1,5 @@
 import { AssertionFn, PredicateFn } from './defs/utils.js';
-import { each$, EachOrigin, EachOriginValue } from './each$.js';
+import { each$, EachOrigin, EachOriginValue, EachResult } from './each$.js';
 import { PipeStep } from './pipe$.js';
 
 export interface ValidatePredicateOpts<in D = unknown> {
@@ -21,13 +21,13 @@ export class ValidateError<D = unknown> extends Error {
 /**
  * Uses given assertion to validate emitted values.
  */
-export function validate$<O extends EachOrigin, R extends EachOriginValue<O>>(assert: AssertionFn<EachOriginValue<O>, R>): PipeStep<O, R>;
+export function validate$<O extends EachOrigin, R extends EachOriginValue<O>>(assert: AssertionFn<EachOriginValue<O>, R>): PipeStep<O, EachResult<O, R>>;
 
 /**
  * Uses given predicate to validate emitted values.
  * Use `onMiss` to customize default error, when predicated returns false.
  */
-export function validate$<O extends EachOrigin, R extends EachOriginValue<O>>(predicate: PredicateFn<EachOriginValue<O>, R>, opts?: ValidatePredicateOpts<EachOriginValue<O>>): PipeStep<O, R>;
+export function validate$<O extends EachOrigin, R extends EachOriginValue<O>>(predicate: PredicateFn<EachOriginValue<O>, R>, opts?: ValidatePredicateOpts<EachOriginValue<O>>): PipeStep<O, EachResult<O, R>>;
 
 export function validate$(fn: (data: unknown) => boolean | void, opts: ValidatePredicateOpts = {}) {
   return each$((data) => {
