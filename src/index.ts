@@ -1,6 +1,7 @@
 export * from './defs/index.js';
 export { extractObservable } from './utils/observable.js';
 
+export * from './const$.js';
 export * from './each$.js';
 export * from './filter$.js';
 export * from './flow$.js';
@@ -17,3 +18,4 @@ export * from './retry$.js';
 export * from './source$.js';
 export * from './timeout$.js';
 export * from './validate$.js';
+export * from './var$.js';
