@@ -13,3 +13,8 @@ export interface Readable<out D = unknown> {
  * Object that can be asynchronously read.
  */
 export interface AsyncReadable<out D = unknown> extends Readable<PromiseLike<D>> {}
+
+/**
+ * Extract value type from a Readable type
+ */
+export type ReadValue<R extends Readable> = R extends Readable<infer D> ? D : never;
