@@ -1,4 +1,5 @@
 import type { Mutable, Observable, Readable, ReadValue, Subscribable } from './defs/index.js';
+import { off$ } from './off$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import { source$ } from './source$.js';
@@ -53,11 +54,10 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     // Add observable
     if (isSubscribable(origin)) {
       builder.add({
-        subscribe(...args) {
-          // TODO: combine both Subscriptions and return result.
-          origin.subscribe(...args);
-          source.subscribe(...args);
-        }
+        subscribe: (...args) => off$(
+          origin.subscribe(...args),
+          source.subscribe(...args),
+        )
       });
     } else {
       builder.add({ subscribe: source.subscribe });
