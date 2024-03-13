@@ -1,19 +1,20 @@
-import type { Mutable, Observable, Readable, ReadValue, Subscribable } from './defs/index.js';
+import type { Mutable, Observable, Readable } from './defs/index.js';
+import type { EachOrigin, EachOriginValue } from './each$.js';
 import { off$ } from './off$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import { source$ } from './source$.js';
-import { isMutable, isPromise, isSubscribable } from './utils/predicates.js';
+import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
 
 // Types
-export type YieldOrigin<D = unknown> = Readable<D>
-  & Partial<Mutable<any, D>> // eslint-disable-line @typescript-eslint/no-explicit-any
-  & Partial<Subscribable<D>>;
+export type YieldOrigin<D = unknown> = EachOrigin<D>;
 
-export type YieldResult<O extends YieldOrigin> = O & Observable<Awaited<ReadValue<O>>>;
+export type YieldResult<O extends YieldOrigin> =
+  & Pick<O, Extract<keyof O, keyof Readable | keyof Mutable>>
+  & Observable<Awaited<EachOriginValue<O>>>;
 
 /**
- * Adds an observable feature to a resource
+ * Adds an observable feature to a resource. The added observable will emit each result from read & mutate.
  */
 export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
   return (origin: YieldOrigin) => {
@@ -30,14 +31,16 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     }
 
     // Add read
-    builder.add({
-      read(signal) {
-        const result = origin.read(signal);
-        emitResult(result);
+    if (isReadable(origin)) {
+      builder.add({
+        read(signal) {
+          const result = origin.read(signal);
+          emitResult(result);
 
-        return result;
-      }
-    });
+          return result;
+        }
+      });
+    }
 
     // Add mutable
     if (isMutable(origin)) {
