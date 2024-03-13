@@ -39,6 +39,9 @@ export function resource$<D>(): ResourceBuilder<D> {
     add(feature: unknown): ResourceBuilder<D> {
       if (isSubscribableHolder(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
+        Object.assign(resource, {
+          [Symbol.observable ?? '@@observable']: () => resource,
+        });
       } else {
         Object.assign(resource, feature);
       }
