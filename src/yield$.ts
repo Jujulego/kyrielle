@@ -1,9 +1,8 @@
 import type { Mutable, Observable, Readable } from './defs/index.js';
 import type { EachOrigin, EachOriginValue } from './each$.js';
-import { off$ } from './off$.js';
+import { observable$, type SubscriberObserver } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import { source$ } from './source$.js';
 import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
 
 // Types
@@ -19,14 +18,14 @@ export type YieldResult<O extends YieldOrigin> =
 export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
   return (origin: YieldOrigin) => {
     const builder = resource$();
-    const source = source$();
+    let observer: SubscriberObserver;
 
     // Utils
     function emitResult(result: unknown) {
       if (isPromise(result)) {
-        result.then((value) => source.next(value));
+        result.then((value) => observer?.next(value));
       } else {
-        source.next(result);
+        observer?.next(result);
       }
     }
 
@@ -55,16 +54,13 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     }
 
     // Add observable
-    if (isSubscribable(origin)) {
-      builder.add({
-        subscribe: (...args) => off$(
-          origin.subscribe(...args),
-          source.subscribe(...args),
-        )
-      });
-    } else {
-      builder.add({ subscribe: source.subscribe });
-    }
+    builder.add(observable$((obs) => {
+      observer = obs;
+
+      if (isSubscribable(origin)) {
+        origin.subscribe(obs);
+      }
+    }));
 
     return builder.build() as YieldResult<O>;
   };
