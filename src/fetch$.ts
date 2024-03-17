@@ -3,7 +3,7 @@ import { readable$ } from './readable$.js';
 
 export interface FetchOpts<D = Response> extends Omit<RequestInit, 'signal'> {
   onFetch?: (url: string | URL) => void;
-  onSuccess?: (res: Response) => D;
+  onSuccess?: (res: Response) => PromiseLike<D>;
 }
 
 export class FetchError extends Error {
@@ -18,7 +18,7 @@ export class FetchError extends Error {
   }
 }
 
-export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): D }): Readable<Promise<D>>;
+export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> }): Readable<Promise<D>>;
 export function fetch$(url: string | URL, opts?: FetchOpts): Readable<Promise<Response>>;
 
 export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {}): Readable<Promise<D>> {
@@ -30,6 +30,6 @@ export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {})
       throw new FetchError(res);
     }
 
-    return opts.onSuccess ? opts.onSuccess(res) : <D>res;
+    return opts.onSuccess ? opts.onSuccess(res) : res as D;
   });
 }

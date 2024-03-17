@@ -3,6 +3,7 @@ export { extractObservable } from './utils/observable.js';
 
 export * from './const$.js';
 export * from './each$.js';
+export * from './fetch$.js';
 export * from './filter$.js';
 export * from './flow$.js';
 export * from './interval$.js';
