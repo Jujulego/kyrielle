@@ -8,6 +8,7 @@ import {
   Emitter,
   Listenable
 } from '../defs/index.js';
+import { NonNullObject } from '../defs/utils.js';
 
 /**
  * Tests if given value is an Emitter object
@@ -81,10 +82,10 @@ export function isSubscribableHolder<D = unknown>(value: unknown): value is Subs
 }
 
 // Utils
-function isNonNullObject(value: unknown): value is Record<number | string | symbol, unknown> {
+function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod(value: Record<number | string | symbol, unknown>, name: number | string | symbol): boolean {
+function hasMethod(value: NonNullObject, name: keyof NonNullObject): boolean {
   return name in value && typeof value[name] === 'function';
 }

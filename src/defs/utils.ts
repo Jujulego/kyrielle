@@ -19,3 +19,5 @@ export type AssertionFn<in D, out R extends D> = (data: D) => asserts data is R;
  * Defines a predicate function
  */
 export type PredicateFn<in D, out R extends D> = (data: D) => data is R;
+
+export interface NonNullObject extends Record<number | string | symbol, unknown> {}
