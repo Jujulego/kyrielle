@@ -12,10 +12,7 @@ describe('parseSubscribeArgs', () => {
       complete: vi.fn(),
     };
 
-    expect(parseSubscribeArgs([observer])).toEqual({
-      ...observer,
-      start: expect.any(Function)
-    });
+    expect(parseSubscribeArgs([observer])).toBe(observer);
   });
 
   it('should return a valid observer', () => {

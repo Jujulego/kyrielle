@@ -1,6 +1,6 @@
 import { Mapping, Multiplexer, Observer, SubscribeCallbacks, Unsubscribable } from '../defs/index.js';
 import { splitKey } from '../utils/key.js';
-import { isEmitter, isListenable, isObserver, isSubscribable } from '../utils/predicates.js';
+import { isEmitter, isListenable, isPartialObserver, isSubscribable } from '../utils/predicates.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 
 /**
@@ -19,7 +19,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
         return origin.emit(rest, event);
       }
 
-      if (!rest && isObserver(origin)) {
+      if (!rest && isPartialObserver(origin)) {
         return origin.next(event);
       }
 

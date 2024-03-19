@@ -1,4 +1,5 @@
 import { Observer, SubscribeCallbacks } from '../defs/index.js';
+import { observer$ } from '../observer$.js';
 
 // Utils
 const noop = () => { /* noop */ };
@@ -9,12 +10,7 @@ const noop = () => { /* noop */ };
  */
 export function parseSubscribeArgs<D>(args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Observer<D> {
   if (typeof args[0] === 'object') {
-    return {
-      start: args[0].start ?? noop,
-      next: args[0].next ?? noop,
-      error: args[0].error ?? noop,
-      complete: args[0].complete ?? noop,
-    };
+    return observer$(args[0]);
   }
 
   return {
