@@ -3,11 +3,7 @@
     "target": "esnext",
     "externalHelpers": true,
     "parser": {
-      "syntax": "typescript",
-      "decorators": true
-    },
-    "transform": {
-      "decoratorVersion": "2022-03"
+      "syntax": "typescript"
     }
   },
   "module": {

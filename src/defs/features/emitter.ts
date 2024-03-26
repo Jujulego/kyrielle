@@ -1,9 +1,9 @@
-import { DataKey, DataMap } from '../data-map.js';
+import { MappingKey, Mapping } from '../mapping.js';
 
 /**
  * Object emitting multiple events, by keys
  */
-export interface Emitter<M extends DataMap = DataMap> {
+export interface Emitter<M extends Mapping = Mapping> {
   __emit_event_map?: M;
 
   /**
@@ -11,5 +11,5 @@ export interface Emitter<M extends DataMap = DataMap> {
    * @param key
    * @param data
    */
-  emit<const K extends DataKey<M>>(key: K, data: M[K]): void;
+  emit<const K extends MappingKey<M>>(key: K, data: M[K]): void;
 }

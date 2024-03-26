@@ -1,20 +1,20 @@
 /**
- * Defines an object that can be read
+ * Object that can be read.
  */
 export interface Readable<out D = unknown> {
   /**
-   * Return current value
+   * Access to "pointed" data. Can receive a signal to abort request.
+   * @param signal
    */
   read(signal?: AbortSignal): D;
 }
 
 /**
- * Defines an object that can be asynchronously read
+ * Object that can be asynchronously read.
  */
 export interface AsyncReadable<out D = unknown> extends Readable<PromiseLike<D>> {}
 
-// Utils
 /**
- * Extract read value type
+ * Extract value type from a Readable type
  */
-export type ReadValue<R extends Readable> = Awaited<ReturnType<R['read']>>;
+export type ReadValue<R extends Readable> = R extends Readable<infer D> ? D : never;
