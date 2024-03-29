@@ -2,7 +2,7 @@ import { Mutable, Observable, Observer, Readable, SubscribeCallbacks, Subscripti
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
-export interface Var<in out D> extends Observable<Exclude<D, undefined>>, Readable<D>, Mutable<D> {}
+export interface Var<in out D> extends Observable<Exclude<D, undefined>>, Readable<D>, Mutable<D, D> {}
 
 /**
  * Builds an uninitialized var
