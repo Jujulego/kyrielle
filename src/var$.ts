@@ -2,12 +2,13 @@ import { Mutable, Observable, Observer, Readable, SubscribeCallbacks, Subscripti
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
-export interface Var<in out D> extends Observable<Exclude<D, undefined>>, Readable<D>, Mutable<D, D> {}
+export interface Var<in out D> extends Observable<D>, Readable<D>, Mutable<D, D> {}
+export interface UninitializedVar<in out D> extends Observable<D>, Readable<D | undefined>, Mutable<D, D> {}
 
 /**
  * Builds an uninitialized var
  */
-export function var$<D>(): Var<D | undefined>;
+export function var$<D>(): UninitializedVar<D>;
 
 /**
  * Builds an initialized var
@@ -15,25 +16,25 @@ export function var$<D>(): Var<D | undefined>;
  */
 export function var$<D>(initial: D): Var<D>;
 
-export function var$<D>(initial?: D): Var<D | undefined> {
-  const observers = new Set<Observer<Exclude<D, undefined>>>();
+export function var$<D>(initial?: D): UninitializedVar<D> {
+  const observers = new Set<Observer<D>>();
   let value = initial;
 
   const _var = {
     read: () => value,
-    mutate: (arg: D | undefined) => {
+    mutate: (arg: D) => {
       value = arg;
 
       if (value !== undefined) {
         for (const observer of observers) {
-          observer.next(value as Exclude<D, undefined>);
+          observer.next(value);
         }
       }
 
       return value;
     },
     [Symbol.observable ?? '@@observable']: () => _var,
-    subscribe(...args: [Partial<Observer<Exclude<D, undefined>>>] | SubscribeCallbacks<Exclude<D, undefined>>): Subscription {
+    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),
@@ -44,7 +45,7 @@ export function var$<D>(initial?: D): Var<D | undefined> {
       observer.start?.(subscription);
 
       if (value !== undefined) {
-        observer.next(value as Exclude<D, undefined>);
+        observer.next(value);
       }
 
       return subscription;
