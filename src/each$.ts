@@ -5,7 +5,7 @@ import {
   Mutable,
   Observable,
   Subscribable,
-  Readable
+  Readable, type Unsubscribable
 } from './defs/index.js';
 import { isMutable, isSubscribable, isPromise, isReadable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
@@ -43,7 +43,13 @@ export function each$<A, R>(fn: (arg: A) => R) {
 
     if (isSubscribable<A>(origin)) {
       builder.add(observable$<R>((observer, signal) => {
-        const subscription = origin.subscribe({
+        let subscription: Unsubscribable;
+
+        origin.subscribe({
+          start(sub) {
+            subscription = sub;
+            signal.addEventListener('abort', sub.unsubscribe, { once: true });
+          },
           next(val) {
             observer.next(fn(val));
           },
@@ -53,8 +59,6 @@ export function each$<A, R>(fn: (arg: A) => R) {
             observer.complete();
           }
         });
-
-        signal.addEventListener('abort', subscription.unsubscribe, { once: true });
       }));
     }
 

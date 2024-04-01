@@ -1,4 +1,4 @@
-import { Observable, ObservedValue, Subscribable } from './defs/index.js';
+import { Observable, ObservedValue, Subscribable, type Unsubscribable } from './defs/index.js';
 import { PredicateFn } from './defs/utils.js';
 import { observable$ } from './observable$.js';
 import { PipeStep } from './pipe$.js';
@@ -17,7 +17,13 @@ export function filter$<O extends Subscribable>(predicate: (val: ObservedValue<O
 
 export function filter$(predicate: (val: unknown) => boolean): PipeStep<Subscribable, Observable> {
   return (origin) => observable$((observer, signal) => {
-    const subscription = origin.subscribe({
+    let subscription: Unsubscribable;
+
+    origin.subscribe({
+      start(sub) {
+        subscription = sub;
+        signal.addEventListener('abort', sub.unsubscribe, { once: true });
+      },
       next(val) {
         if (predicate(val)) {
           observer.next(val);
@@ -29,7 +35,5 @@ export function filter$(predicate: (val: unknown) => boolean): PipeStep<Subscrib
         observer.complete();
       }
     });
-
-    signal.addEventListener('abort', subscription.unsubscribe, { once: true });
   });
 }
