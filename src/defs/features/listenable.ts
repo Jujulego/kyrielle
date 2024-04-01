@@ -24,3 +24,8 @@ export interface Listenable<M extends Mapping = any> { // eslint-disable-line @t
    */
   on<const K extends MappingKey<M>>(key: K, observer: Partial<Observer<M[K]>>): Unsubscribable;
 }
+
+/**
+ * Extract event map from a Listenable
+ */
+export type ListenEventMap<L extends Listenable> = L extends Listenable<infer M> ? M : never;
