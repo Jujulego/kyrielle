@@ -1,6 +1,6 @@
-import { multiplexer$ } from '@/src/multiplexer$.js';
 import { describe, expect, it, vi } from 'vitest';
 
+import { multiplexer$ } from '@/src/multiplexer$.js';
 import { once$ } from '@/src/once$.js';
 import { source$ } from '@/src/source$.js';
 
