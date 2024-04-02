@@ -22,4 +22,5 @@ export * from './source$.js';
 export * from './timeout$.js';
 export * from './validate$.js';
 export * from './var$.js';
+export * from './waitFor$.js';
 export * from './yield$.js';
