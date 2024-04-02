@@ -1,5 +1,6 @@
 export * from './defs/index.js';
 export { extractObservable } from './utils/observable.js';
+export * from './utils/predicates.js';
 
 export * from './const$.js';
 export * from './each$.js';
