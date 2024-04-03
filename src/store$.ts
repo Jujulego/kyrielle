@@ -13,10 +13,14 @@ export type StoreOrigin<D = unknown> = Subscribable<D>
   | StoreMutableOrigin<D>;
 
 export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D> {}
+
 export interface StoredResource<out D = unknown> extends Readable<D | undefined>, Observable<D> {}
+export interface Refreshable<out R = unknown> {
+  refresh(signal?: AbortSignal): R
+}
 
 export type StoreResult<O extends StoreOrigin> = StoredResource<ObservedValue<O>>
-  & (O extends Readable<infer R> ? { refresh(signal?: AbortSignal): R } : unknown)
+  & (O extends Readable<infer R> ? Refreshable<R> : unknown)
   & (O extends Mutable<infer A, infer R> ? Mutable<A, R> : unknown);
 
 /**
