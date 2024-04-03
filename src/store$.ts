@@ -11,7 +11,6 @@ export interface StoreMutableOrigin<out D = unknown> extends Subscribable<D>, Mu
 export type StoreOrigin<D = unknown> = Subscribable<D>
   | StoreReadableOrigin<D>
   | StoreMutableOrigin<D>;
-//| (StoreReadableOrigin<D> & StoreMutableOrigin<D>);
 
 export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D> {}
 export interface StoredResource<out D = unknown> extends Readable<D | undefined>, Observable<D> {}
@@ -25,14 +24,14 @@ export type StoreResult<O extends StoreOrigin> = StoredResource<ObservedValue<O>
  */
 export function store$<O extends StoreOrigin>(ref: StoreReference<ObservedValue<O>>): PipeStep<O, StoreResult<O>>;
 
-export function store$<D>(ref: StoreReference<D>): PipeStep<Subscribable<D>, StoredResource<D>> {
+export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D>, StoredResource<D>> {
   return (origin: Subscribable<D>) => {
     // Setup resource
     const result = resource$()
       .add(observable$<D>((obs, signal) => {
         const sub = origin.subscribe({
           next(data) {
-            ref.mutate(data);
+            reference.mutate(data);
             obs.next(data);
           },
           error: obs.error,
@@ -41,14 +40,14 @@ export function store$<D>(ref: StoreReference<D>): PipeStep<Subscribable<D>, Sto
 
         signal.addEventListener('abort', () => sub.unsubscribe());
       }))
-      .add({ read: ref.read })
+      .add({ read: (signal) => reference.read(signal) })
       .build();
 
     function handleResult(result: Awaitable<D>): Awaitable<D> {
       if (isPromise(result)) {
-        result.then((data) => ref.mutate(data));
+        result.then((data) => reference.mutate(data));
       } else {
-        ref.mutate(result);
+        reference.mutate(result);
       }
 
       return result;
