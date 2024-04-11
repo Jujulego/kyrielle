@@ -1,4 +1,12 @@
-import type { Awaitable, Mutable, Observable, ObservedValue, Readable, Subscribable } from './defs/index.js';
+import type {
+  Awaitable,
+  Mutable,
+  Observable,
+  ObservedValue,
+  Readable,
+  Subscribable,
+  Unsubscribable
+} from './defs/index.js';
 import { isMutable, isPromise, isReadable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
@@ -33,16 +41,23 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     // Setup resource
     const result = resource$()
       .add(observable$<D>((obs, signal) => {
-        const sub = origin.subscribe({
+        let subscription: Unsubscribable;
+
+        origin.subscribe({
+          start(sub) {
+            subscription = sub;
+            signal.addEventListener('abort', sub.unsubscribe, { once: true });
+          },
           next(data) {
             reference.mutate(data);
             obs.next(data);
           },
           error: obs.error,
-          complete: obs.complete,
+          complete() {
+            signal.removeEventListener('abort', subscription.unsubscribe);
+            obs.complete();
+          },
         });
-
-        signal.addEventListener('abort', () => sub.unsubscribe());
       }))
       .add({ read: (signal) => reference.read(signal) })
       .build();
