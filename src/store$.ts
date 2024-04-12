@@ -34,7 +34,14 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     // Setup resource
     const result = resource$()
       .add(observable$<D>((obs, signal) => {
-        boundedSubscription(origin, signal, obs);
+        boundedSubscription(origin, signal, {
+          next(data) {
+            reference.mutate(data);
+            obs.next(data);
+          },
+          error: obs.error,
+          complete: obs.complete,
+        });
       }))
       .add({ read: (signal) => reference.read(signal) })
       .build();
