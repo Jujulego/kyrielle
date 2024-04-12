@@ -1,16 +1,17 @@
-import {
+import type {
   AsyncMutable,
   AsyncReadable,
-  Awaitable,
   Mutable,
   Observable,
   Subscribable,
-  Readable, type Unsubscribable
+  Readable,
+  Awaitable
 } from './defs/index.js';
 import { isMutable, isSubscribable, isPromise, isReadable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
-import { PipeStep } from './pipe$.js';
+import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type EachOrigin<D = unknown> =
@@ -43,21 +44,12 @@ export function each$<A, R>(fn: (arg: A) => R) {
 
     if (isSubscribable<A>(origin)) {
       builder.add(observable$<R>((observer, signal) => {
-        let subscription: Unsubscribable;
-
-        origin.subscribe({
-          start(sub) {
-            subscription = sub;
-            signal.addEventListener('abort', sub.unsubscribe, { once: true });
-          },
+        boundedSubscription(origin, signal, {
           next(val) {
             observer.next(fn(val));
           },
           error: observer.error,
-          complete() {
-            signal.removeEventListener('abort', subscription.unsubscribe);
-            observer.complete();
-          }
+          complete: observer.complete,
         });
       }));
     }

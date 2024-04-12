@@ -3,6 +3,7 @@ import { isMutable, isPromise, isReadable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export interface StoreReadableOrigin<out D = unknown> extends Subscribable<D>, Readable<Awaitable<D>> {}
@@ -33,7 +34,7 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     // Setup resource
     const result = resource$()
       .add(observable$<D>((obs, signal) => {
-        const sub = origin.subscribe({
+        boundedSubscription(origin, signal, {
           next(data) {
             reference.mutate(data);
             obs.next(data);
@@ -41,8 +42,6 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
           error: obs.error,
           complete: obs.complete,
         });
-
-        signal.addEventListener('abort', () => sub.unsubscribe());
       }))
       .add({ read: (signal) => reference.read(signal) })
       .build();

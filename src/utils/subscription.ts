@@ -1,4 +1,4 @@
-import { Subscription } from '../defs/index.js';
+import { type Observer, type Subscribable, Subscription, type Unsubscribable } from '../defs/index.js';
 
 export interface SubscriptionProps {
   /**
@@ -28,4 +28,25 @@ export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps
   });
 
   return subscription as Subscription;
+}
+
+/**
+ * Subscribes to given observer, bounded to a signal.
+ */
+export function boundedSubscription<T>(observable: Subscribable<T>, signal: AbortSignal, observer: Observer<T>): Unsubscribable {
+  let subscription: Unsubscribable;
+
+  return observable.subscribe({
+    start(sub) {
+      subscription = sub;
+      signal.addEventListener('abort', sub.unsubscribe, { once: true });
+      observer.start?.(sub);
+    },
+    next: observer.next,
+    error: observer.error,
+    complete() {
+      signal.removeEventListener('abort', subscription.unsubscribe);
+      observer.complete();
+    }
+  });
 }
