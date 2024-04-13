@@ -1081,7 +1081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:7.6.0, @typescript-eslint/utils@npm:^7.4.0":
+"@typescript-eslint/utils@npm:7.6.0, @typescript-eslint/utils@npm:^7.6.0":
   version: 7.6.0
   resolution: "@typescript-eslint/utils@npm:7.6.0"
   dependencies:
@@ -2019,20 +2019,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vitest@npm:0.4.1":
-  version: 0.4.1
-  resolution: "eslint-plugin-vitest@npm:0.4.1"
+"eslint-plugin-vitest@npm:0.5.1":
+  version: 0.5.1
+  resolution: "eslint-plugin-vitest@npm:0.5.1"
   dependencies:
-    "@typescript-eslint/utils": "npm:^7.4.0"
+    "@typescript-eslint/utils": "npm:^7.6.0"
   peerDependencies:
-    eslint: ">=8.0.0"
+    eslint: ^8.57.0 || ^9.0.0
     vitest: "*"
   peerDependenciesMeta:
     "@typescript-eslint/eslint-plugin":
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/d06a7efec259778186526fa3bcf94af1433c145a0388bd6f6f9d9e86e918f9ade906c7c49000252a61ff0d45f44525428e9729c074cb94ce0a7d768f0c990a76
+  checksum: 10c0/e8fda6a877b2d1a7c65819445339a64e8c96cb31d347095a4b548ebc667231e37ff43a062782d2ca370b8b6fef22403ab7c96bf1528ebc488a9202354a915a9d
   languageName: node
   linkType: hard
 
@@ -3163,7 +3163,7 @@ __metadata:
     "@types/node": "npm:18.19.31"
     "@vitest/coverage-v8": "npm:1.5.0"
     eslint: "npm:8.57.0"
-    eslint-plugin-vitest: "npm:0.4.1"
+    eslint-plugin-vitest: "npm:0.5.1"
     shx: "npm:0.3.4"
     typescript: "npm:5.4.5"
     typescript-eslint: "npm:7.6.0"
