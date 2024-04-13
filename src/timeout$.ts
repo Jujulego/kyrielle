@@ -7,12 +7,17 @@ export function timeout$(ms: number): Readable<Promise<void>> {
   return {
     read(signal?: AbortSignal): Promise<void> {
       return new Promise<void>((resolve, reject) => {
-        const id = setTimeout(resolve, ms);
+        const id = setTimeout(() => {
+          signal?.removeEventListener('abort', handleAbort);
+          resolve();
+        }, ms);
 
-        signal?.addEventListener('abort', function () {
+        function handleAbort(this: AbortSignal) {
           clearTimeout(id);
           reject(this.reason);
-        });
+        }
+
+        signal?.addEventListener('abort', handleAbort, { once: true });
       });
     }
   };
