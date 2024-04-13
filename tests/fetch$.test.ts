@@ -23,7 +23,7 @@ describe('fetch$', () => {
     const ref = fetch$('life');
     await expect(ref.read()).resolves.toBe(res);
 
-    expect(mockFetch).toHaveBeenCalledWith('life', { signal: expect.any(AbortSignal) });
+    expect(mockFetch).toHaveBeenCalledWith('life', { signal: expect.any(AbortSignal) as AbortSignal });
   });
 
   it('should call onFetch with url just before initiating the request', async () => {

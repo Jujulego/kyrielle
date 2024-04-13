@@ -20,6 +20,7 @@ describe('each$', () => {
 
     expectTypeOf(res).toHaveProperty('read');
     expectTypeOf(res).not.toHaveProperty('mutate');
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.toBeString();
   });
 
@@ -34,6 +35,7 @@ describe('each$', () => {
 
     expectTypeOf(res).toHaveProperty('read');
     expectTypeOf(res).not.toHaveProperty('mutate');
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.resolves.toBeString();
   });
 
@@ -41,7 +43,7 @@ describe('each$', () => {
     const res = pipe$(
       resource$<number>()
         .add(source$<number>())
-        .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+        .add(mutable$((arg: string) => 42))
         .build(),
       each$((n) => n.toString())
     );
@@ -49,6 +51,7 @@ describe('each$', () => {
     expectTypeOf(res).not.toHaveProperty('read');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.mutate).returns.toBeString();
   });
 
@@ -56,7 +59,7 @@ describe('each$', () => {
     const res = pipe$(
       resource$<number>()
         .add(source$<number>())
-        .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+        .add(mutable$(async (arg: string) => 42))
         .build(),
       each$((n) => n.toString())
     );
@@ -64,6 +67,7 @@ describe('each$', () => {
     expectTypeOf(res).not.toHaveProperty('read');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.mutate).returns.resolves.toBeString();
   });
 });

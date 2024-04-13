@@ -73,38 +73,3 @@ describe('nested multiplexer', () => {
     assertType(mlt.on('mlt.life', (_: 'toto') => null));
   });
 });
-
-// describe('nested group', () => {
-//   const mlt = multiplexer$({
-//     grp: group$({
-//       life: source$<42>(),
-//       toto: source$<'toto'>(),
-//     }),
-//   });
-//
-//   it('should refuse grp events', () => {
-//     // @ts-expect-error Cannot emit "grp" event (is a group)
-//     assertType(mlt.emit('grp', 42));
-//
-//     // @ts-expect-error Cannot emit "grp" event (is a group)
-//     assertType(mlt.emit('grp', 'toto'));
-//   });
-//
-//   it('should accept valid grp.life events', () => {
-//     assertType(mlt.emit('grp.life', 42));
-//
-//     // @ts-expect-error Cannot emit "toto" as "grp.life" event
-//     assertType(mlt.emit('grp.life', 'toto'));
-//   });
-//
-//   it('should provide grp events', () => {
-//     assertType(mlt.on('grp', (_: 42 | 'toto') => null));
-//   });
-//
-//   it('should provide valid grp.life events', () => {
-//     assertType(mlt.on('grp.life', (_: 42) => null));
-//
-//     // @ts-expect-error Cannot listen "toto" as "grp.life" event
-//     assertType(mlt.on('grp.life', (_: 'toto') => null));
-//   });
-// });

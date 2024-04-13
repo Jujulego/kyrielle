@@ -57,7 +57,7 @@ describe('each$', () => {
   it('should transform mutate result', () => {
     const src = resource$<number>()
       .add(source$<number>())
-      .add(mutable$((arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+      .add(mutable$((arg: string) => 42))
       .build();
 
     vi.spyOn(src, 'mutate');
@@ -71,7 +71,7 @@ describe('each$', () => {
   it('should transform async mutate result', async () => {
     const src = resource$<number>()
       .add(source$<number>())
-      .add(mutable$(async (arg: string) => 42)) // eslint-disable-line @typescript-eslint/no-unused-vars
+      .add(mutable$(async (arg: string) => 42))
       .build();
 
     vi.spyOn(src, 'mutate');

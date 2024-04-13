@@ -23,7 +23,7 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     // Utils
     function emitResult(result: unknown) {
       if (isPromise(result)) {
-        result.then((value) => observer?.next(value));
+        void result.then((value) => observer?.next(value));
       } else {
         observer?.next(result);
       }

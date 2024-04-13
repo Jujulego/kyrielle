@@ -20,7 +20,7 @@ export default tsEslint.config(
     },
   },
   {
-    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
@@ -30,7 +30,7 @@ export default tsEslint.config(
     }
   },
   {
-    files: ['**/*.test.js', '**/*.test.jsx', '**/*.test.ts', '**/*.test.tsx'],
+    files: ['**/*.test.{js,jsx,ts,tsx}', '**/*.test-d.{ts,tsx}'],
     plugins: {
       vitest
     },
@@ -41,6 +41,12 @@ export default tsEslint.config(
     },
     rules: {
       ...vitest.configs.recommended.rules,
+      '@typescript-eslint/no-unused-vars': ['off'],
+      '@typescript-eslint/require-await': ['off'],
+      '@typescript-eslint/unbound-method': ['off'],
+      'vitest/expect-expect': ['error', {
+        assertFunctionNames: ['expect', 'expectTypeOf', 'assertType']
+      }],
     }
   }
 );

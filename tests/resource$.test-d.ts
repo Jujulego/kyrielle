@@ -16,6 +16,7 @@ describe('resourceBuilder$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('read');
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.toBeNumber();
   });
 
@@ -25,6 +26,7 @@ describe('resourceBuilder$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('read');
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.resolves.toBeNumber();
   });
 
@@ -35,6 +37,7 @@ describe('resourceBuilder$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('read');
+    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.toBeString();
   });
 });

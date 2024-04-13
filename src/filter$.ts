@@ -24,8 +24,8 @@ export function filter$(predicate: (val: unknown) => boolean): PipeStep<Subscrib
           observer.next(val);
         }
       },
-      error: observer.error,
-      complete: observer.complete,
+      error: (err) => observer.error(err),
+      complete: () => observer.complete(),
     });
   });
 }
