@@ -115,7 +115,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
       // Activate observable
       if (state === State.Inactive) {
-        activate();
+        void activate();
       }
 
       return subscription;

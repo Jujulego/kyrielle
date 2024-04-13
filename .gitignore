@@ -9,6 +9,7 @@
 
 # Generated files
 .vite
+.vitest
 coverage
 dist
 *.log

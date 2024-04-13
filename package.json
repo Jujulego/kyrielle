@@ -34,19 +34,20 @@
     "@swc/helpers": "^0.5.3"
   },
   "devDependencies": {
+    "@eslint/js": "8.57.0",
     "@jujulego/jill": "2.5.2",
     "@jujulego/vite-plugin-swc": "1.2.0",
     "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@swc/cli": "0.3.12",
     "@swc/core": "1.4.13",
+    "@types/eslint__js": "8.42.3",
     "@types/node": "18.19.31",
-    "@typescript-eslint/eslint-plugin": "7.6.0",
-    "@typescript-eslint/parser": "7.6.0",
     "@vitest/coverage-v8": "1.5.0",
     "eslint": "8.57.0",
     "eslint-plugin-vitest": "0.4.1",
     "shx": "0.3.4",
     "typescript": "5.4.5",
+    "typescript-eslint": "7.6.0",
     "vite": "5.2.8",
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "1.5.0"

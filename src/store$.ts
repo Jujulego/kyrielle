@@ -39,8 +39,8 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
             reference.mutate(data);
             obs.next(data);
           },
-          error: obs.error,
-          complete: obs.complete,
+          error: (err) => obs.error(err),
+          complete: () => obs.complete(),
         });
       }))
       .add({ read: (signal) => reference.read(signal) })
@@ -48,7 +48,7 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
 
     function handleResult(result: Awaitable<D>): Awaitable<D> {
       if (isPromise(result)) {
-        result.then((data) => reference.mutate(data));
+        void result.then((data) => reference.mutate(data));
       } else {
         reference.mutate(result);
       }

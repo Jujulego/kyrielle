@@ -116,7 +116,7 @@ describe('retry$', () => {
 
   it('should abort call if given signal aborts', async () => {
     const piped = pipe$(
-      { read: (signal: AbortSignal) => new Promise((_, reject) => signal!.addEventListener('abort', () => reject(signal!.reason))) },
+      { read: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
       retry$('read', {
         onRetry: () => false,
       })

@@ -48,8 +48,8 @@ export function each$<A, R>(fn: (arg: A) => R) {
           next(val) {
             observer.next(fn(val));
           },
-          error: observer.error,
-          complete: observer.complete,
+          error: (err) => observer.error(err),
+          complete: () => observer.complete(),
         });
       }));
     }

@@ -39,13 +39,13 @@ export function boundedSubscription<T>(observable: Subscribable<T>, signal: Abor
   return observable.subscribe({
     start(sub) {
       subscription = sub;
-      signal.addEventListener('abort', sub.unsubscribe, { once: true });
+      signal.addEventListener('abort', () => sub.unsubscribe(), { once: true });
       observer.start?.(sub);
     },
-    next: observer.next,
-    error: observer.error,
+    next: (data) => observer.next(data),
+    error: (err) => observer.error(err),
     complete() {
-      signal.removeEventListener('abort', subscription.unsubscribe);
+      signal.removeEventListener('abort', () => subscription.unsubscribe());
       observer.complete();
     }
   });

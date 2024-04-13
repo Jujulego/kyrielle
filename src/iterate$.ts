@@ -11,7 +11,7 @@ export function iterate$<D>(observable: Subscribable<D> | SubscribableHolder<D>)
 
   return new Repeater<D>(async (push, stop) => {
     const sub = obs.subscribe({
-      next: (data) => push(data),
+      next: (data) => void push(data),
       error: (err) => stop(err),
       complete: () => stop(),
     });
