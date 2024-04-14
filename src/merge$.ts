@@ -2,6 +2,9 @@ import type { Observable, Subscribable, Unsubscribable } from './defs/index.js';
 
 import { observable$ } from './observable$.js';
 
+/**
+ * Merges multiple observables into one.
+ */
 export function merge$<D>(...observables: Subscribable<D>[]): Observable<D> {
   return observable$((observer, signal) => {
     const subscriptions = new Set<Unsubscribable>();
