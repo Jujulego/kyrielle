@@ -71,16 +71,22 @@ function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): Observer 
     };
   } else {
     return {
-      next: !arg.next ? noop : (data: unknown) => {
-        if (cleanup) cleanup();
-        cleanup = arg.next!(data);
-      },
-      error: !arg.next ? noop : (error: unknown) => {
-        if (cleanup) cleanup();
-        cleanup = arg.error!(error);
-      },
+      start: arg.start?.bind(arg) ?? noop,
+      next: arg.next
+        ? (data: unknown) => {
+          if (cleanup) cleanup();
+          cleanup = arg.next!(data);
+        }
+        : noop,
+      error: arg.error
+        ? (error: unknown) => {
+          if (cleanup) cleanup();
+          cleanup = arg.error!(error);
+        }
+        : noop,
       complete() {
         if (cleanup) cleanup();
+        if (arg.complete) arg.complete();
       }
     };
   }
