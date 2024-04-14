@@ -40,7 +40,7 @@ describe('filter$', () => {
     expect(subscription.closed).toBe(true);
   });
 
-  it('should complete source completes', () => {
+  it('should unsubscribe to source, on observable abort', () => {
     const fn = vi.fn();
     const src = observable$<number>((_, signal) => {
       signal.addEventListener('abort', fn, { once: true });
