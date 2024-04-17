@@ -1,4 +1,4 @@
-import { Observer } from './defs/index.js';
+import { Observer, type PartialObserver } from './defs/index.js';
 import { isObserver } from './utils/predicates.js';
 
 // Utils
@@ -7,7 +7,7 @@ const noop = () => { /* noop */ };
 /**
  * Utility to simplify observer creation
  */
-export function observer$<D>(input: Partial<Observer<D>>): Observer<D> {
+export function observer$<D>(input: PartialObserver<D>): Observer<D> {
   if (isObserver(input)) {
     return input;
   }
