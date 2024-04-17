@@ -27,3 +27,5 @@ export interface Observer<in D = unknown> {
    */
   complete(): void;
 }
+
+export type PartialObserver<in D = unknown> = { [K in keyof Observer<D>]?: Observer<D>[K] | undefined };

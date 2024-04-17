@@ -7,6 +7,25 @@ import { source$ } from '@/src/source$.js';
 // Tests
 describe('once$', () => {
   describe('with an observer', () => {
+    it('should be unsubscribed after first call', () => {
+      const spy = vi.fn();
+      const source = source$<number>();
+
+      const sub = once$(source, spy);
+      vi.spyOn(sub, 'unsubscribe');
+
+      // First call
+      source.next(42);
+
+      expect(spy).toHaveBeenCalledWith(42);
+      expect(sub.unsubscribe).toHaveBeenCalled();
+
+      // Next call
+      source.next(1);
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
     it('should be unsubscribed after first next call', () => {
       const spy = vi.fn();
       const source = source$<number>();
@@ -47,6 +66,27 @@ describe('once$', () => {
   });
 
   describe('with a listener', () => {
+    it('should be unsubscribed after first call', () => {
+      const spy = vi.fn();
+      const mux = multiplexer$({
+        test: source$<number>()
+      });
+
+      const sub = once$(mux, 'test', spy);
+      vi.spyOn(sub, 'unsubscribe');
+
+      // First call
+      mux.emit('test', 42);
+
+      expect(spy).toHaveBeenCalledWith(42);
+      expect(sub.unsubscribe).toHaveBeenCalled();
+
+      // Next call
+      mux.emit('test', 1);
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
     it('should be unsubscribed after first next call', () => {
       const spy = vi.fn();
       const mux = multiplexer$({

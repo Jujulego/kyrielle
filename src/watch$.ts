@@ -3,19 +3,19 @@ import type {
   ListenEventMap,
   MappingKey,
   ObservedValue,
-  Observer,
+  Observer, PartialObserver,
   Subscribable,
   Unsubscribable
 } from './defs/index.js';
+import { observer$ } from './observer$.js';
 
 // Type
 export type WatchCleanup = () => void;
-export type WatchCallback<in D = any> = (data: D) => WatchCleanup | void;  // eslint-disable-line @typescript-eslint/no-explicit-any
+export type WatchCallback<in D = any> = (data: D) => WatchCleanup | void; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export interface WatchObserver<in D = unknown> extends Observer<D> {
-  next(data: D): void | WatchCleanup;
-  error(error: unknown): void | WatchCleanup;
-  complete(): void;
+export interface WatchObserver<in D = unknown> extends PartialObserver<D> {
+  next?: ((data: D) => void | WatchCleanup) | undefined;
+  error?: ((error: unknown) => void | WatchCleanup) | undefined;
 }
 
 /**
@@ -53,41 +53,34 @@ export function watch$(...args: [Subscribable, WatchCallback | Partial<WatchObse
 }
 
 // Utils
-const noop = () => { /* noop */ };
-
 function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): Observer {
   let cleanup: WatchCleanup | void;
 
   if (typeof arg === 'function') {
-    return {
+    return observer$({
       next(data: unknown) {
         if (cleanup) cleanup();
         cleanup = arg(data);
       },
-      error: noop,
       complete() {
         if (cleanup) cleanup();
       }
-    };
+    });
   } else {
-    return {
-      start: arg.start?.bind(arg) ?? noop,
-      next: arg.next
-        ? (data: unknown) => {
-          if (cleanup) cleanup();
-          cleanup = arg.next!(data);
-        }
-        : noop,
-      error: arg.error
-        ? (error: unknown) => {
-          if (cleanup) cleanup();
-          cleanup = arg.error!(error);
-        }
-        : noop,
+    return observer$({
+      start: arg.start?.bind(arg),
+      next: arg.next && ((data: unknown) => {
+        if (cleanup) cleanup();
+        cleanup = arg.next!(data);
+      }),
+      error: arg.error && ((error: unknown) => {
+        if (cleanup) cleanup();
+        cleanup = arg.error!(error);
+      }),
       complete() {
         if (cleanup) cleanup();
         if (arg.complete) arg.complete();
       }
-    };
+    });
   }
 }
