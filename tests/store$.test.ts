@@ -105,4 +105,20 @@ describe('store$', () => {
     expect(origin.mutate).toHaveBeenCalledWith(42, undefined);
     expect(reference.mutate).toHaveBeenCalledWith(43);
   });
+
+  it('should emit values emitted by reference', () => {
+    // Setup
+    const origin = source$<number>();
+    const reference = var$<number>();
+    const result = pipe$(origin, store$(reference));
+
+    // Mocks
+    const spy = vi.fn();
+    result.subscribe(spy);
+
+    // Emit !
+    reference.mutate(42);
+
+    expect(spy).toHaveBeenCalledWith(42);
+  });
 });
