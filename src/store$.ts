@@ -1,5 +1,6 @@
 import type { Awaitable, Mutable, Observable, ObservedValue, Readable, Subscribable } from './defs/index.js';
-import { isMutable, isPromise, isReadable } from './utils/predicates.js';
+import { merge$ } from './merge$.js';
+import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
@@ -13,7 +14,7 @@ export type StoreOrigin<D = unknown> = Subscribable<D>
   | StoreReadableOrigin<D>
   | StoreMutableOrigin<D>;
 
-export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D> {}
+export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D>, Partial<Subscribable<D>> {}
 
 export interface StoredResource<out D = unknown> extends Readable<D | undefined>, Observable<D> {}
 export interface Refreshable<out R = unknown> {
@@ -31,18 +32,25 @@ export function store$<O extends StoreOrigin>(ref: StoreReference<ObservedValue<
 
 export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D>, StoredResource<D>> {
   return (origin: Subscribable<D>) => {
+    // Prepare observable
+    let observable: Observable<D> = observable$<D>((obs, signal) => {
+      boundedSubscription(origin, signal, {
+        next(data) {
+          reference.mutate(data);
+          obs.next(data);
+        },
+        error: (err) => obs.error(err),
+        complete: () => obs.complete(),
+      });
+    });
+
+    if (isSubscribable<D>(reference)) {
+      observable = merge$(observable, reference);
+    }
+
     // Setup resource
     const result = resource$()
-      .add(observable$<D>((obs, signal) => {
-        boundedSubscription(origin, signal, {
-          next(data) {
-            reference.mutate(data);
-            obs.next(data);
-          },
-          error: (err) => obs.error(err),
-          complete: () => obs.complete(),
-        });
-      }))
+      .add(observable)
       .add({ read: (signal) => reference.read(signal) })
       .build();
 
