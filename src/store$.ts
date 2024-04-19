@@ -1,9 +1,17 @@
-import type { Awaitable, Mutable, Observable, ObservedValue, Readable, Subscribable } from './defs/index.js';
+import type {
+  Awaitable,
+  Mutable,
+  Observable,
+  ObservedValue,
+  Readable,
+  Refreshable,
+  Subscribable
+} from './defs/index.js';
 import { merge$ } from './merge$.js';
-import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -17,9 +25,6 @@ export type StoreOrigin<D = unknown> = Subscribable<D>
 export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D>, Partial<Subscribable<D>> {}
 
 export interface StoredResource<out D = unknown> extends Readable<D | undefined>, Observable<D> {}
-export interface Refreshable<out R = unknown> {
-  refresh(signal?: AbortSignal): R
-}
 
 export type StoreResult<O extends StoreOrigin> = StoredResource<ObservedValue<O>>
   & (O extends Readable<infer R> ? Refreshable<R> : unknown)
