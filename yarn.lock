@@ -321,6 +321,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/js@npm:9.1.1":
+  version: 9.1.1
+  resolution: "@eslint/js@npm:9.1.1"
+  checksum: 10c0/b25d11736b91d8df44dd217e88adb1f43d2bd5911ef4f4033e51faffe370f28d329731ffbf841d0b8303c8eedb60bda8c3a9efe803bb3b3737a06bb22c09ad0c
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -3284,7 +3291,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kyrielle@workspace:."
   dependencies:
-    "@eslint/js": "npm:9.0.0"
+    "@eslint/js": "npm:9.1.1"
     "@jujulego/jill": "npm:2.5.2"
     "@jujulego/vite-plugin-swc": "npm:1.2.0"
     "@microsoft/eslint-formatter-sarif": "npm:3.1.0"
