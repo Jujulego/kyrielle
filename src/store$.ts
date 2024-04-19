@@ -54,10 +54,9 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     }
 
     // Setup resource
-    const result = resource$()
+    const builder = resource$()
       .add(observable)
-      .add({ read: (signal) => reference.read(signal) })
-      .build();
+      .add({ read: (signal) => reference.read(signal) });
 
     function handleResult(result: Awaitable<D>): Awaitable<D> {
       if (isPromise(result)) {
@@ -71,18 +70,18 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
 
     // Add refresh method
     if (isReadable<Awaitable<D>>(origin)) {
-      Object.assign(result, {
+      builder.add({
         refresh: (signal?: AbortSignal) => handleResult(origin.read(signal)),
       });
     }
 
     // Add mutate method
     if (isMutable<unknown, Awaitable<D>>(origin)) {
-      Object.assign(result, {
+      builder.add({
         mutate: (arg: unknown, signal?: AbortSignal) => handleResult(origin.mutate(arg, signal)),
       });
     }
 
-    return result;
+    return builder.build();
   };
 }
