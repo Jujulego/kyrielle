@@ -60,46 +60,31 @@ export function each$<A, R>(fn: (arg: A) => R) {
 
     if (isReadable<A>(origin)) {
       builder.add({
-        read(signal) {
-          const res = origin.read(signal);
-
-          if (isPromise<A>(res)) {
-            return res.then(fn);
-          } else {
-            return fn(res);
-          }
-        }
+        read: (signal) => applyFn(fn, origin.read(signal)),
       });
     }
 
     if (isRefreshable<A>(origin)) {
       builder.add({
-        refresh(signal) {
-          const res = origin.refresh(signal);
-
-          if (isPromise<A>(res)) {
-            return res.then(fn);
-          } else {
-            return fn(res);
-          }
-        }
+        refresh: (signal) => applyFn(fn, origin.refresh(signal)),
       });
     }
 
     if (isMutable<unknown, A>(origin)) {
       builder.add({
-        mutate(arg, signal) {
-          const res = origin.mutate(arg, signal);
-
-          if (isPromise<A>(res)) {
-            return res.then(fn);
-          } else {
-            return fn(res);
-          }
-        }
+        mutate: (arg, signal) => applyFn(fn, origin.mutate(arg, signal)),
       });
     }
 
     return builder.build();
   };
+}
+
+// Utils
+function applyFn<A, R>(fn: (arg: A) => R, res: Awaitable<A>): Awaitable<R> {
+  if (isPromise<A>(res)) {
+    return res.then(fn);
+  } else {
+    return fn(res);
+  }
 }
