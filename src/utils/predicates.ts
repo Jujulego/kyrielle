@@ -6,7 +6,7 @@ import {
   Observer,
   Mapping,
   Emitter,
-  Listenable
+  Listenable, type Refreshable
 } from '../defs/index.js';
 import { NonNullObject } from '../defs/utils.js';
 
@@ -57,6 +57,13 @@ export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> 
  */
 export function isReadable<D = unknown>(value: unknown): value is Readable<D> {
   return isNonNullObject(value) && hasMethod(value, 'read');
+}
+
+/**
+ * Tests if given value is a Refreshable object
+ */
+export function isRefreshable<D = unknown>(value: unknown): value is Refreshable<D> {
+  return isNonNullObject(value) && hasMethod(value, 'refresh');
 }
 
 /**

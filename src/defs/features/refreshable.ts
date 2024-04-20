@@ -12,7 +12,7 @@ export interface Refreshable<out R = unknown> {
 /**
  * Object that can be asynchronously refreshed.
  */
-export interface AsyncReadable<out D = unknown> extends Refreshable<PromiseLike<D>> {}
+export interface AsyncRefreshable<out D = unknown> extends Refreshable<PromiseLike<D>> {}
 
 /**
  * Extract value type from a Readable type

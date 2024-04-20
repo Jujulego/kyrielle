@@ -5,9 +5,9 @@ import type {
   Observable,
   Subscribable,
   Readable,
-  Awaitable
+  Awaitable, Refreshable, AsyncRefreshable
 } from './defs/index.js';
-import { isMutable, isSubscribable, isPromise, isReadable } from './utils/predicates.js';
+import { isMutable, isSubscribable, isPromise, isReadable, isRefreshable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
@@ -17,19 +17,23 @@ import { boundedSubscription } from './utils/subscription.js';
 export type EachOrigin<D = unknown> =
   | Subscribable<D>
   | Readable<Awaitable<D>>
+  | Refreshable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export type EachMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutable<A, D> : Mutable<A, D>;
 export type EachReadable<O extends Readable, D> = O extends AsyncReadable ? AsyncReadable<D> : Readable<D>;
+export type EachRefreshable<O extends Refreshable, D> = O extends AsyncRefreshable ? AsyncRefreshable<D> : Refreshable<D>;
 
 export type EachOriginValue<O extends EachOrigin> =
   & (O extends Subscribable<infer D> ? D : unknown)
   & (O extends Readable<infer D> ? Awaited<D> : unknown)
+  & (O extends Refreshable<infer D> ? Awaited<D> : unknown)
   & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export type EachResult<O, R> =
   & (O extends Subscribable ? Observable<R> : unknown)
   & (O extends Readable ? EachReadable<O, R> : unknown)
+  & (O extends Refreshable ? EachRefreshable<O, R> : unknown)
   & (O extends Mutable<infer A> ? EachMutable<O, A, R> : unknown);
 
 /**
@@ -58,6 +62,20 @@ export function each$<A, R>(fn: (arg: A) => R) {
       builder.add({
         read(signal) {
           const res = origin.read(signal);
+
+          if (isPromise<A>(res)) {
+            return res.then(fn);
+          } else {
+            return fn(res);
+          }
+        }
+      });
+    }
+
+    if (isRefreshable<A>(origin)) {
+      builder.add({
+        refresh(signal) {
+          const res = origin.refresh(signal);
 
           if (isPromise<A>(res)) {
             return res.then(fn);
