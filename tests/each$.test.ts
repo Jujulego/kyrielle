@@ -1,11 +1,9 @@
-import { mutable$ } from '@/src/mutable$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { each$ } from '@/src/each$.js';
 import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
-import { readable$ } from '@/src/readable$.js';
 import { resource$ } from '@/src/resource$.js';
 
 // Tests
@@ -34,8 +32,7 @@ describe('each$', () => {
 
   it('should transform read result', () => {
     const src = resource$<number>()
-      .add(source$<number>())
-      .add(readable$(() => 42))
+      .add({ read: () => 42 })
       .build();
 
     const res = pipe$(src, each$((n) => n.toString()));
@@ -45,8 +42,7 @@ describe('each$', () => {
 
   it('should transform async read result', async () => {
     const src = resource$<number>()
-      .add(source$<number>())
-      .add(readable$(async () => 42))
+      .add({ read: async () => 42 })
       .build();
 
     const res = pipe$(src, each$((n) => n.toString()));
@@ -54,10 +50,29 @@ describe('each$', () => {
     await expect(res.read()).resolves.toBe('42');
   });
 
+  it('should transform refresh result', () => {
+    const src = resource$<number>()
+      .add({ refresh: () => 42 })
+      .build();
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    expect(res.refresh()).toBe('42');
+  });
+
+  it('should transform async refresh result', async () => {
+    const src = resource$<number>()
+      .add({ refresh: async () => 42 })
+      .build();
+
+    const res = pipe$(src, each$((n) => n.toString()));
+
+    await expect(res.refresh()).resolves.toBe('42');
+  });
+
   it('should transform mutate result', () => {
     const src = resource$<number>()
-      .add(source$<number>())
-      .add(mutable$((arg: string) => 42))
+      .add({ mutate: (arg: string) => 42 })
       .build();
 
     vi.spyOn(src, 'mutate');
@@ -70,8 +85,7 @@ describe('each$', () => {
 
   it('should transform async mutate result', async () => {
     const src = resource$<number>()
-      .add(source$<number>())
-      .add(mutable$(async (arg: string) => 42))
+      .add({ mutate: async (arg: string) => 42 })
       .build();
 
     vi.spyOn(src, 'mutate');

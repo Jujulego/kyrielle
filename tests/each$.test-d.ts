@@ -1,24 +1,21 @@
-import { mutable$ } from '@/src/mutable$.js';
 import { describe, expectTypeOf, it } from 'vitest';
 
 import { each$ } from '@/src/each$.js';
 import { pipe$ } from '@/src/pipe$.js';
-import { source$ } from '@/src/source$.js';
 import { resource$ } from '@/src/resource$.js';
-import { readable$ } from '@/src/readable$.js';
 
 // Tests
 describe('each$', () => {
   it('should have a synchronous read method', () => {
     const res = pipe$(
       resource$<number>()
-        .add(source$<number>())
-        .add(readable$(() => 42))
+        .add({ read: () => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
     expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.toBeString();
@@ -27,28 +24,58 @@ describe('each$', () => {
   it('should have an asynchronous read method', () => {
     const res = pipe$(
       resource$<number>()
-        .add(source$<number>())
-        .add(readable$(async () => 42))
+        .add({ read: async () => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
     expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.read).returns.resolves.toBeString();
   });
 
-  it('should have a synchronous mutate method', () => {
+  it('should have a synchronous refresh method', () => {
     const res = pipe$(
       resource$<number>()
-        .add(source$<number>())
-        .add(mutable$((arg: string) => 42))
+        .add({ refresh: () => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('refresh');
+    expectTypeOf(res).not.toHaveProperty('mutate');
+    // eslint-disable-next-line vitest/valid-expect
+    expectTypeOf(res.refresh).returns.toBeString();
+  });
+
+  it('should have an asynchronous refresh method', () => {
+    const res = pipe$(
+      resource$<number>()
+        .add({ refresh: async () => 42 })
+        .build(),
+      each$((n) => n.toString())
+    );
+
+    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('refresh');
+    expectTypeOf(res).not.toHaveProperty('mutate');
+    // eslint-disable-next-line vitest/valid-expect
+    expectTypeOf(res.refresh).returns.resolves.toBeString();
+  });
+
+  it('should have a synchronous mutate method', () => {
+    const res = pipe$(
+      resource$<number>()
+        .add({ mutate: (arg: string) => 42 })
+        .build(),
+      each$((n) => n.toString())
+    );
+
+    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
     // eslint-disable-next-line vitest/valid-expect
@@ -58,13 +85,13 @@ describe('each$', () => {
   it('should have an asynchronous mutate method', () => {
     const res = pipe$(
       resource$<number>()
-        .add(source$<number>())
-        .add(mutable$(async (arg: string) => 42))
+        .add({ mutate: async (arg: string) => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
     // eslint-disable-next-line vitest/valid-expect
