@@ -44,6 +44,8 @@ export class SubscriberCompleted extends Error {
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   const observers = new Set<Observer<D>>();
+  let state = State.Inactive;
+  let controller: AbortController;
 
   // Subscriber
   const subscriber: SubscriberObserver<D> = {
@@ -62,14 +64,13 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
         obs.complete();
       }
 
+      state = State.Inactive;
+      controller.abort();
       observers.clear();
     }
   };
 
   // Inner state
-  let state = State.Inactive;
-  let controller: AbortController;
-
   async function activate() {
     try {
       state = State.Active;
