@@ -14,6 +14,7 @@ export * from './multiplexer$.js';
 export * from './mutable$.js';
 export * from './observable$.js';
 export * from './observer$.js';
+export * from './of$.js';
 export * from './off$.js';
 export * from './once$.js';
 export * from './pipe$.js';
