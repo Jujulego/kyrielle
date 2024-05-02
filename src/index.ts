@@ -2,6 +2,7 @@ export * from './defs/index.js';
 export { extractObservable } from './utils/observable.js';
 export * from './utils/predicates.js';
 
+export * from './collect$.js';
 export * from './const$.js';
 export * from './each$.js';
 export * from './fetch$.js';
