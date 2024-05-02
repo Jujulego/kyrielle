@@ -21,6 +21,7 @@ export * from './once$.js';
 export * from './scan$.js';
 export * from './pipe$.js';
 export * from './readable$.js';
+export * from './reduce$.js';
 export * from './resource$.js';
 export * from './retry$.js';
 export * from './store$.js';
