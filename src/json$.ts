@@ -8,7 +8,6 @@ import type {
   Subscribable
 } from './defs/index.js';
 import { observable$ } from './observable$.js';
-import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import { applyFn } from './utils/fn.js';
 import { isMutable, isReadable, isRefreshable, isSubscribable } from './utils/predicates.js';
@@ -21,23 +20,23 @@ export type JsonOrigin =
   | Refreshable<Awaitable<string>>
   | Mutable<string, Awaitable<string>>;
 
-export type JsonMutable<O extends Mutable> = O extends AsyncMutable ? AsyncMutable : Mutable;
-export type JsonReadable<O extends Readable> = O extends AsyncReadable ? AsyncReadable : Readable;
-export type JsonRefreshable<O extends Refreshable> = O extends AsyncRefreshable ? AsyncRefreshable : Refreshable;
+export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable ? AsyncMutable<D, A> : Mutable<D, A>;
+export type JsonReadable<O extends Readable, D> = O extends AsyncReadable ? AsyncReadable<D> : Readable<D>;
+export type JsonRefreshable<O extends Refreshable, D> = O extends AsyncRefreshable ? AsyncRefreshable<D> : Refreshable<D>;
 
-export type JsonResult<O> =
-  & (O extends Subscribable ? Observable : unknown)
-  & (O extends Readable ? JsonReadable<O> : unknown)
-  & (O extends Refreshable ? JsonRefreshable<O> : unknown)
-  & (O extends Mutable ? JsonMutable<O> : unknown);
+export type JsonResult<O, D, A> =
+  & (O extends Subscribable ? Observable<D> : unknown)
+  & (O extends Readable ? JsonReadable<O, D> : unknown)
+  & (O extends Refreshable ? JsonRefreshable<O, D> : unknown)
+  & (O extends Mutable ? JsonMutable<O, D, A> : unknown);
 
 /**
- * Parses json items
+ * Parses json items.
  */
-export function json$<O extends JsonOrigin>(): PipeStep<O, JsonResult<O>>;
+export function json$<D = unknown, A = any>(): <O extends JsonOrigin>(origin: O) => JsonResult<O, D, A>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export function json$() {
-  return (origin: unknown) => {
+  return <O extends JsonOrigin>(origin: O) => {
     let lastObj: WeakRef<object> | null = null;
     let lastStr = '';
 
