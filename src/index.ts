@@ -10,6 +10,7 @@ export * from './filter$.js';
 export * from './flow$.js';
 export * from './interval$.js';
 export * from './iterate$.js';
+export * from './json$.js';
 export * from './merge$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';

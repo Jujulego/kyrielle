@@ -4,7 +4,6 @@ import { each$ } from '@/src/each$.js';
 import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
-import { resource$ } from '@/src/resource$.js';
 
 // Tests
 describe('each$', () => {
@@ -31,52 +30,35 @@ describe('each$', () => {
   });
 
   it('should transform read result', () => {
-    const src = resource$<number>()
-      .add({ read: () => 42 })
-      .build();
-
+    const src = { read: () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
     expect(res.read()).toBe('42');
   });
 
   it('should transform async read result', async () => {
-    const src = resource$<number>()
-      .add({ read: async () => 42 })
-      .build();
-
+    const src = { read: async () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
     await expect(res.read()).resolves.toBe('42');
   });
 
   it('should transform refresh result', () => {
-    const src = resource$<number>()
-      .add({ refresh: () => 42 })
-      .build();
-
+    const src = { refresh: () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
     expect(res.refresh()).toBe('42');
   });
 
   it('should transform async refresh result', async () => {
-    const src = resource$<number>()
-      .add({ refresh: async () => 42 })
-      .build();
-
+    const src = { refresh: async () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
     await expect(res.refresh()).resolves.toBe('42');
   });
 
   it('should transform mutate result', () => {
-    const src = resource$<number>()
-      .add({ mutate: (arg: string) => 42 })
-      .build();
-
-    vi.spyOn(src, 'mutate');
-
+    const src = { mutate: vi.fn((arg: string) => 42) };
     const res = pipe$(src, each$((n) => n.toString()));
 
     expect(res.mutate('life')).toBe('42');
@@ -84,12 +66,7 @@ describe('each$', () => {
   });
 
   it('should transform async mutate result', async () => {
-    const src = resource$<number>()
-      .add({ mutate: async (arg: string) => 42 })
-      .build();
-
-    vi.spyOn(src, 'mutate');
-
+    const src = { mutate: vi.fn(async (arg: string) => 42) };
     const res = pipe$(src, each$((n) => n.toString()));
 
     await expect(res.mutate('life')).resolves.toBe('42');

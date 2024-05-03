@@ -1,16 +1,19 @@
 import type {
   AsyncMutable,
   AsyncReadable,
+  AsyncRefreshable,
+  Awaitable,
   Mutable,
   Observable,
-  Subscribable,
   Readable,
-  Awaitable, Refreshable, AsyncRefreshable
+  Refreshable,
+  Subscribable
 } from './defs/index.js';
-import { isMutable, isSubscribable, isPromise, isReadable, isRefreshable } from './utils/predicates.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import { applyFn } from './utils/fn.js';
+import { isMutable, isReadable, isRefreshable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -78,13 +81,4 @@ export function each$<A, R>(fn: (arg: A) => R) {
 
     return builder.build();
   };
-}
-
-// Utils
-function applyFn<A, R>(fn: (arg: A) => R, res: Awaitable<A>): Awaitable<R> {
-  if (isPromise<A>(res)) {
-    return res.then(fn);
-  } else {
-    return fn(res);
-  }
 }
