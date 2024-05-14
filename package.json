@@ -52,7 +52,7 @@
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "1.6.0"
   },
-  "packageManager": "yarn@4.2.1",
+  "packageManager": "yarn@4.2.2",
   "dependenciesMeta": {
     "vitest@1.6.0": {
       "unplugged": true
