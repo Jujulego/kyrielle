@@ -43,7 +43,7 @@
     "@types/eslint__js": "8.42.3",
     "@types/node": "18.19.33",
     "@vitest/coverage-v8": "1.6.0",
-    "eslint": "9.2.0",
+    "eslint": "9.3.0",
     "eslint-plugin-vitest": "0.5.4",
     "shx": "0.3.4",
     "typescript": "5.4.5",
