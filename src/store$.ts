@@ -3,7 +3,7 @@ import type {
   Mutable,
   Observable,
   ObservedValue,
-  Readable,
+  Deferrable,
   Refreshable,
   Subscribable
 } from './defs/index.js';
@@ -11,23 +11,23 @@ import { merge$ } from './merge$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
+import { isMutable, isPromise, isDeferrable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
-export interface StoreReadableOrigin<out D = unknown> extends Subscribable<D>, Readable<Awaitable<D>> {}
+export interface StoreDeferrableOrigin<out D = unknown> extends Subscribable<D>, Deferrable<Awaitable<D>> {}
 export interface StoreMutableOrigin<out D = unknown> extends Subscribable<D>, Mutable<any, Awaitable<D>> {} // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export type StoreOrigin<D = unknown> = Subscribable<D>
-  | StoreReadableOrigin<D>
+  | StoreDeferrableOrigin<D>
   | StoreMutableOrigin<D>;
 
-export interface StoreReference<in out D = unknown> extends Readable<D | undefined>, Mutable<D, D>, Partial<Subscribable<D>> {}
+export interface StoreReference<in out D = unknown> extends Deferrable<D | undefined>, Mutable<D, D>, Partial<Subscribable<D>> {}
 
-export interface StoredResource<out D = unknown> extends Readable<D | undefined>, Observable<D> {}
+export interface StoredResource<out D = unknown> extends Deferrable<D | undefined>, Observable<D> {}
 
 export type StoreResult<O extends StoreOrigin> = StoredResource<ObservedValue<O>>
-  & (O extends Readable<infer R> ? Refreshable<R> : unknown)
+  & (O extends Deferrable<infer R> ? Refreshable<R> : unknown)
   & (O extends Mutable<infer A, infer R> ? Mutable<A, R> : unknown);
 
 /**
@@ -56,7 +56,7 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     // Setup resource
     const builder = resource$()
       .add(observable)
-      .add({ read: (signal) => reference.read(signal) });
+      .add({ defer: reference.defer.bind(reference) });
 
     function handleResult(result: Awaitable<D>): Awaitable<D> {
       if (isPromise(result)) {
@@ -69,9 +69,9 @@ export function store$<D>(reference: StoreReference<D>): PipeStep<Subscribable<D
     }
 
     // Add refresh method
-    if (isReadable<Awaitable<D>>(origin)) {
+    if (isDeferrable<Awaitable<D>>(origin)) {
       builder.add({
-        refresh: (signal?: AbortSignal) => handleResult(origin.read(signal)),
+        refresh: (signal?: AbortSignal) => handleResult(origin.defer(signal)),
       });
     }
 

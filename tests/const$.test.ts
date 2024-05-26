@@ -5,6 +5,6 @@ import { const$ } from '@/src/const$.js';
 describe('const$', () => {
   it('should return given value', () => {
     const ref = const$(42);
-    expect(ref.read()).toBe(42);
+    expect(ref.defer()).toBe(42);
   });
 });

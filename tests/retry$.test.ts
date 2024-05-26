@@ -13,18 +13,17 @@ afterEach(() => {
 
 // Tests
 describe('retry$', () => {
-  it('should call twice ref read method', async () => {
-    const read = vi.fn(async () => 42);
-    read.mockRejectedValueOnce(new Error('Try again !'));
+  it('should call twice ref defer method', async () => {
+    const defer = vi.fn(async () => 42);
+    defer.mockRejectedValueOnce(new Error('Try again !'));
 
-    const piped = pipe$({ read }, retry$('read'));
+    const piped = pipe$({ defer }, retry$('defer'));
 
-    await expect(piped.read()).resolves.toBe(42);
-    expect(read).toHaveBeenCalledTimes(2);
+    await expect(piped.defer()).resolves.toBe(42);
+    expect(defer).toHaveBeenCalledTimes(2);
   });
 
   it('should call twice ref mutate method', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const mutate = vi.fn(async (_: string) => 42);
     mutate.mockRejectedValueOnce(new Error('Try again !'));
 
@@ -39,76 +38,76 @@ describe('retry$', () => {
 
   it('should call onRetry callback and then fail as it returned false', async () => {
     const onRetry = vi.fn(() => false);
-    const read = vi.fn(async () => 42);
-    read.mockRejectedValueOnce(new Error('Try again !'));
+    const defer = vi.fn(async () => 42);
+    defer.mockRejectedValueOnce(new Error('Try again !'));
 
     const piped = pipe$(
-      { read },
-      retry$('read', { onRetry })
+      { defer },
+      retry$('defer', { onRetry })
     );
 
-    await expect(piped.read()).rejects.toStrictEqual(new Error('Try again !'));
+    await expect(piped.defer()).rejects.toStrictEqual(new Error('Try again !'));
 
-    expect(read).toHaveBeenCalledOnce();
+    expect(defer).toHaveBeenCalledOnce();
     expect(onRetry).toHaveBeenCalledWith(new Error('Try again !'), 1);
   });
 
   it('should wait for onRetry to resolve before retrying', async () => {
-    const read = vi.fn(async () => 42);
-    read.mockRejectedValueOnce(new Error('Try again !'));
+    const defer = vi.fn(async () => 42);
+    defer.mockRejectedValueOnce(new Error('Try again !'));
 
     const piped = pipe$(
-      { read },
-      retry$('read', {
+      { defer },
+      retry$('defer', {
         onRetry: () => new Promise((resolve) => setTimeout(() => resolve(), 1000)),
       }),
     );
 
-    const prom = piped.read();
-    expect(read).toHaveBeenCalledOnce();
+    const prom = piped.defer();
+    expect(defer).toHaveBeenCalledOnce();
 
     await vi.advanceTimersByTimeAsync(1000);
     await expect(prom).resolves.toBe(42);
 
-    expect(read).toHaveBeenCalledTimes(2);
+    expect(defer).toHaveBeenCalledTimes(2);
   });
 
-  it('should read onRetry result before retrying', async () => {
-    const read = vi.fn(async () => 42);
-    read.mockRejectedValueOnce(new Error('Try again !'));
+  it('should defer onRetry result before retrying', async () => {
+    const defer = vi.fn(async () => 42);
+    defer.mockRejectedValueOnce(new Error('Try again !'));
 
     const retry = {
-      read: vi.fn(() => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000)))
+      defer: vi.fn(() => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000)))
     };
 
     const piped = pipe$(
-      { read },
-      retry$('read', {
+      { defer },
+      retry$('defer', {
         onRetry: () => retry,
       }),
     );
 
-    const prom = piped.read();
-    expect(read).toHaveBeenCalledOnce();
+    const prom = piped.defer();
+    expect(defer).toHaveBeenCalledOnce();
 
-    await vi.waitFor(() => expect(retry.read).toHaveBeenCalled());
+    await vi.waitFor(() => expect(retry.defer).toHaveBeenCalled());
 
     await vi.advanceTimersByTimeAsync(1000);
     await expect(prom).resolves.toBe(42);
 
-    expect(read).toHaveBeenCalledTimes(2);
+    expect(defer).toHaveBeenCalledTimes(2);
   });
 
   it('should abort call after given timeout', async () => {
     const piped = pipe$(
-      { read: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
-      retry$('read', {
+      { defer: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
+      retry$('defer', {
         onRetry: () => false,
         tryTimeout: 1000
       })
     );
 
-    const prom = piped.read();
+    const prom = piped.defer();
     await vi.advanceTimersByTimeAsync(1000);
 
     await expect(prom).rejects.toStrictEqual(new DOMException('The operation was aborted due to timeout', 'TimeoutError'));
@@ -116,33 +115,33 @@ describe('retry$', () => {
 
   it('should abort call if given signal aborts', async () => {
     const piped = pipe$(
-      { read: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
-      retry$('read', {
+      { defer: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
+      retry$('defer', {
         onRetry: () => false,
       })
     );
 
     const ctrl = new AbortController();
-    const prom = piped.read(ctrl.signal);
+    const prom = piped.defer(ctrl.signal);
 
     ctrl.abort(new Error('Abort !'));
 
     await expect(prom).rejects.toStrictEqual(new Error('Abort !'));
   });
 
-  it('should not call read if retry were given an aborted signal', async () => {
-    const read = vi.fn(async () => 42);
+  it('should not call defer if retry were given an aborted signal', async () => {
+    const defer = vi.fn(async () => 42);
 
     const piped = pipe$(
-      { read },
-      retry$('read', {
+      { defer },
+      retry$('defer', {
         onRetry: () => false,
       })
     );
 
-    await expect(piped.read(AbortSignal.abort(new Error('Abort !'))))
+    await expect(piped.defer(AbortSignal.abort(new Error('Abort !'))))
       .rejects.toStrictEqual(new Error('Abort !'));
 
-    expect(read).not.toHaveBeenCalled();
+    expect(defer).not.toHaveBeenCalled();
   });
 });

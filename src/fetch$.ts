@@ -1,5 +1,5 @@
-import { Readable } from './defs/index.js';
-import { readable$ } from './readable$.js';
+import { Deferrable } from './defs/index.js';
+import { deferrable$ } from './deferrable$.js';
 
 export interface FetchOpts<D = Response> extends Omit<RequestInit, 'signal'> {
   onFetch?: (url: string | URL) => void;
@@ -18,11 +18,11 @@ export class FetchError extends Error {
   }
 }
 
-export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> }): Readable<Promise<D>>;
-export function fetch$(url: string | URL, opts?: FetchOpts): Readable<Promise<Response>>;
+export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> }): Deferrable<Promise<D>>;
+export function fetch$(url: string | URL, opts?: FetchOpts): Deferrable<Promise<Response>>;
 
-export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {}): Readable<Promise<D>> {
-  return readable$(async (signal): Promise<D> => {
+export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {}): Deferrable<Promise<D>> {
+  return deferrable$(async (signal): Promise<D> => {
     if (opts.onFetch) opts.onFetch(url);
     const res = await fetch(url, { ...opts, signal });
 

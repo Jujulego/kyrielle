@@ -29,18 +29,18 @@ describe('each$', () => {
     expect(fn).toHaveBeenCalledWith('42');
   });
 
-  it('should transform read result', () => {
-    const src = { read: () => 42 };
+  it('should transform defer result', () => {
+    const src = { defer: () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
-    expect(res.read()).toBe('42');
+    expect(res.defer()).toBe('42');
   });
 
-  it('should transform async read result', async () => {
-    const src = { read: async () => 42 };
+  it('should transform async defer result', async () => {
+    const src = { defer: async () => 42 };
     const res = pipe$(src, each$((n) => n.toString()));
 
-    await expect(res.read()).resolves.toBe('42');
+    await expect(res.defer()).resolves.toBe('42');
   });
 
   it('should transform refresh result', () => {

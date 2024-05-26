@@ -4,6 +4,7 @@ export * from './utils/predicates.js';
 
 export * from './collect$.js';
 export * from './const$.js';
+export * from './deferrable$.js';
 export * from './each$.js';
 export * from './fetch$.js';
 export * from './filter$.js';
@@ -21,7 +22,6 @@ export * from './off$.js';
 export * from './once$.js';
 export * from './scan$.js';
 export * from './pipe$.js';
-export * from './readable$.js';
 export * from './reduce$.js';
 export * from './resource$.js';
 export * from './retry$.js';

@@ -28,49 +28,49 @@ describe('store$', () => {
     expect(reference.mutate).toHaveBeenCalledWith(42);
   });
 
-  it('should read value from given reference', () => {
+  it('should defer value from given reference', () => {
     // Setup
     const origin = source$<number>();
+
     const reference = var$<number>(42);
+    vi.spyOn(reference, 'defer');
+
+    // Defer !
     const result = pipe$(origin, store$(reference));
 
-    // Mocks
-    vi.spyOn(reference, 'read');
-
-    // Read !
-    expect(result.read()).toBe(42);
-    expect(reference.read).toHaveBeenCalled();
+    expect(result.defer()).toBe(42);
+    expect(reference.defer).toHaveBeenCalled();
   });
 
-  it('should refresh value using origin read', () => {
+  it('should refresh value using origin defer', () => {
     // Setup
-    const origin = { read: () => 42 };
+    const origin = { defer: () => 42 };
     const reference = var$<number>();
     const result = pipe$(origin, yield$(), store$(reference));
 
     // Mocks
-    vi.spyOn(origin, 'read');
+    vi.spyOn(origin, 'defer');
     vi.spyOn(reference, 'mutate');
 
-    // Read !
+    // Defer !
     expect(result.refresh()).toBe(42);
-    expect(origin.read).toHaveBeenCalled();
+    expect(origin.defer).toHaveBeenCalled();
     expect(reference.mutate).toHaveBeenCalledWith(42);
   });
 
-  it('should refresh value using origin read (async)', async () => {
+  it('should refresh value using origin defer (async)', async () => {
     // Setup
-    const origin = { read: async () => 42, mutate: async (v: number) => v + 1 };
+    const origin = { defer: async () => 42, mutate: async (v: number) => v + 1 };
     const reference = var$<number>();
     const result = pipe$(origin, yield$(), store$(reference));
 
     // Mocks
-    vi.spyOn(origin, 'read');
+    vi.spyOn(origin, 'defer');
     vi.spyOn(reference, 'mutate');
 
-    // Read !
+    // Defer !
     await expect(result.refresh()).resolves.toBe(42);
-    expect(origin.read).toHaveBeenCalled();
+    expect(origin.defer).toHaveBeenCalled();
     expect(reference.mutate).toHaveBeenCalledWith(42);
   });
 
@@ -84,7 +84,7 @@ describe('store$', () => {
     vi.spyOn(origin, 'mutate');
     vi.spyOn(reference, 'mutate');
 
-    // Read !
+    // Defer !
     expect(result.mutate(42)).toBe(43);
     expect(origin.mutate).toHaveBeenCalledWith(42, undefined);
     expect(reference.mutate).toHaveBeenCalledWith(43);
@@ -92,7 +92,7 @@ describe('store$', () => {
 
   it('should mutate value using origin mutate (async)', async () => {
     // Setup
-    const origin = { read: async () => 42, mutate: async (v: number) => v + 1 };
+    const origin = { defer: async () => 42, mutate: async (v: number) => v + 1 };
     const reference = var$<number>();
     const result = pipe$(origin, yield$(), store$(reference));
 
@@ -100,7 +100,7 @@ describe('store$', () => {
     vi.spyOn(origin, 'mutate');
     vi.spyOn(reference, 'mutate');
 
-    // Read !
+    // Defer !
     await expect(result.mutate(42)).resolves.toBe(43);
     expect(origin.mutate).toHaveBeenCalledWith(42, undefined);
     expect(reference.mutate).toHaveBeenCalledWith(43);

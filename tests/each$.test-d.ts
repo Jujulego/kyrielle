@@ -6,34 +6,34 @@ import { resource$ } from '@/src/resource$.js';
 
 // Tests
 describe('each$', () => {
-  it('should have a synchronous read method', () => {
+  it('should have a synchronous defer method', () => {
     const res = pipe$(
       resource$<number>()
-        .add({ read: () => 42 })
+        .add({ defer: () => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('defer');
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.read).returns.toBeString();
+    expectTypeOf(res.defer).returns.toBeString();
   });
 
-  it('should have an asynchronous read method', () => {
+  it('should have an asynchronous defer method', () => {
     const res = pipe$(
       resource$<number>()
-        .add({ read: async () => 42 })
+        .add({ defer: async () => 42 })
         .build(),
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('defer');
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.read).returns.resolves.toBeString();
+    expectTypeOf(res.defer).returns.resolves.toBeString();
   });
 
   it('should have a synchronous refresh method', () => {
@@ -44,7 +44,7 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('defer');
     expectTypeOf(res).toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
@@ -59,7 +59,7 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('defer');
     expectTypeOf(res).toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
@@ -74,7 +74,7 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('defer');
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
@@ -90,7 +90,7 @@ describe('each$', () => {
       each$((n) => n.toString())
     );
 
-    expectTypeOf(res).not.toHaveProperty('read');
+    expectTypeOf(res).not.toHaveProperty('defer');
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();

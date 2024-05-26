@@ -1,17 +1,15 @@
-import { Awaitable } from 'vitest';
-
-import { AsyncMutable, AsyncReadable, Mutable, Readable } from './defs/index.js';
+import { AsyncMutable, AsyncDeferrable, Awaitable, Mutable, Deferrable } from './defs/index.js';
 import { PipeStep } from './pipe$.js';
 import { abortSignalAny } from './utils/abort.js';
-import { isMutable, isReadable } from './utils/predicates.js';
+import { isMutable, isDeferrable } from './utils/predicates.js';
 
 // Types
-export type RetryableMethod = 'read' | 'mutate' | 'both';
+export type RetryableMethod = 'defer' | 'mutate' | 'both';
 
-export type RetriedReadable<O> = O extends AsyncReadable<infer D> ? Readable<Promise<D>> : never;
+export type RetriedDeferrable<O> = O extends AsyncDeferrable<infer D> ? Deferrable<Promise<D>> : never;
 export type RetriedMutable<O> = O extends AsyncMutable<infer A, infer D> ? Mutable<A, Promise<D>> : never;
 
-export type OnRetryResult = Awaitable<boolean | void> | Readable<Awaitable<boolean | void>>;
+export type OnRetryResult = Awaitable<boolean | void> | Deferrable<Awaitable<boolean | void>>;
 
 export interface RetryOptions {
   /**
@@ -32,9 +30,9 @@ export interface RetryOptions {
 }
 
 /**
- * Retry calls to origin's read method.
+ * Retry calls to origin's defer method.
  */
-export function retry$<O extends AsyncReadable>(method: 'read', options?: RetryOptions): PipeStep<O, Omit<O, 'read'> & RetriedReadable<O>>
+export function retry$<O extends AsyncDeferrable>(method: 'defer', options?: RetryOptions): PipeStep<O, Omit<O, 'defer'> & RetriedDeferrable<O>>
 
 /**
  * Retry calls to origin's mutate method.
@@ -42,12 +40,12 @@ export function retry$<O extends AsyncReadable>(method: 'read', options?: RetryO
 export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, Omit<O, 'mutate'> & RetriedMutable<O>>
 
 /**
- * Retry calls to origin's both read & mutate methods.
+ * Retry calls to origin's both defer & mutate methods.
  */
-export function retry$<O extends AsyncReadable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, Omit<O, 'read' | 'mutate'> & RetriedReadable<O> & RetriedMutable<O>>
+export function retry$<O extends AsyncDeferrable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, Omit<O, 'defer' | 'mutate'> & RetriedDeferrable<O> & RetriedMutable<O>>
 
 /**
- * Retry calls to origin's read method.
+ * Retry calls to origin's defer method.
  */
 export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<O, O> {
   const { onRetry = () => true, tryTimeout } = options;
@@ -83,11 +81,11 @@ export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): 
   }
 
   return (origin: O) => {
-    if (isReadable<PromiseLike<unknown>>(origin) && ['read', 'both'].includes(method)) {
-      const originalRead = origin.read.bind(origin);
+    if (isDeferrable<PromiseLike<unknown>>(origin) && ['defer', 'both'].includes(method)) {
+      const originalDefer = origin.defer.bind(origin);
 
       Object.assign(origin, {
-        read: (signal?: AbortSignal) => retryStrategy(originalRead, signal)
+        defer: (signal?: AbortSignal) => retryStrategy(originalDefer, signal)
       });
     }
 
@@ -104,8 +102,8 @@ export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): 
 }
 
 async function shouldStop(result: OnRetryResult, signal?: AbortSignal): Promise<boolean> {
-  if (isReadable(result)) {
-    result = result.read(signal);
+  if (isDeferrable(result)) {
+    result = result.defer(signal);
   }
 
   return !(await result ?? true);

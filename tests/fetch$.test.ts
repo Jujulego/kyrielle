@@ -16,12 +16,12 @@ afterEach(() => {
 
 // Tests
 describe('fetch$', () => {
-  it('should call fetch on read and resolve to its response', async () => {
+  it('should call fetch on defer and resolve to its response', async () => {
     const res = Response.json({ life: 42 });
     mockFetch.mockResolvedValue(res);
 
     const ref = fetch$('life');
-    await expect(ref.read()).resolves.toBe(res);
+    await expect(ref.defer()).resolves.toBe(res);
 
     expect(mockFetch).toHaveBeenCalledWith('life', { signal: expect.any(AbortSignal) as AbortSignal });
   });
@@ -32,7 +32,7 @@ describe('fetch$', () => {
     mockFetch.mockResolvedValue(res);
 
     const ref = fetch$('life', { onFetch });
-    await expect(ref.read()).resolves.toBeDefined();
+    await expect(ref.defer()).resolves.toBeDefined();
 
     expect(onFetch).toHaveBeenCalledWith('life');
   });
@@ -42,7 +42,7 @@ describe('fetch$', () => {
     mockFetch.mockResolvedValue(res);
 
     const ref = fetch$('life', { onSuccess: (res) => res.json()});
-    await expect(ref.read()).resolves.toStrictEqual({ life: 42 });
+    await expect(ref.defer()).resolves.toStrictEqual({ life: 42 });
   });
 
   it('should a FetchError on error response', async () => {
@@ -50,6 +50,6 @@ describe('fetch$', () => {
     mockFetch.mockResolvedValue(res);
 
     const ref = fetch$('life');
-    await expect(ref.read()).rejects.toStrictEqual(new FetchError(res));
+    await expect(ref.defer()).rejects.toStrictEqual(new FetchError(res));
   });
 });
