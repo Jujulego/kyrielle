@@ -31,13 +31,13 @@ describe('store$', () => {
   it('should defer value from given reference', () => {
     // Setup
     const origin = source$<number>();
-    const reference = var$<number>(42);
-    const result = pipe$(origin, store$(reference));
 
-    // Mocks
+    const reference = var$<number>(42);
     vi.spyOn(reference, 'defer');
 
     // Defer !
+    const result = pipe$(origin, store$(reference));
+
     expect(result.defer()).toBe(42);
     expect(reference.defer).toHaveBeenCalled();
   });

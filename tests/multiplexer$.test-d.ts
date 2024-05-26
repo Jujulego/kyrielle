@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection JSVoidFunctionReturnValueUsed
 
 import { assertType, describe, it } from 'vitest';
