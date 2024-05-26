@@ -1,32 +1,32 @@
 import type {
   AsyncMutable,
-  AsyncReadable, AsyncRefreshable,
+  AsyncDeferrable, AsyncRefreshable,
   Awaitable,
   Mutable, Observable,
-  Readable,
+  Deferrable,
   Refreshable,
   Subscribable
 } from './defs/index.js';
 import { observable$ } from './observable$.js';
 import { resource$ } from './resource$.js';
 import { applyFn } from './utils/fn.js';
-import { isMutable, isReadable, isRefreshable, isSubscribable } from './utils/predicates.js';
+import { isMutable, isDeferrable, isRefreshable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type JsonOrigin =
   | Subscribable<string>
-  | Readable<Awaitable<string>>
+  | Deferrable<Awaitable<string>>
   | Refreshable<Awaitable<string>>
   | Mutable<string, Awaitable<string>>;
 
 export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable ? AsyncMutable<D, A> : Mutable<D, A>;
-export type JsonReadable<O extends Readable, D> = O extends AsyncReadable ? AsyncReadable<D> : Readable<D>;
+export type JsonDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncDeferrable<D> : Deferrable<D>;
 export type JsonRefreshable<O extends Refreshable, D> = O extends AsyncRefreshable ? AsyncRefreshable<D> : Refreshable<D>;
 
 export type JsonResult<O, D, A> =
   & (O extends Subscribable ? Observable<D> : unknown)
-  & (O extends Readable ? JsonReadable<O, D> : unknown)
+  & (O extends Deferrable ? JsonDeferrable<O, D> : unknown)
   & (O extends Refreshable ? JsonRefreshable<O, D> : unknown)
   & (O extends Mutable ? JsonMutable<O, D, A> : unknown);
 
@@ -72,9 +72,9 @@ export function json$() {
       }));
     }
 
-    if (isReadable<string>(origin)) {
+    if (isDeferrable<string>(origin)) {
       builder.add({
-        read: (signal) => applyFn(parser, origin.read(signal)),
+        defer: (signal) => applyFn(parser, origin.defer(signal)),
       });
     }
 

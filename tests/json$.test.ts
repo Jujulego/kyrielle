@@ -29,19 +29,19 @@ describe('json$', () => {
     expect(fn).toHaveBeenCalledWith({ life: 42 });
   });
 
-  it('should parse read result', () => {
-    const src = { read: () => '{ "life": 42 }' };
+  it('should parse defer result', () => {
+    const src = { defer: () => '{ "life": 42 }' };
     const res = pipe$(src, json$());
 
-    expect(res.read()).toEqual({ life: 42 });
-    expect(res.read()).toBe(res.read());
+    expect(res.defer()).toEqual({ life: 42 });
+    expect(res.defer()).toBe(res.defer());
   });
 
-  it('should parse async read result', async () => {
-    const src = { read: async () => '{ "life": 42 }' };
+  it('should parse async defer result', async () => {
+    const src = { defer: async () => '{ "life": 42 }' };
     const res = pipe$(src, json$());
 
-    await expect(res.read()).resolves.toEqual({ life: 42 });
+    await expect(res.defer()).resolves.toEqual({ life: 42 });
   });
 
   it('should parse refresh result', () => {

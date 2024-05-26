@@ -1,7 +1,7 @@
 import {
   Mutable,
   Subscribable,
-  Readable,
+  Deferrable,
   SubscribableHolder,
   Observer,
   Mapping,
@@ -53,10 +53,10 @@ export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> 
 }
 
 /**
- * Tests if given value is a Readable object
+ * Tests if given value is a Deferrable object
  */
-export function isReadable<D = unknown>(value: unknown): value is Readable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'read');
+export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D> {
+  return isNonNullObject(value) && hasMethod(value, 'defer');
 }
 
 /**

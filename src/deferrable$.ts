@@ -1,19 +1,19 @@
-import { Readable } from './defs/index.js';
+import { Deferrable } from './defs/index.js';
 import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 
 /**
- * Builds a Readable object around fn. Produced object will deduplicate calls to fn, meaning that all read calls made
+ * Builds a Deferrable object around fn. Produced object will deduplicate calls to fn, meaning that all defer calls made
  * while fn is running won't call fn again and all will return at the same time.
  *
  * @param fn
  */
-export function readable$<D>(fn: (signal: AbortSignal) => D): Readable<D> {
+export function deferrable$<D>(fn: (signal: AbortSignal) => D): Deferrable<D> {
   let query: Query<D> | null = null;
 
-  // Build readable
+  // Build deferrable
   return {
-    read(signal?: AbortSignal): D {
+    defer(signal?: AbortSignal): D {
       signal?.throwIfAborted();
 
       // Execute

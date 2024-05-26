@@ -1,10 +1,10 @@
-import { Awaitable, Mutable, Subscribable, Readable, SubscribableHolder, type Refreshable } from './defs/index.js';
+import { Awaitable, Mutable, Subscribable, Deferrable, SubscribableHolder, type Refreshable } from './defs/index.js';
 import { isSubscribableHolder } from './utils/predicates.js';
 
 // Types
 export type ResourceFeature<D> =
   | Subscribable<D>
-  | Readable<Awaitable<D>>
+  | Deferrable<Awaitable<D>>
   | Refreshable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 

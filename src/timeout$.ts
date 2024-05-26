@@ -1,11 +1,11 @@
-import { Readable } from './defs/index.js';
+import { Deferrable } from './defs/index.js';
 
 /**
- * Utility building a readable taking ms milliseconds to complete
+ * Utility building a deferrable taking ms milliseconds to complete
  */
-export function timeout$(ms: number): Readable<Promise<void>> {
+export function timeout$(ms: number): Deferrable<Promise<void>> {
   return {
-    read(signal?: AbortSignal): Promise<void> {
+    defer(signal?: AbortSignal): Promise<void> {
       return new Promise<void>((resolve, reject) => {
         const id = setTimeout(() => {
           signal?.removeEventListener('abort', handleAbort);

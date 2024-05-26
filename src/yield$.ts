@@ -1,19 +1,19 @@
-import type { Mutable, Observable, Readable } from './defs/index.js';
+import type { Mutable, Observable, Deferrable } from './defs/index.js';
 import type { EachOrigin, EachOriginValue } from './each$.js';
 import { observable$, type SubscriberObserver } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import { isMutable, isPromise, isReadable, isSubscribable } from './utils/predicates.js';
+import { isMutable, isPromise, isDeferrable, isSubscribable } from './utils/predicates.js';
 
 // Types
 export type YieldOrigin<D = unknown> = EachOrigin<D>;
 
 export type YieldResult<O extends YieldOrigin> =
-  & Pick<O, Extract<keyof O, keyof Readable | keyof Mutable>>
+  & Pick<O, Extract<keyof O, keyof Deferrable | keyof Mutable>>
   & Observable<Awaited<EachOriginValue<O>>>;
 
 /**
- * Adds an observable feature to a resource. The added observable will emit each result from read & mutate.
+ * Adds an observable feature to a resource. The added observable will emit each result from defer & mutate.
  */
 export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
   return (origin: YieldOrigin) => {
@@ -29,11 +29,11 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
       }
     }
 
-    // Add read
-    if (isReadable(origin)) {
+    // Add defer
+    if (isDeferrable(origin)) {
       builder.add({
-        read(signal) {
-          const result = origin.read(signal);
+        defer(signal) {
+          const result = origin.defer(signal);
           emitResult(result);
 
           return result;

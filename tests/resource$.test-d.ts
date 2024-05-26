@@ -12,32 +12,32 @@ describe('resourceBuilder$', () => {
 
   it('should add readable methods to final object type', () => {
     const res = resource$()
-      .add({ read: () => 42 })
+      .add({ defer: () => 42 })
       .build();
 
-    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('defer');
     // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.read).returns.toBeNumber();
+    expectTypeOf(res.defer).returns.toBeNumber();
   });
 
   it('should add async readable methods to final object type', () => {
     const res = resource$()
-      .add({ read: async () => 42 })
+      .add({ defer: async () => 42 })
       .build();
 
-    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('defer');
     // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.read).returns.resolves.toBeNumber();
+    expectTypeOf(res.defer).returns.resolves.toBeNumber();
   });
 
   it('should override common methods in final object type', () => {
     const res = resource$()
-      .add({ read: () => 42 })
-      .add({ read: () => '42' })
+      .add({ defer: () => 42 })
+      .add({ defer: () => '42' })
       .build();
 
-    expectTypeOf(res).toHaveProperty('read');
+    expectTypeOf(res).toHaveProperty('defer');
     // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.read).returns.toBeString();
+    expectTypeOf(res.defer).returns.toBeString();
   });
 });
