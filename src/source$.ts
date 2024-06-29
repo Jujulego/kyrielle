@@ -1,4 +1,4 @@
-import assert from 'node:assert';
+import assert from 'assert';
 
 import { Observer, Source, SubscribeCallbacks, Subscription } from './defs/index.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
