@@ -34,7 +34,14 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
 /**
  * Tests if given value is a partial Observer object
  */
-export function isPartialObserver<T = unknown>(value: unknown): value is Pick<Observer<T>, 'next'> {
+export function isPartialObserver<T = unknown>(value: unknown): value is Partial<Observer<T>> {
+  return isNonNullObject(value) && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'));
+}
+
+/**
+ * Tests if given value is a minimal Observer object (with at least a next method)
+ */
+export function isMinimalObserver<T = unknown>(value: unknown): value is Pick<Observer<T>, 'next'> {
   return isNonNullObject(value) && hasMethod(value, 'next');
 }
 
@@ -42,7 +49,7 @@ export function isPartialObserver<T = unknown>(value: unknown): value is Pick<Ob
  * Tests if given value is a fully defined Observer object
  */
 export function isObserver<T = unknown>(value: unknown): value is Observer<T> {
-  return isPartialObserver(value) && hasMethod(value, 'error') && hasMethod(value, 'complete');
+  return isMinimalObserver(value) && hasMethod(value, 'error') && hasMethod(value, 'complete');
 }
 
 /**
