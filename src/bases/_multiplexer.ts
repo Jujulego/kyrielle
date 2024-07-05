@@ -1,6 +1,6 @@
 import { Mapping, Multiplexer, Observer, SubscribeCallbacks, Unsubscribable } from '../defs/index.js';
 import { splitKey } from '../utils/key.js';
-import { isEmitter, isListenable, isMinimalObserver, isPartialObserver, isSubscribable } from '../utils/predicates.js';
+import { isEmitter, isListenable, isMinimalObserver, isSubscribable } from '../utils/predicates.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 
 /**
