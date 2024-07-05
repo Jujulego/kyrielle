@@ -1,5 +1,6 @@
 import { Observer, SubscribeCallbacks } from '../defs/index.js';
 import { observer$ } from '../observer$.js';
+import { isPartialObserver } from './predicates.js';
 
 // Utils
 const noop = () => { /* noop */ };
@@ -9,7 +10,7 @@ const noop = () => { /* noop */ };
  * @param args
  */
 export function parseSubscribeArgs<D>(args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Observer<D> {
-  if (typeof args[0] === 'object') {
+  if (isPartialObserver(args[0])) {
     return observer$(args[0]);
   }
 
