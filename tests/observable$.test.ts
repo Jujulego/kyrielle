@@ -17,7 +17,7 @@ describe('observable$', () => {
   });
 
   it('should abort subscriber using signal when all subscription are unsubscribed & call subscriber again on next subscription', async () => {
-    const subscriber = vi.fn<[SubscriberObserver, AbortSignal], Promise<void>>(() => new Promise<void>(() => {}));
+    const subscriber = vi.fn<(obs: SubscriberObserver, sig: AbortSignal) => Promise<void>>(() => new Promise<void>(() => {}));
     const observable = observable$(subscriber);
 
     // first subscription

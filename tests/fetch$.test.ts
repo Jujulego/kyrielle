@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { fetch$, FetchError } from '@/src/fetch$.js';
 
 // Setup
-let mockFetch: Mock<[string, URL], Response>;
+let mockFetch: Mock<typeof fetch>;
 
 beforeEach(() => {
   mockFetch = vi.fn();
