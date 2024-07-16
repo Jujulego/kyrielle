@@ -41,7 +41,7 @@
     "@swc/cli": "0.4.0",
     "@swc/core": "1.6.13",
     "@types/eslint__js": "8.42.3",
-    "@types/node": "18.19.39",
+    "@types/node": "18.19.40",
     "@vitest/coverage-v8": "2.0.3",
     "eslint": "9.7.0",
     "eslint-plugin-vitest": "0.5.4",
