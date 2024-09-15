@@ -1,16 +1,16 @@
 import type { Mutable, Observable, Deferrable } from './defs/index.js';
-import type { EachOrigin, EachOriginValue } from './each$.js';
+import type { MapOrigin, MapOriginValue } from './map$.js';
 import { observable$, type SubscriberObserver } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import { isMutable, isPromise, isDeferrable, isSubscribable } from './utils/predicates.js';
 
 // Types
-export type YieldOrigin<D = unknown> = EachOrigin<D>;
+export type YieldOrigin<D = unknown> = MapOrigin<D>;
 
 export type YieldResult<O extends YieldOrigin> =
   & Pick<O, Extract<keyof O, keyof Deferrable | keyof Mutable>>
-  & Observable<Awaited<EachOriginValue<O>>>;
+  & Observable<Awaited<MapOriginValue<O>>>;
 
 /**
  * Adds an observable feature to a resource. The added observable will emit each result from defer & mutate.
