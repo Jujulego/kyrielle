@@ -1,17 +1,17 @@
 import { describe, expectTypeOf, it } from 'vitest';
 
-import { each$ } from '@/src/each$.js';
+import { map$ } from '@/src/map$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { resource$ } from '@/src/resource$.js';
 
 // Tests
-describe('each$', () => {
+describe('map$', () => {
   it('should have a synchronous defer method', () => {
     const res = pipe$(
       resource$<number>()
         .add({ defer: () => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).toHaveProperty('defer');
@@ -26,7 +26,7 @@ describe('each$', () => {
       resource$<number>()
         .add({ defer: async () => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).toHaveProperty('defer');
@@ -41,7 +41,7 @@ describe('each$', () => {
       resource$<number>()
         .add({ refresh: () => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');
@@ -56,7 +56,7 @@ describe('each$', () => {
       resource$<number>()
         .add({ refresh: async () => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');
@@ -71,7 +71,7 @@ describe('each$', () => {
       resource$<number>()
         .add({ mutate: (arg: string) => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');
@@ -87,7 +87,7 @@ describe('each$', () => {
       resource$<number>()
         .add({ mutate: async (arg: string) => 42 })
         .build(),
-      each$((n) => n.toString())
+      map$((n) => n.toString())
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');
