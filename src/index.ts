@@ -14,6 +14,7 @@ export * from './iterate$.js';
 export * from './json$.js';
 export * from './map$.js';
 export * from './merge$.js';
+export * from './merge-map$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';
 export * from './observable$.js';
