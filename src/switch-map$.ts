@@ -13,7 +13,7 @@ export function switchMap$<T, R>(fn: (item: T) => Subscribable<R>): PipeStep<Sub
       boundedSubscription(origin, signal, {
         next(item) {
           previous?.unsubscribe();
-          previous = fn(item).subscribe({
+          previous = boundedSubscription(fn(item), signal, {
             next: (it) => observer.next(it),
             error: (err) => observer.error(err),
             complete: () => {
