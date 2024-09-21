@@ -22,11 +22,15 @@ export default tsEslint.config(
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-empty-object-type': ['error', {
+        allowInterfaces: 'with-single-extends'
+      }],
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       'no-console': ['error', {
         allow: ['warn', 'error'],
-      }]
+      }],
     }
   },
   {
@@ -42,6 +46,7 @@ export default tsEslint.config(
     rules: {
       ...vitest.configs.recommended.rules,
       '@typescript-eslint/no-unused-vars': ['off'],
+      '@typescript-eslint/prefer-promise-reject-errors': ['off'],
       '@typescript-eslint/require-await': ['off'],
       '@typescript-eslint/unbound-method': ['off'],
       'vitest/expect-expect': ['error', {

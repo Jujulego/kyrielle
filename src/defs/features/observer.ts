@@ -1,4 +1,4 @@
-import { Unsubscribable } from './unsubscribable.js';
+import type { Unsubscribable } from './unsubscribable.js';
 
 /**
  * Object receiving data from an observable.

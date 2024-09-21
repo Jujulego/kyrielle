@@ -1,7 +1,6 @@
-import { Observer, Source, Subscription } from '@/src/defs/index.js';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
+import type { Observer, Source, Subscription } from '@/src/defs/index.js';
 import { source$ } from '@/src/source$.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 let observer: Observer<number>;

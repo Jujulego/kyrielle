@@ -1,4 +1,4 @@
-import { Awaitable, Mutable, Subscribable, Deferrable, SubscribableHolder, type Refreshable } from './defs/index.js';
+import type { Awaitable, Deferrable, Mutable, Refreshable, Subscribable, SubscribableHolder } from './defs/index.js';
 import { isSubscribableHolder } from './utils/predicates.js';
 
 // Types

@@ -1,6 +1,6 @@
-import { AssertionFn, PredicateFn } from './defs/utils.js';
-import { map$, MapOrigin, MapOriginValue, MapResult } from './map$.js';
-import { PipeStep } from './pipe$.js';
+import type { AssertionFn, PredicateFn } from './defs/utils.js';
+import { map$, type MapOrigin, type MapOriginValue, type MapResult } from './map$.js';
+import type { PipeStep } from './pipe$.js';
 
 export interface ValidatePredicateOpts<in D = unknown> {
   /**

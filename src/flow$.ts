@@ -1,5 +1,5 @@
-import { ObservedValue, Observer, Subscribable, Unsubscribable } from './defs/index.js';
-import { PipeStep } from './pipe$.js';
+import type { ObservedValue, Observer, Subscribable, Unsubscribable } from './defs/index.js';
+import type { PipeStep } from './pipe$.js';
 
 /**
  * Given observer subscribes to result given observable.

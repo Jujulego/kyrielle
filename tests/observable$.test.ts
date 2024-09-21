@@ -1,7 +1,6 @@
+import type { Observer } from '@/src/defs/index.js';
+import { observable$, type SubscriberObserver } from '@/src/observable$.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { Observer } from '@/src/defs/index.js';
-import { observable$, SubscriberObserver } from '@/src/observable$.js';
 
 // Tests
 describe('observable$', () => {

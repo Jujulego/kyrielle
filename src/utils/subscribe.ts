@@ -1,4 +1,4 @@
-import { Observer, SubscribeCallbacks } from '../defs/index.js';
+import type { Observer, SubscribeCallbacks } from '../defs/index.js';
 import { observer$ } from '../observer$.js';
 import { isPartialObserver } from './predicates.js';
 

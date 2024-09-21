@@ -1,6 +1,6 @@
-import { MappingKey, Mapping } from '../mapping.js';
-import { Observer } from './observer.js';
-import { Unsubscribable } from './unsubscribable.js';
+import type { MappingKey, Mapping } from '../mapping.js';
+import type { Observer } from './observer.js';
+import type { Unsubscribable } from './unsubscribable.js';
 
 /**
  * Object registering listeners for multiple events

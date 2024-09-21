@@ -1,15 +1,15 @@
-import { type Observer, type Subscribable, Subscription, type Unsubscribable } from '../defs/index.js';
+import type { Observer, Subscribable, Subscription, Unsubscribable } from '../defs/index.js';
 
 export interface SubscriptionProps {
   /**
    * Called to close subscription (unsubscribe call or dispose).
    */
-  onUnsubscribe(): void;
+  readonly onUnsubscribe: () => void;
 
   /**
    * Getter to know if subscription is closed.
    */
-  isClosed(): boolean;
+  readonly isClosed: () => boolean;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Mutable } from './defs/index.js';
+import type { Mutable } from './defs/index.js';
 import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 

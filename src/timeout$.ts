@@ -1,4 +1,4 @@
-import { Deferrable } from './defs/index.js';
+import type { Deferrable } from './defs/index.js';
 
 /**
  * Utility building a deferrable taking ms milliseconds to complete
@@ -14,7 +14,7 @@ export function timeout$(ms: number): Deferrable<Promise<void>> {
 
         function handleAbort(this: AbortSignal) {
           clearTimeout(id);
-          reject(this.reason);
+          reject(this.reason as Error);
         }
 
         signal?.addEventListener('abort', handleAbort, { once: true });

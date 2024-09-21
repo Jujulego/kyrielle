@@ -1,5 +1,5 @@
-import { Emitter, Listenable } from '../features/index.js';
-import { InputMapping, Mapping, OutputMapping } from '../mapping.js';
+import type { Emitter, Listenable } from '../features/index.js';
+import type { InputMapping, Mapping, OutputMapping } from '../mapping.js';
 
 /**
  * Object managing multiple events

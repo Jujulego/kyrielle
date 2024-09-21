@@ -1,4 +1,4 @@
-import { SubscribableHolder, Subscribable } from '../defs/index.js';
+import type { SubscribableHolder, Subscribable } from '../defs/index.js';
 import { isSubscribableHolder } from './predicates.js';
 
 /**
