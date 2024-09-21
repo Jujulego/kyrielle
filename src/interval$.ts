@@ -1,4 +1,4 @@
-import { Observable } from './defs/index.js';
+import type { Observable } from './defs/index.js';
 import { observable$ } from './observable$.js';
 
 /**

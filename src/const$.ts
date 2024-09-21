@@ -1,4 +1,4 @@
-import { Deferrable } from './defs/index.js';
+import type { Deferrable } from './defs/index.js';
 
 /**
  * Returns a readable always returning the same value.

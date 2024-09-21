@@ -1,14 +1,15 @@
-import {
-  Mutable,
-  Subscribable,
+import type {
   Deferrable,
-  SubscribableHolder,
-  Observer,
-  Mapping,
   Emitter,
-  Listenable, type Refreshable
+  Listenable,
+  Mapping,
+  Mutable,
+  Observer,
+  Refreshable,
+  Subscribable,
+  SubscribableHolder
 } from '../defs/index.js';
-import { NonNullObject } from '../defs/utils.js';
+import type { NonNullObject } from '../defs/utils.js';
 
 /**
  * Tests if given value is an Emitter object

@@ -1,7 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-
-import { Observer } from '@/src/defs/index.js';
+import type { Observer } from '@/src/defs/index.js';
 import { parseSubscribeArgs } from '@/src/utils/subscribe.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('parseSubscribeArgs', () => {

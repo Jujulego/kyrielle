@@ -1,7 +1,7 @@
-import { AsyncMutable, AsyncDeferrable, Awaitable, Mutable, Deferrable } from './defs/index.js';
-import { PipeStep } from './pipe$.js';
+import type { AsyncDeferrable, AsyncMutable, Awaitable, Deferrable, Mutable } from './defs/index.js';
+import type { PipeStep } from './pipe$.js';
 import { abortSignalAny } from './utils/abort.js';
-import { isMutable, isDeferrable } from './utils/predicates.js';
+import { isDeferrable, isMutable } from './utils/predicates.js';
 
 // Types
 export type RetryableMethod = 'defer' | 'mutate' | 'both';

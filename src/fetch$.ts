@@ -1,4 +1,4 @@
-import { Deferrable } from './defs/index.js';
+import type { Deferrable } from './defs/index.js';
 import { deferrable$ } from './deferrable$.js';
 
 export interface FetchOpts<D = Response> extends Omit<RequestInit, 'signal'> {

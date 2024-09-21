@@ -1,5 +1,5 @@
-import { Observer } from '../features/index.js';
-import { Observable } from './observable.js';
+import type { Observer } from '../features/index.js';
+import type { Observable } from './observable.js';
 
 /**
  * Observable object emitting given values.

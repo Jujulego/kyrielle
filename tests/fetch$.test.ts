@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-
 import { fetch$, FetchError } from '@/src/fetch$.js';
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 // Setup
 let mockFetch: Mock<typeof fetch>;

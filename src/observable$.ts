@@ -8,18 +8,18 @@ export interface SubscriberObserver<in D = unknown> {
    * Emits given value
    * @param data
    */
-  next(data: D): void;
+  readonly next: (data: D) => void;
 
   /**
    * Emits given error
    * @param err
    */
-  error(err: unknown): void;
+  readonly error: (err: unknown) => void;
 
   /**
    * Completes the observable and closes all subscriptions
    */
-  complete(): void;
+  readonly complete: () => void;
 }
 
 export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
@@ -49,17 +49,17 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
   // Subscriber
   const subscriber: SubscriberObserver<D> = {
-    next(data: D) {
+    next: (data: D) => {
       for (const obs of observers) {
         obs.next(data);
       }
     },
-    error(err: unknown) {
+    error: (err: unknown) => {
       for (const obs of observers) {
         obs.error(err);
       }
     },
-    complete() {
+    complete: () => {
       for (const obs of observers) {
         obs.complete();
       }

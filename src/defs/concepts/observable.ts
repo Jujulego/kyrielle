@@ -1,5 +1,5 @@
-import { SubscribableHolder, Observer, Subscribable } from '../features/index.js';
-import { Subscription } from './subscription.js';
+import type { SubscribableHolder, Observer, Subscribable } from '../features/index.js';
+import type { Subscription } from './subscription.js';
 import '../symbols.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,5 +1,5 @@
-import { Observer } from './observer.js';
-import { Unsubscribable } from './unsubscribable.js';
+import type { Observer } from './observer.js';
+import type { Unsubscribable } from './unsubscribable.js';
 import '../symbols.js';
 
 /**

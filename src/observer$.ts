@@ -1,4 +1,4 @@
-import { Observer, type PartialObserver } from './defs/index.js';
+import type { Observer, PartialObserver } from './defs/index.js';
 import { isObserver } from './utils/predicates.js';
 
 // Utils

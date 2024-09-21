@@ -1,4 +1,4 @@
-import { Unsubscribable } from './defs/index.js';
+import type { Unsubscribable } from './defs/index.js';
 
 /**
  * Represents a subscription group

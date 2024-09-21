@@ -1,5 +1,5 @@
-import { Emitter, Listenable, Observer, Subscribable } from './features/index.js';
-import { MapValueIntersection } from './utils.js';
+import type { Emitter, Listenable, Observer, Subscribable } from './features/index.js';
+import type { MapValueIntersection } from './utils.js';
 
 /**
  * Ensure that the given type is a data map

@@ -1,4 +1,4 @@
-import { MappingKey, Mapping } from '../mapping.js';
+import type { MappingKey, Mapping } from '../mapping.js';
 
 /**
  * Object emitting multiple events, by keys

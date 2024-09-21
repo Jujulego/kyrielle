@@ -1,4 +1,4 @@
-import { Deferrable } from './defs/index.js';
+import type { Deferrable } from './defs/index.js';
 import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 

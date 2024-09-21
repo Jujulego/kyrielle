@@ -1,6 +1,5 @@
 import { Repeater } from '@repeaterjs/repeater';
-
-import { SubscribableHolder, Subscribable } from './defs/index.js';
+import type { Subscribable, SubscribableHolder } from './defs/index.js';
 import { isSubscribableHolder } from './utils/predicates.js';
 
 /**

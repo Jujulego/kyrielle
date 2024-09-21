@@ -1,11 +1,10 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
-import { assertType, describe, it } from 'vitest';
-
-import { Observer } from '@/src/defs/features/observer.js';
+import type { Observer } from '@/src/defs/features/observer.js';
+import type { Subscribable } from '@/src/defs/index.js';
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { source$ } from '@/src/source$.js';
-import { Subscribable } from '@/src/defs/index.js';
+import { assertType, describe, it } from 'vitest';
 
 describe('nested source', () => {
   const mlt = multiplexer$({

@@ -1,7 +1,6 @@
-import { describe, expect, it } from 'vitest';
-
-import { Mutable, Deferrable } from '@/src/defs/index.js';
+import type { Deferrable, Mutable } from '@/src/defs/index.js';
 import { resource$ } from '@/src/resource$.js';
+import { describe, expect, it } from 'vitest';
 
 // Tests
 describe('resourceBuilder$', () => {
