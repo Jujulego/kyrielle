@@ -1,4 +1,4 @@
-name: 'Javascript'
+name: 'CI'
 
 on:
   push:
