@@ -1,5 +1,5 @@
-import { Mutable, Observable, Observer, Deferrable, SubscribeCallbacks, Subscription } from './defs/index.js';
-import { parseSubscribeArgs } from './utils/subscribe.js';
+import type { Deferrable, Mutable, Observable, Observer, Subscription } from './defs/index.js';
+import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
 export interface Var<in out D> extends Observable<D>, Deferrable<D>, Mutable<D, D> {}
@@ -34,7 +34,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
       return value;
     },
     [Symbol.observable ?? '@@observable']: () => _var,
-    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: SubscribeArgs<D>): Subscription {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),

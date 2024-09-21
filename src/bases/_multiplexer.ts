@@ -1,7 +1,7 @@
-import { Mapping, Multiplexer, Observer, SubscribeCallbacks, Unsubscribable } from '../defs/index.js';
+import type { Mapping, Multiplexer, Unsubscribable } from '../defs/index.js';
 import { splitKey } from '../utils/key.js';
 import { isEmitter, isListenable, isMinimalObserver, isSubscribable } from '../utils/predicates.js';
-import { parseSubscribeArgs } from '../utils/subscribe.js';
+import { parseSubscribeArgs, type SubscribeArgs } from '../utils/subscribe.js';
 
 /**
  * Common base of multiplexer origins. It handles all event routing logic.
@@ -25,7 +25,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
 
       throw new Error(`Unsupported emit key ${key}`);
     },
-    on(key: string, ...args: [Partial<Observer>] | SubscribeCallbacks): Unsubscribable {
+    on(key: string, ...args: SubscribeArgs): Unsubscribable {
       const [part, rest] = splitKey(key);
       const origin = getOrigin(part);
 

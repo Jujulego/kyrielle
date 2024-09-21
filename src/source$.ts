@@ -1,7 +1,7 @@
 import assert from 'assert';
 
-import { Observer, Source, SubscribeCallbacks, Subscription } from './defs/index.js';
-import { parseSubscribeArgs } from './utils/subscribe.js';
+import type { Observer, Source, Subscription } from './defs/index.js';
+import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
 /**
@@ -38,7 +38,7 @@ export function source$<D>(): Source<D> {
 
       observers.clear();
     },
-    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: SubscribeArgs<D>): Subscription {
       assert(!isCompleted, 'Cannot subscribe to completed source');
 
       const observer = parseSubscribeArgs(args);
