@@ -12,6 +12,11 @@ export interface Observable<out D = unknown> extends SubscribableHolder<D>, Subs
   [Symbol.observable](): Observable<D>;
 
   /**
+   * Subscribe to observable.
+   */
+  subscribe(): Subscription;
+
+  /**
    * Subscribe to observable using an observer.
    * @param observer
    */

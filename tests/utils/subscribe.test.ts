@@ -5,6 +5,14 @@ import { parseSubscribeArgs } from '@/src/utils/subscribe.js';
 
 // Tests
 describe('parseSubscribeArgs', () => {
+  it('should return a valid observer', () => {
+    const observer = parseSubscribeArgs([]);
+
+    expect(observer).toHaveProperty('next', expect.any(Function));
+    expect(observer).toHaveProperty('error', expect.any(Function));
+    expect(observer).toHaveProperty('complete', expect.any(Function));
+  });
+
   it('should return given observer', () => {
     const observer: Observer = {
       next: vi.fn(),
@@ -15,7 +23,7 @@ describe('parseSubscribeArgs', () => {
     expect(parseSubscribeArgs([observer])).toBe(observer);
   });
 
-  it('should return a valid observer', () => {
+  it('should keep given onNext function', () => {
     const onNext = () => null;
     const observer = parseSubscribeArgs([onNext]);
 

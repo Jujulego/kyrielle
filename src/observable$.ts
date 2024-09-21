@@ -1,5 +1,5 @@
-import { Observable, Observer, SubscribeCallbacks, Subscription } from './defs/index.js';
-import { parseSubscribeArgs } from './utils/subscribe.js';
+import type { Observable, Observer, Subscription } from './defs/index.js';
+import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
 // Types
@@ -92,7 +92,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   // Build observable
   const observable = {
     [Symbol.observable ?? '@@observable']: () => observable,
-    subscribe(...args: [Partial<Observer<D>>] | SubscribeCallbacks<D>): Subscription {
+    subscribe(...args: SubscribeArgs<D>): Subscription {
       // Parse args
       const observer = parseSubscribeArgs(args);
       observers.add(observer);
