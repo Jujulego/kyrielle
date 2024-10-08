@@ -1274,22 +1274,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/eslint-plugin@npm:1.1.4":
-  version: 1.1.4
-  resolution: "@vitest/eslint-plugin@npm:1.1.4"
+"@vitest/eslint-plugin@npm:1.1.7":
+  version: 1.1.7
+  resolution: "@vitest/eslint-plugin@npm:1.1.7"
   peerDependencies:
     "@typescript-eslint/utils": ">= 8.0"
     eslint: ">= 8.57.0"
     typescript: ">= 5.0.0"
     vitest: "*"
   peerDependenciesMeta:
-    "@typescript-eslint/utils":
-      optional: true
     typescript:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/e1de76593acefa063498081978746750fcd4906f9de31a463e7675b98d44b0e600c1b9d54d1873f6c01efcf2230184f414d3a4e9a7933e7105ae60c0ea18591c
+  checksum: 10c0/a2c7e3361dcf02b214eaaead63838abd0a07f0fa6294871b61df4e5dc3ca951056acf75b64feeec196e12f129306dc5780601dd94a88f9df3c2e6623863b39f2
   languageName: node
   linkType: hard
 
@@ -3325,7 +3323,7 @@ __metadata:
     "@types/node": "npm:20.16.11"
     "@typescript-eslint/utils": "npm:8.7.0"
     "@vitest/coverage-v8": "npm:2.1.2"
-    "@vitest/eslint-plugin": "npm:1.1.4"
+    "@vitest/eslint-plugin": "npm:1.1.7"
     eslint: "npm:9.12.0"
     shx: "npm:0.3.4"
     typescript: "npm:5.6.2"
