@@ -1,8 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin';
 import tsEslint from 'typescript-eslint';
-
 
 export default tsEslint.config(
   {
