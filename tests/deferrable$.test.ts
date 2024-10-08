@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 // Tests
-describe('readable$', () => {
+describe('deferrable$', () => {
   it('should call fn and return it\'s result', () => {
     const fn = vi.fn(() => 42);
     const deferrable = deferrable$(fn);

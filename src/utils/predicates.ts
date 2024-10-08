@@ -1,5 +1,4 @@
 import type {
-  Deferrable,
   Emitter,
   Listenable,
   Mapping,
@@ -10,6 +9,7 @@ import type {
   SubscribableHolder
 } from '../defs/index.js';
 import type { NonNullObject } from '../defs/utils.js';
+import type { Deferrable } from '../types/inputs/Deferrable.js';
 
 /**
  * Tests if given value is an Emitter object

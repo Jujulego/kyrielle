@@ -1,19 +1,30 @@
-import type { Deferrable } from './defs/index.js';
+import type { Ref } from './types/outputs/Ref.js';
 import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 
 /**
- * Builds a Deferrable object around fn. Produced object will deduplicate calls to fn, meaning that all defer calls made
- * while fn is running won't call fn again and all will return at the same time.
+ * Builds a Ref object around fn.
+ * Produced object will deduplicate calls to fn, meaning that all "defer" calls made while fn is running won't call fn
+ * again and all will return at the same time.
  *
- * @param fn
+ * @example
+ * let value = 1;
+ *
+ * const ref = deferrable$(() => value);
+ * console.log(ref.defer()); // prints 1
+ *
+ * value = 2;
+ * console.log(ref.defer()); // prints 2
+ *
+ * @param fn function returning deferred value
+ *
+ * @since 1.0.0
  */
-export function deferrable$<D>(fn: (signal: AbortSignal) => D): Deferrable<D> {
+export function deferrable$<D>(fn: (signal: AbortSignal) => D): Ref<D> {
   let query: Query<D> | null = null;
 
-  // Build deferrable
   return {
-    defer(signal?: AbortSignal): D {
+    defer: (signal?: AbortSignal): D => {
       signal?.throwIfAborted();
 
       // Execute
