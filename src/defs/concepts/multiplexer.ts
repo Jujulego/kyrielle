@@ -1,8 +1,8 @@
-import { DataMap } from '../data-map.js';
-import { Emitter, Listenable } from '../features/index.js';
+import type { Emitter, Listenable } from '../features/index.js';
+import type { InputMapping, Mapping, OutputMapping } from '../mapping.js';
 
 /**
  * Object managing multiple events
  */
-export interface Multiplexer<InputMap extends DataMap, OutputMap extends DataMap>
-  extends Emitter<InputMap>, Listenable<OutputMap> {}
+export interface Multiplexer<M extends Mapping = Mapping>
+  extends Emitter<InputMapping<M>>, Listenable<OutputMapping<M>> {}

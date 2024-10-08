@@ -1,33 +1,31 @@
-import { OffFn } from '../common.js';
-import { DataKey, DataListener, DataMap } from '../data-map.js';
+import type { MappingKey, Mapping } from '../mapping.js';
+import type { Observer } from './observer.js';
+import type { Unsubscribable } from './unsubscribable.js';
 
 /**
  * Object registering listeners for multiple events
  */
-export interface Listenable<M extends DataMap = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export interface Listenable<M extends Mapping = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
   __listen_event_map?: M;
-
-  /**
-   * Returns every listenable keys
-   */
-  eventKeys(): Iterable<DataKey<M>>;
 
   /**
    * Registers listener on given "key" event
    * @param key
-   * @param listener
+   * @param onNext Called with each emitted value
+   * @param onError Called when an error occurs in the listenable.
+   * @param onComplete Called when the listenable completes. No other data or error will then be received.
    */
-  on<const K extends DataKey<M>>(key: K, listener: DataListener<M, K>): OffFn;
+  on<const K extends MappingKey<M>>(key: K, onNext: (event: M[K]) => void, onError?: (error: Error) => void, onComplete?: () => void): Unsubscribable;
 
   /**
-   * Unregisters listener from given "key" event
+   * Registers observer on given "key" event
    * @param key
-   * @param listener
+   * @param observer
    */
-  off<const K extends DataKey<M>>(key: K, listener: DataListener<M, K>): void;
-
-  /**
-   * Unregister all listeners, or only "key" listeners if given
-   */
-  clear(key?: DataKey<M>): void;
+  on<const K extends MappingKey<M>>(key: K, observer: Partial<Observer<M[K]>>): Unsubscribable;
 }
+
+/**
+ * Extract event map from a Listenable
+ */
+export type ListenEventMap<L extends Listenable> = L extends Listenable<infer M> ? M : never;

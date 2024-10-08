@@ -1,25 +1,16 @@
 /**
- * Defines an object that can be mutated
+ * Object that can be mutated.
  */
-export interface Mutable<out D = unknown, in A = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export interface Mutable<in A = any, out D = unknown> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
-   * Mutate current value
+   * Mutates object. Can receive a signal to abort mutation.
+   * @param arg
+   * @param signal
    */
   mutate(arg: A, signal?: AbortSignal): D;
 }
 
 /**
- * Defines an object that can be asynchronously mutated
+ * Object that can be asynchronously mutated.
  */
-export interface AsyncMutable<out D = unknown, in A = any> extends Mutable<PromiseLike<D>, A> {} // eslint-disable-line @typescript-eslint/no-explicit-any
-
-// Utils
-/**
- * Extract mutate arg type
- */
-export type MutateArg<M extends Mutable> = M extends Mutable<unknown, infer A> ? A : never;
-
-/**
- * Extract mutate value type
- */
-export type MutateValue<M extends Mutable> = M extends Mutable<infer D> ? Awaited<D> : never;
+export interface AsyncMutable<in A = any, out D = unknown> extends Mutable<A, PromiseLike<D>> {} // eslint-disable-line @typescript-eslint/no-explicit-any

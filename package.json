@@ -1,6 +1,6 @@
 {
   "name": "kyrielle",
-  "version": "0.10.1",
+  "version": "1.0.0-beta.4",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": {
@@ -12,86 +12,50 @@
   },
   "sideEffects": false,
   "files": [
-    "./dist",
-    "./browser.d.ts",
-    "./collections.d.ts",
-    "./events.d.ts",
-    "./operators.d.ts",
-    "./pipe.d.ts",
-    "./refs.d.ts",
-    "./subscriptions.d.ts"
+    "./dist"
   ],
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./browser": {
-      "types": "./dist/browser/index.d.ts",
-      "default": "./dist/browser/index.js"
-    },
-    "./collections": {
-      "types": "./dist/collections/index.d.ts",
-      "default": "./dist/collections/index.js"
-    },
-    "./events": {
-      "types": "./dist/events/index.d.ts",
-      "default": "./dist/events/index.js"
-    },
-    "./operators": {
-      "types": "./dist/operators/index.d.ts",
-      "default": "./dist/operators/index.js"
-    },
-    "./pipe": {
-      "types": "./dist/pipe/index.d.ts",
-      "default": "./dist/pipe/index.js"
-    },
-    "./refs": {
-      "types": "./dist/refs/index.d.ts",
-      "default": "./dist/refs/index.js"
-    },
-    "./subscriptions": {
-      "types": "./dist/subscriptions/index.d.ts",
-      "default": "./dist/subscriptions/index.js"
-    }
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
   "scripts": {
     "lint": "eslint .",
     "clean": "shx rm -r dist",
     "build": "jill run 'build:esm // build:types'",
-    "build:esm": "swc -d dist src",
+    "build:esm": "swc src -d dist --strip-leading-paths",
     "build:types": "tsc --project tsconfig.build.json",
     "test": "vitest run --typecheck"
   },
   "dependencies": {
-    "@swc/helpers": "^0.5.3",
-    "immer": "^10.0.3"
+    "@repeaterjs/repeater": "^3.0.5",
+    "@swc/helpers": "^0.5.3"
   },
   "devDependencies": {
+    "@eslint/js": "9.12.0",
     "@jujulego/jill": "2.5.2",
-    "@jujulego/vite-plugin-swc": "1.1.1",
-    "@microsoft/eslint-formatter-sarif": "3.0.0",
-    "@swc/cli": "0.3.9",
-    "@swc/core": "1.4.1",
-    "@types/node": "18.19.15",
-    "@typescript-eslint/eslint-plugin": "7.0.1",
-    "@typescript-eslint/parser": "7.0.1",
-    "@vitest/coverage-v8": "1.2.2",
-    "eslint": "8.56.0",
-    "eslint-plugin-vitest": "0.3.22",
-    "happy-dom": "13.3.8",
+    "@jujulego/vite-plugin-swc": "1.2.0",
+    "@microsoft/eslint-formatter-sarif": "3.1.0",
+    "@swc/cli": "0.4.0",
+    "@swc/core": "1.7.28",
+    "@types/eslint__js": "8.42.3",
+    "@types/node": "20.16.11",
+    "@typescript-eslint/utils": "8.8.1",
+    "@vitest/coverage-v8": "2.1.2",
+    "@vitest/eslint-plugin": "1.1.7",
+    "eslint": "9.12.0",
     "shx": "0.3.4",
-    "typescript": "5.3.3",
-    "vite": "5.1.2",
-    "vite-tsconfig-paths": "4.3.1",
-    "vitest": "1.2.2"
+    "typescript": "5.6.2",
+    "typescript-eslint": "8.8.1",
+    "vite": "5.4.8",
+    "vite-tsconfig-paths": "5.0.1",
+    "vitest": "2.1.2"
   },
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.5.0",
   "dependenciesMeta": {
-    "vitest@1.2.2": {
+    "vitest@2.1.2": {
       "unplugged": true
     }
   }
