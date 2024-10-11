@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { mutable$ } from '@/src/mutable$.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup
 beforeEach(() => {
@@ -33,13 +32,23 @@ describe('mutable$', () => {
     expect(fn).toHaveBeenCalledTimes(2);
   });
 
-  it('should call fn twice while promise is still "running" as args are different', async () => {
-    const fn = vi.fn(async () => 42);
+  it('should cancel first call to fn as args are different', async () => {
+    const fn = vi.fn((_, signal: AbortSignal) => {
+      return new Promise<number>((resolve, reject) => {
+        signal.addEventListener('abort', () => reject(signal.reason));
+        setTimeout(() => resolve(42), 1000);
+      });
+    });
     const mutable = mutable$(fn);
 
     // 2 calls "at the same time"
-    await expect(Promise.all([mutable.mutate('life'), mutable.mutate('toto')]))
-      .resolves.toStrictEqual([42, 42]);
+    const first = mutable.mutate('life');
+    const second = mutable.mutate('toto');
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    await expect(first).rejects.toStrictEqual(new Error('A newer mutate call has been made!'));
+    await expect(second).resolves.toBe(42);
 
     expect(fn).toHaveBeenCalledTimes(2);
   });
@@ -96,27 +105,5 @@ describe('mutable$', () => {
 
     await expect(promiseA).rejects.toEqual(new Error('Abort A !'));
     await expect(promiseB).rejects.toEqual(new Error('Abort B !'));
-  });
-
-  it('should cancel only first call on abort as args are different', async () => {
-    const readable = mutable$((_: string, signal) => {
-      return new Promise<number>((resolve, reject) => {
-        signal.addEventListener('abort', () => reject(signal.reason));
-        setTimeout(() => resolve(42), 1000);
-      });
-    });
-
-    const controllerA = new AbortController();
-    const promiseA = readable.mutate('life', controllerA.signal);
-
-    const controllerB = new AbortController();
-    const promiseB = readable.mutate('toto', controllerB.signal);
-
-    controllerA.abort(new Error('Abort A !'));
-
-    await expect(promiseA).rejects.toEqual(new Error('Abort A !'));
-
-    await vi.advanceTimersToNextTimerAsync();
-    await expect(promiseB).resolves.toEqual(42);
   });
 });

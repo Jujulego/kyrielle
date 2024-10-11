@@ -2,7 +2,6 @@ import type {
   Emitter,
   Listenable,
   Mapping,
-  Mutable,
   Observer,
   Refreshable,
   Subscribable,
@@ -10,6 +9,7 @@ import type {
 } from '../defs/index.js';
 import type { NonNullObject } from '../defs/utils.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
+import type { Mutable } from '../types/inputs/Mutable.js';
 
 /**
  * Tests if given value is an Emitter object

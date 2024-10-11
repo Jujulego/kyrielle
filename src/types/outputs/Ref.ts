@@ -17,5 +17,5 @@ export interface Ref<out D = unknown> extends Deferrable<D> {
    *
    * @since 1.1.0
    */
-  readonly defer: (signal?: AbortSignal) => D;
+  defer(this: void, signal?: AbortSignal): D;
 }

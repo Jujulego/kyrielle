@@ -1,5 +1,6 @@
 /**
  * Object that can be mutated.
+ * @deprecated
  */
 export interface Mutable<in A = any, out D = unknown> { // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
