@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { deferrable$ } from '@/src/deferrable$.js';
+import { ref$ } from '@/src/ref$.js';
 
 // Setup
 beforeEach(() => {
@@ -11,7 +11,7 @@ beforeEach(() => {
 describe('deferrable$', () => {
   it('should call fn and return it\'s result', () => {
     const fn = vi.fn(() => 42);
-    const deferrable = deferrable$(fn);
+    const deferrable = ref$(fn);
 
     expect(deferrable.defer()).toBe(42);
     expect(fn).toHaveBeenCalledWith(expect.any(AbortSignal));
@@ -19,7 +19,7 @@ describe('deferrable$', () => {
 
   it('should call fn only once while promise is still "running"', async () => {
     const fn = vi.fn(async () => 42);
-    const deferrable = deferrable$(fn);
+    const deferrable = ref$(fn);
 
     // 2 calls "at the same time"
     await expect(Promise.all([deferrable.defer(), deferrable.defer()]))
@@ -35,7 +35,7 @@ describe('deferrable$', () => {
 
   it('should cancel call on abort', async () => {
     const controller = new AbortController();
-    const deferrable = deferrable$((signal) => {
+    const deferrable = ref$((signal) => {
       return new Promise<never>((_, reject) => {
         signal.addEventListener('abort', () => reject(signal.reason));
       });
@@ -49,7 +49,7 @@ describe('deferrable$', () => {
 
   it('should not cancel call on abort if another call did not gave a signal', async () => {
     const controller = new AbortController();
-    const deferrable = deferrable$((signal) => {
+    const deferrable = ref$((signal) => {
       return new Promise<number>((resolve, reject) => {
         signal.addEventListener('abort', () => reject(signal.reason));
         setTimeout(() => resolve(42), 1000);
@@ -67,7 +67,7 @@ describe('deferrable$', () => {
   });
 
   it('should cancel if all calls are aborted', async () => {
-    const deferrable = deferrable$((signal) => {
+    const deferrable = ref$((signal) => {
       return new Promise<number>((resolve, reject) => {
         signal.addEventListener('abort', () => reject(signal.reason));
         setTimeout(() => resolve(42), 1000);

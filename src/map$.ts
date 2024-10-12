@@ -1,47 +1,41 @@
-import type {
-  AsyncMutable,
-  AsyncDeferrable,
-  AsyncRefreshable,
-  Awaitable,
-  Mutable,
-  Observable,
-  Deferrable,
-  Refreshable,
-  Subscribable
-} from './defs/index.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
+import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
+import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
+import type { Observable } from './types/outputs/Observable.js';
+import type { AsyncRef, Ref } from './types/outputs/Ref.js';
+import type { Awaitable } from './types/utils.js';
 import { applyFn } from './utils/fn.js';
-import { isMutable, isDeferrable, isRefreshable, isSubscribable } from './utils/predicates.js';
+import { isDeferrable, isMutable, isRefreshable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type MapOrigin<D = unknown> =
-  | Subscribable<D>
+  | AnySubscribable<D>
   | Deferrable<Awaitable<D>>
-  | Refreshable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type MapMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutable<A, D> : Mutable<A, D>;
-export type MapDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncDeferrable<D> : Deferrable<D>;
-export type MapRefreshable<O extends Refreshable, D> = O extends AsyncRefreshable ? AsyncRefreshable<D> : Refreshable<D>;
+export type MapMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutator<A, D> : Mutator<A, D>;
+export type MapDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncRef<D> : Ref<D>;
 
 export type MapOriginValue<O extends MapOrigin> =
-  & (O extends Subscribable<infer D> ? D : unknown)
+  & (O extends AnySubscribable<infer D> ? D : unknown)
   & (O extends Deferrable<infer D> ? Awaited<D> : unknown)
-  & (O extends Refreshable<infer D> ? Awaited<D> : unknown)
   & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export type MapResult<O, R> =
-  & (O extends Subscribable ? Observable<R> : unknown)
+  & (O extends AnySubscribable ? Observable<R> : unknown)
   & (O extends Deferrable ? MapDeferrable<O, R> : unknown)
-  & (O extends Refreshable ? MapRefreshable<O, R> : unknown)
   & (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
 
 /**
  * Applies given function on every emitted values,
  * including values returned by defer and mutate if present.
+ *
+ * @since 1.0.0
  */
 export function map$<O extends MapOrigin, R>(fn: (arg: MapOriginValue<O>) => R): PipeStep<O, MapResult<O, R>>;
 
@@ -52,7 +46,7 @@ export function map$<A, R>(fn: (arg: A) => R) {
     if (isSubscribable<A>(origin)) {
       builder.add(observable$<R>((observer, signal) => {
         boundedSubscription(origin, signal, {
-          next(val) {
+          next: (val) => {
             observer.next(fn(val));
           },
           error: (err) => observer.error(err),

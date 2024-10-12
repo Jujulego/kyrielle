@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { map$ } from '@/src/map$.js';
 import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('map$', () => {
@@ -41,20 +40,6 @@ describe('map$', () => {
     const res = pipe$(src, map$((n) => n.toString()));
 
     await expect(res.defer()).resolves.toBe('42');
-  });
-
-  it('should transform refresh result', () => {
-    const src = { refresh: () => 42 };
-    const res = pipe$(src, map$((n) => n.toString()));
-
-    expect(res.refresh()).toBe('42');
-  });
-
-  it('should transform async refresh result', async () => {
-    const src = { refresh: async () => 42 };
-    const res = pipe$(src, map$((n) => n.toString()));
-
-    await expect(res.refresh()).resolves.toBe('42');
   });
 
   it('should transform mutate result', () => {

@@ -1,4 +1,4 @@
-import { deferrable$ } from './deferrable$.js';
+import { ref$ } from './ref$.js';
 import type { Ref } from './types/outputs/Ref.js';
 
 // Types
@@ -29,13 +29,13 @@ export interface FetchOpts<D = Response> extends Omit<RequestInit, 'signal'> {
  * @throws FetchError when the fetch call fails (received a response with a status > 200)
  *
  * @since 1.0.0
- * @see deferrable$
+ * @see ref$
  */
 export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> }): Ref<Promise<D>>;
 export function fetch$(url: string | URL, opts?: FetchOpts): Ref<Promise<Response>>;
 
 export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {}): Ref<Promise<D>> {
-  return deferrable$(async (signal): Promise<D> => {
+  return ref$(async (signal): Promise<D> => {
     if (opts.onFetch) opts.onFetch(url);
     const res = await fetch(url, { ...opts, signal });
 

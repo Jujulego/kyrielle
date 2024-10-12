@@ -18,9 +18,9 @@ import { Query } from './utils/query.js';
  *
  * @param fn function returning deferred value
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
-export function deferrable$<D>(fn: (signal: AbortSignal) => D): Ref<D> {
+export function ref$<D>(fn: (signal: AbortSignal) => D): Ref<D> {
   let query: Query<D> | null = null;
 
   return {

@@ -1,8 +1,7 @@
-import { describe, expectTypeOf, it } from 'vitest';
-
 import { map$ } from '@/src/map$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { resource$ } from '@/src/resource$.js';
+import { describe, expectTypeOf, it } from 'vitest';
 
 // Tests
 describe('map$', () => {
@@ -34,36 +33,6 @@ describe('map$', () => {
     expectTypeOf(res).not.toHaveProperty('mutate');
     // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.defer).returns.resolves.toBeString();
-  });
-
-  it('should have a synchronous refresh method', () => {
-    const res = pipe$(
-      resource$<number>()
-        .add({ refresh: () => 42 })
-        .build(),
-      map$((n) => n.toString())
-    );
-
-    expectTypeOf(res).not.toHaveProperty('defer');
-    expectTypeOf(res).toHaveProperty('refresh');
-    expectTypeOf(res).not.toHaveProperty('mutate');
-    // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.refresh).returns.toBeString();
-  });
-
-  it('should have an asynchronous refresh method', () => {
-    const res = pipe$(
-      resource$<number>()
-        .add({ refresh: async () => 42 })
-        .build(),
-      map$((n) => n.toString())
-    );
-
-    expectTypeOf(res).not.toHaveProperty('defer');
-    expectTypeOf(res).toHaveProperty('refresh');
-    expectTypeOf(res).not.toHaveProperty('mutate');
-    // eslint-disable-next-line vitest/valid-expect
-    expectTypeOf(res.refresh).returns.resolves.toBeString();
   });
 
   it('should have a synchronous mutate method', () => {
