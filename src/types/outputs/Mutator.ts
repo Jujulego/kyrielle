@@ -10,7 +10,7 @@ import type { Mutable } from '../inputs/Mutable.js';
  * @see mutable$
  * @see var$
  */
-export interface Mutator<in A = any, out D = unknown> extends Mutable<A, D> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export interface Mutator<in A = unknown, out D = unknown> extends Mutable<A, D> {
   /**
    * Mutates the object.
    * @param arg

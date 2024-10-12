@@ -1,5 +1,5 @@
 export * from './defs/index.js';
-export { extractObservable } from './utils/observable.js';
+export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 
 export * from './collect$.js';

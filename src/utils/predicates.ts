@@ -2,14 +2,13 @@ import type {
   Emitter,
   Listenable,
   Mapping,
-  Observer,
   Refreshable,
-  Subscribable,
-  SubscribableHolder
 } from '../defs/index.js';
 import type { NonNullObject } from '../defs/utils.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
+import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
+import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
 
 /**
  * Tests if given value is an Emitter object
@@ -35,7 +34,7 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
 /**
  * Tests if given value is a partial Observer object
  */
-export function isPartialObserver<T = unknown>(value: unknown): value is Partial<Observer<T>> {
+export function isPartialObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
   return isNonNullObject(value) && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'));
 }
 

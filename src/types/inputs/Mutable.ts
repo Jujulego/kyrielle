@@ -6,7 +6,7 @@
  * @since 1.0.0
  * @see Mutator
  */
-export interface Mutable<in A = any, out D = unknown> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export interface Mutable<in A = unknown, out D = unknown> {
   /**
    * Mutates the object.
    * @param arg

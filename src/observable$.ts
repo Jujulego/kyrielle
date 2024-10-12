@@ -1,41 +1,8 @@
-import type { Observable, Observer, Subscription } from './defs/index.js';
-import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
+import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
+import type { StrictObserver } from './types/outputs/StrictObserver.js';
+import type { Subscription } from './types/outputs/Subscription.js';
+import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
-
-// Types
-export interface SubscriberObserver<in D = unknown> {
-  /**
-   * Emits given value
-   * @param data
-   */
-  readonly next: (data: D) => void;
-
-  /**
-   * Emits given error
-   * @param err
-   */
-  readonly error: (err: unknown) => void;
-
-  /**
-   * Completes the observable and closes all subscriptions
-   */
-  readonly complete: () => void;
-}
-
-export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
-
-// Enum
-const enum State {
-  Inactive,
-  Active,
-}
-
-// Errors
-export class SubscriberCompleted extends Error {
-  constructor() {
-    super('Subscriber completed');
-  }
-}
 
 /**
  * Creates an observable using fn's logic.
@@ -43,7 +10,7 @@ export class SubscriberCompleted extends Error {
  * @param fn subscriber function
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
-  const observers = new Set<Observer<D>>();
+  const observers = new Set<StrictObserver<D>>();
   let state = State.Inactive;
   let controller: AbortController;
 
@@ -92,7 +59,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   // Build observable
   const observable = {
     [Symbol.observable ?? '@@observable']: () => observable,
-    subscribe(...args: SubscribeArgs<D>): Subscription {
+    subscribe: (...args: SubscribeArgs<D>): Subscription => {
       // Parse args
       const observer = parseSubscribeArgs(args);
       observers.add(observer);
@@ -121,7 +88,35 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
       return subscription;
     }
-  };
+  } as Observable<D>;
 
   return observable;
+}
+
+// Types
+export interface SubscriberObserver<in D = unknown> {
+  /**
+   * Emits given value
+   * @param data
+   */
+  readonly next: (data: D) => void;
+
+  /**
+   * Emits given error
+   * @param err
+   */
+  readonly error: (err: unknown) => void;
+
+  /**
+   * Completes the observable and closes all subscriptions
+   */
+  readonly complete: () => void;
+}
+
+export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
+
+// Enum
+const enum State {
+  Inactive,
+  Active,
 }
