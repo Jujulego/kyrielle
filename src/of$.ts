@@ -1,8 +1,10 @@
-import type { Observable } from './defs/index.js';
 import { observable$ } from './observable$.js';
+import type { Observable } from './types/outputs/Observable.js';
 
 /**
- * Returns an observable emitting each value from given iterable
+ * Returns an observable emitting each value from given iterable.
+ *
+ * @since 1.0.0
  */
 export function of$<T>(iterable: Iterable<T> | AsyncIterable<T>): Observable<T> {
   return observable$<T>(async (observer, signal) => {

@@ -4,6 +4,8 @@ import { isSubscribableHolder } from './utils/predicates.js';
 
 /**
  * Wraps given observable into an async iterator.
+ *
+ * @since 1.0.0
  */
 export function iterate$<D>(observable: AnySubscribable<D>): Repeater<D> {
   const obs = isSubscribableHolder(observable) ? observable[Symbol.observable ?? '@@observable']() : observable;

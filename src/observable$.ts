@@ -6,8 +6,9 @@ import { buildSubscription } from './utils/subscription.js';
 
 /**
  * Creates an observable using fn's logic.
- *
  * @param fn subscriber function
+ *
+ * @since 1.0.0
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   const observers = new Set<StrictObserver<D>>();
