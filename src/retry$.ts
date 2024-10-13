@@ -1,13 +1,17 @@
-import type { AsyncDeferrable, AsyncMutable, Awaitable, Deferrable, Mutable } from './defs/index.js';
 import type { PipeStep } from './pipe$.js';
+import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
+import type { AsyncMutable } from './types/inputs/Mutable.js';
+import type { Mutator } from './types/outputs/Mutator.js';
+import type { Ref } from './types/outputs/Ref.js';
+import type { Awaitable } from './types/utils.js';
 import { abortSignalAny } from './utils/abort.js';
 import { isDeferrable, isMutable } from './utils/predicates.js';
 
 // Types
 export type RetryableMethod = 'defer' | 'mutate' | 'both';
 
-export type RetriedDeferrable<O> = O extends AsyncDeferrable<infer D> ? Deferrable<Promise<D>> : never;
-export type RetriedMutable<O> = O extends AsyncMutable<infer A, infer D> ? Mutable<A, Promise<D>> : never;
+export type RetriedDeferrable<O> = O extends AsyncDeferrable<infer D> ? Ref<Promise<D>> : never;
+export type RetriedMutable<O> = O extends AsyncMutable<infer A, infer D> ? Mutator<A, Promise<D>> : never;
 
 export type OnRetryResult = Awaitable<boolean | void> | Deferrable<Awaitable<boolean | void>>;
 
@@ -19,33 +23,45 @@ export interface RetryOptions {
    * By default, `retry` will always retry, no matter the error or how tries there been until now
    *
    * @param error Error from origin call
-   * @param count Number of try
+   * @param count Number of tries
+   *
+   * @since 1.0.0
    */
   onRetry?: (error: unknown, count: number) => OnRetryResult;
 
   /**
    * Timeout in milliseconds, applied to each try.
+   *
+   * @since 1.0.0
    */
   tryTimeout?: number;
 }
 
 /**
  * Retry calls to origin's defer method.
+ *
+ * @since 1.0.0
  */
 export function retry$<O extends AsyncDeferrable>(method: 'defer', options?: RetryOptions): PipeStep<O, Omit<O, 'defer'> & RetriedDeferrable<O>>
 
 /**
  * Retry calls to origin's mutate method.
+ *
+ * @since 1.0.0
  */
 export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, Omit<O, 'mutate'> & RetriedMutable<O>>
 
 /**
  * Retry calls to origin's both defer & mutate methods.
+ *
+ * @since 1.0.0
  */
 export function retry$<O extends AsyncDeferrable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, Omit<O, 'defer' | 'mutate'> & RetriedDeferrable<O> & RetriedMutable<O>>
 
 /**
  * Retry calls to origin's defer method.
+ *
+ * @since 1.0.0
  */
 export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<O, O> {
   const { onRetry = () => true, tryTimeout } = options;
