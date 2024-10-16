@@ -1,8 +1,6 @@
-import { source$ } from '@/src/source$.js';
-import { describe, expect, it, vi } from 'vitest';
-
 import { pipe$ } from '@/src/pipe$.js';
 import { yield$ } from '@/src/yield$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('yield$', () => {
@@ -55,21 +53,6 @@ describe('yield$', () => {
     res.subscribe(cb);
 
     await expect(res.mutate('life')).resolves.toBe(42);
-    expect(cb).toHaveBeenCalledWith(42);
-  });
-
-  it('should emit each emitted value', () => {
-    const src = source$<number>();
-    vi.spyOn(src, 'subscribe');
-
-    const res = pipe$(src, yield$());
-    expect(src.subscribe).not.toHaveBeenCalled();
-
-    const cb = vi.fn();
-    res.subscribe(cb);
-    expect(src.subscribe).toHaveBeenCalledOnce();
-
-    src.next(42);
     expect(cb).toHaveBeenCalledWith(42);
   });
 });

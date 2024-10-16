@@ -1,9 +1,12 @@
-import type { Deferrable } from './defs/index.js';
+import type { Ref } from './types/outputs/Ref.js';
 
 /**
- * Returns a readable always returning the same value.
- * @param value
+ * Returns a Ref always returning the same value.
+ *
+ * @param value contained value
+ *
+ * @since 1.0.0
  */
-export function const$<D>(value: D): Deferrable<D> {
+export function const$<D>(value: D): Ref<D> {
   return { defer: () => value };
 }

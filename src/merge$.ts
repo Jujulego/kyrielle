@@ -1,9 +1,12 @@
-import type { Observable, Subscribable, Unsubscribable } from './defs/index.js';
-
 import { observable$ } from './observable$.js';
+import type { Subscribable } from './types/inputs/Subscribable.js';
+import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
+import type { Observable } from './types/outputs/Observable.js';
 
 /**
  * Merges multiple observables into one.
+ *
+ * @since 1.0.0
  */
 export function merge$<D>(...observables: Subscribable<D>[]): Observable<D> {
   return observable$((observer, signal) => {
@@ -19,13 +22,13 @@ export function merge$<D>(...observables: Subscribable<D>[]): Observable<D> {
       let subscription: Unsubscribable;
 
       obs.subscribe({
-        start(sub) {
+        start: (sub) => {
           subscriptions.add(sub);
           subscription = sub;
         },
         next: (data) => observer.next(data),
         error: (err) => observer.error(err),
-        complete() {
+        complete: () => {
           subscriptions.delete(subscription);
 
           if (subscriptions.size === 0) {

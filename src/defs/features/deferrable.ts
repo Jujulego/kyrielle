@@ -1,5 +1,6 @@
 /**
  * Object that can be deferred.
+ * @deprecated
  */
 export interface Deferrable<out D = unknown> {
   /**
@@ -11,10 +12,12 @@ export interface Deferrable<out D = unknown> {
 
 /**
  * Object that can be asynchronously deferred.
+ * @deprecated
  */
 export interface AsyncDeferrable<out D = unknown> extends Deferrable<PromiseLike<D>> {}
 
 /**
  * Extract value type from a Deferrable type
+ * @deprecated
  */
 export type DeferredValue<R extends Deferrable> = R extends Deferrable<infer D> ? D : never;

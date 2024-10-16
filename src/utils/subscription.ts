@@ -1,4 +1,6 @@
-import type { Observer, Subscribable, Subscription, Unsubscribable } from '../defs/index.js';
+import type { Subscribable } from '../types/inputs/Subscribable.js';
+import type { StrictObserver } from '../types/outputs/StrictObserver.js';
+import type { Subscription } from '../types/outputs/Subscription.js';
 
 export interface SubscriptionProps {
   /**
@@ -33,20 +35,38 @@ export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps
 /**
  * Subscribes to given observer, bounded to a signal.
  */
-export function boundedSubscription<T>(observable: Subscribable<T>, signal: AbortSignal, observer: Observer<T>): Unsubscribable {
-  let subscription: Unsubscribable;
+export function boundedSubscription<T>(observable: Subscribable<T>, signal: AbortSignal, observer: StrictObserver<T>): Subscription {
+  let internal: Subscription;
+  let isClosed = false;
 
-  return observable.subscribe({
+  const sub = observable.subscribe({
     start(sub) {
-      subscription = sub;
-      signal.addEventListener('abort', () => sub.unsubscribe(), { once: true });
-      observer.start?.(sub);
+      internal = buildSubscription({
+        onUnsubscribe: () => {
+          isClosed = true;
+          sub.unsubscribe();
+        },
+        isClosed: () => isClosed
+      });
+
+      signal.addEventListener('abort', internal.unsubscribe, { once: true });
+      observer.start?.(internal);
     },
-    next: (data) => observer.next(data),
-    error: (err) => observer.error(err),
+    next: observer.next,
+    error: observer.error,
     complete() {
-      signal.removeEventListener('abort', () => subscription.unsubscribe());
+      signal.removeEventListener('abort', internal.unsubscribe);
+      isClosed = true;
+
       observer.complete();
     }
+  });
+
+  return buildSubscription({
+    onUnsubscribe: () => {
+      isClosed = true;
+      sub.unsubscribe();
+    },
+    isClosed: () => isClosed
   });
 }

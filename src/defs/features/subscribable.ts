@@ -4,6 +4,8 @@ import '../symbols.js';
 
 /**
  * Lazy and composable push based data source.
+ *
+ * @deprecated
  */
 export interface Subscribable<out D = unknown> {
   __type?: D;
@@ -17,6 +19,8 @@ export interface Subscribable<out D = unknown> {
 
 /**
  * Object that can be observed using `[Symbol.observable]` method.
+ *
+ * @deprecated
  */
 export interface SubscribableHolder<out D = unknown> {
   [Symbol.observable](): Subscribable<D>;

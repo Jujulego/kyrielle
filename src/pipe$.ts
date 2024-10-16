@@ -1,13 +1,14 @@
-// Types
-export type PipeStep<in O = unknown, out R = unknown> = (origin: O) => R;
-
 /**
  * Run step on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B>(value: A, stepA: PipeStep<A, B>): B;
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C>(
   value: A,
@@ -17,6 +18,8 @@ export function pipe$<A, B, C>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D>(
   value: A,
@@ -27,6 +30,8 @@ export function pipe$<A, B, C, D>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E>(
   value: A,
@@ -38,6 +43,8 @@ export function pipe$<A, B, C, D, E>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F>(
   value: A,
@@ -50,6 +57,8 @@ export function pipe$<A, B, C, D, E, F>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F, G>(
   value: A,
@@ -63,6 +72,8 @@ export function pipe$<A, B, C, D, E, F, G>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F, G, H>(
   value: A,
@@ -77,6 +88,8 @@ export function pipe$<A, B, C, D, E, F, G, H>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F, G, H, I>(
   value: A,
@@ -92,6 +105,8 @@ export function pipe$<A, B, C, D, E, F, G, H, I>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F, G, H, I, J>(
   value: A,
@@ -108,6 +123,8 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
   value: A,
@@ -125,7 +142,12 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
+ *
+ * @since 1.0.0
  */
 export function pipe$(value: unknown, ...steps: PipeStep[]): unknown {
   return steps.reduce((val, step) => step(val), value);
 }
+
+// Types
+export type PipeStep<in O = unknown, out R = unknown> = (origin: O) => R;

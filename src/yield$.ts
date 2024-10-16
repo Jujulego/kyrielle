@@ -1,38 +1,36 @@
-import type { Mutable, Observable, Deferrable } from './defs/index.js';
-import type { MapOrigin, MapOriginValue } from './map$.js';
-import { observable$, type SubscriberObserver } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import { isMutable, isPromise, isDeferrable, isSubscribable } from './utils/predicates.js';
-
-// Types
-export type YieldOrigin<D = unknown> = MapOrigin<D>;
-
-export type YieldResult<O extends YieldOrigin> =
-  & Pick<O, Extract<keyof O, keyof Deferrable | keyof Mutable>>
-  & Observable<Awaited<MapOriginValue<O>>>;
+import { source$ } from './source$.js';
+import type { Deferrable } from './types/inputs/Deferrable.js';
+import type { Mutable } from './types/inputs/Mutable.js';
+import type { Mutator } from './types/outputs/Mutator.js';
+import type { Observable } from './types/outputs/Observable.js';
+import type { Ref } from './types/outputs/Ref.js';
+import { isDeferrable, isMutable, isPromise } from './utils/predicates.js';
 
 /**
  * Adds an observable feature to a resource. The added observable will emit each result from defer & mutate.
+ *
+ * @since 1.0.0
  */
 export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
   return (origin: YieldOrigin) => {
     const builder = resource$();
-    let observer: SubscriberObserver;
+    const source = source$();
 
     // Utils
     function emitResult(result: unknown) {
       if (isPromise(result)) {
-        void result.then((value) => observer?.next(value));
+        void result.then((value) => source.next(value));
       } else {
-        observer?.next(result);
+        source.next(result);
       }
     }
 
     // Add defer
     if (isDeferrable(origin)) {
       builder.add({
-        defer(signal) {
+        defer: (signal) => {
           const result = origin.defer(signal);
           emitResult(result);
 
@@ -44,7 +42,7 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     // Add mutable
     if (isMutable(origin)) {
       builder.add({
-        mutate(arg, signal) {
+        mutate: (arg, signal) => {
           const result = origin.mutate(arg, signal);
           emitResult(result);
 
@@ -54,14 +52,22 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
     }
 
     // Add observable
-    builder.add(observable$((obs) => {
-      observer = obs;
-
-      if (isSubscribable(origin)) {
-        origin.subscribe(obs);
-      }
-    }));
+    builder.add({
+      [Symbol.observable ?? '@@observable']: source[Symbol.observable ?? '@@observable'],
+      subscribe: source.subscribe,
+    });
 
     return builder.build() as YieldResult<O>;
   };
 }
+
+// Types
+export type YieldOrigin<D = unknown> = Deferrable<D> | Mutable<D>;
+export type YieldOriginValue<O extends YieldOrigin> =
+  & (O extends Deferrable<infer D> ? Awaited<D> : unknown)
+  & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+export type YieldResult<O extends YieldOrigin> =
+  & (O extends Deferrable<infer D> ? Ref<D> : unknown)
+  & (O extends Mutable<infer A, infer D> ? Mutator<A, D> : unknown)
+  & Observable<YieldOriginValue<O>>;

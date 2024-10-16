@@ -1,20 +1,15 @@
-import type { Observer, SubscribeCallbacks } from '../defs/index.js';
 import { observer$ } from '../observer$.js';
+import type { SubscribeArgs } from '../types/outputs/Observable.js';
+import type { StrictObserver } from '../types/outputs/StrictObserver.js';
+import { noop } from './fn.js';
 import { isPartialObserver } from './predicates.js';
 
-// Utils
-const noop = () => { /* noop */ };
-
-// Types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SubscribeArgs<D = any> = [] | [Partial<Observer<D>>] | SubscribeCallbacks<D>;
-
 /**
- * Builds an observer from subscribe args
+ * Builds a strict observer from subscribe args
  * @param args
  */
-export function parseSubscribeArgs<D>(args: SubscribeArgs<D>): Observer<D> {
-  if (isPartialObserver(args[0])) {
+export function parseSubscribeArgs<D>(args: SubscribeArgs<D>): StrictObserver<D> {
+  if (isPartialObserver<D>(args[0])) {
     return observer$(args[0]);
   }
 

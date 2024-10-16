@@ -1,39 +1,36 @@
-import type {
-  AsyncMutable,
-  AsyncDeferrable, AsyncRefreshable,
-  Awaitable,
-  Mutable, Observable,
-  Deferrable,
-  Refreshable,
-  Subscribable
-} from './defs/index.js';
 import { observable$ } from './observable$.js';
 import { resource$ } from './resource$.js';
+import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
+import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
+import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
+import type { Observable } from './types/outputs/Observable.js';
+import type { AsyncRef, Ref } from './types/outputs/Ref.js';
+import type { Awaitable } from './types/utils.js';
 import { applyFn } from './utils/fn.js';
-import { isMutable, isDeferrable, isRefreshable, isSubscribable } from './utils/predicates.js';
+import { isDeferrable, isMutable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type JsonOrigin =
-  | Subscribable<string>
+  | AnySubscribable<string>
   | Deferrable<Awaitable<string>>
-  | Refreshable<Awaitable<string>>
   | Mutable<string, Awaitable<string>>;
 
-export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable ? AsyncMutable<D, A> : Mutable<D, A>;
-export type JsonDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncDeferrable<D> : Deferrable<D>;
-export type JsonRefreshable<O extends Refreshable, D> = O extends AsyncRefreshable ? AsyncRefreshable<D> : Refreshable<D>;
+export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable ? AsyncMutator<A, D> : Mutator<A, D>;
+export type JsonDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncRef<D> : Ref<D>;
 
 export type JsonResult<O, D, A> =
-  & (O extends Subscribable ? Observable<D> : unknown)
+  & (O extends AnySubscribable ? Observable<D> : unknown)
   & (O extends Deferrable ? JsonDeferrable<O, D> : unknown)
-  & (O extends Refreshable ? JsonRefreshable<O, D> : unknown)
   & (O extends Mutable ? JsonMutable<O, D, A> : unknown);
 
 /**
  * Parses json items.
+ *
+ * @since 1.0.0
  */
-export function json$<D = unknown, A = any>(): <O extends JsonOrigin>(origin: O) => JsonResult<O, D, A>; // eslint-disable-line @typescript-eslint/no-explicit-any
+export function json$<D = unknown, A = unknown>(): <O extends JsonOrigin>(origin: O) => JsonResult<O, D, A>;
 
 export function json$() {
   return <O extends JsonOrigin>(origin: O) => {
@@ -75,12 +72,6 @@ export function json$() {
     if (isDeferrable<string>(origin)) {
       builder.add({
         defer: (signal) => applyFn(parser, origin.defer(signal)),
-      });
-    }
-
-    if (isRefreshable<string>(origin)) {
-      builder.add({
-        refresh: (signal) => applyFn(parser, origin.refresh(signal)),
       });
     }
 
