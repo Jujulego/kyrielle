@@ -1,7 +1,9 @@
-import type { Observable, Observer, Subscription } from './defs/index.js';
+import type { Observer } from './types/inputs/Observer.js';
 import type { Mutator } from './types/outputs/Mutator.js';
+import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
 import type { Ref } from './types/outputs/Ref.js';
-import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
+import type { Subscription } from './types/outputs/Subscription.js';
+import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
 /**
@@ -55,7 +57,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
     },
   };
 
-  return _var;
+  return _var as UninitializedVar<D>;
 }
 
 // Types
