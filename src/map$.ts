@@ -9,7 +9,7 @@ import type { Observable } from './types/outputs/Observable.js';
 import type { AsyncRef, Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
 import { applyFn } from './utils/fn.js';
-import { isDeferrable, isMutable, isRefreshable, isSubscribable } from './utils/predicates.js';
+import { isDeferrable, isMutable, isSubscribable } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -58,12 +58,6 @@ export function map$<A, R>(fn: (arg: A) => R) {
     if (isDeferrable<A>(origin)) {
       builder.add({
         defer: (signal) => applyFn(fn, origin.defer(signal)),
-      });
-    }
-
-    if (isRefreshable<A>(origin)) {
-      builder.add({
-        refresh: (signal) => applyFn(fn, origin.refresh(signal)),
       });
     }
 
