@@ -13,13 +13,25 @@ describe('parseSubscribeArgs', () => {
   });
 
   it('should return given observer', () => {
-    const observer: Observer = {
+    const arg: Observer = {
       next: vi.fn(),
       error: vi.fn(),
       complete: vi.fn(),
     };
+    const observer = parseSubscribeArgs([arg]);
 
-    expect(parseSubscribeArgs([observer])).toBe(observer);
+    expect(observer).toHaveProperty('next', expect.any(Function));
+    expect(observer).toHaveProperty('error', expect.any(Function));
+    expect(observer).toHaveProperty('complete', expect.any(Function));
+
+    observer.next(42);
+    expect(arg.next).toHaveBeenCalledWith(42);
+
+    observer.error(new Error('Failed!'));
+    expect(arg.error).toHaveBeenCalledWith(new Error('Failed!'));
+
+    observer.complete();
+    expect(arg.complete).toHaveBeenCalledOnce();
   });
 
   it('should keep given onNext function', () => {
