@@ -9,7 +9,8 @@ import type { Observable } from './types/outputs/Observable.js';
 import type { AsyncRef, Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
 import { applyFn } from './utils/fn.js';
-import { isDeferrable, isMutable, isSubscribable } from './utils/predicates.js';
+import { isDeferrable, isMutable, isSubscribable, isSubscribableHolder } from './utils/predicates.js';
+import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -43,9 +44,9 @@ export function map$<A, R>(fn: (arg: A) => R) {
   return (origin: unknown) => {
     const builder = resource$<R>();
 
-    if (isSubscribable<A>(origin)) {
+    if (isSubscribable<A>(origin) || isSubscribableHolder<A>(origin)) {
       builder.add(observable$<R>((observer, signal) => {
-        boundedSubscription(origin, signal, {
+        boundedSubscription(extractSubscribable(origin), signal, {
           next: (val) => {
             observer.next(fn(val));
           },
