@@ -3,7 +3,7 @@
  *
  * @since 2.0.0
  */
-export interface Iterable<out D> {
+export interface Iterable<out D = unknown> {
   /**
    * Returns next item.
    *
