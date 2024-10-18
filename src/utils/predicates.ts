@@ -40,7 +40,7 @@ export function isPartialObserver<T = unknown>(value: unknown): value is Partial
  * Tests if given value is a minimal Observer object (with at least a next method)
  */
 export function isMinimalObserver<T = unknown>(value: unknown): value is Pick<Observer<T>, 'next'> {
-  return isNonNullObject(value) && hasMethod(value, 'next');
+  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length > 0;
 }
 
 /**
@@ -90,7 +90,7 @@ export function isSubscribableHolder<D = unknown>(value: unknown): value is Subs
  * Tests if given value is an Iterable object
  */
 export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'next');
+  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length === 0;
 }
 
 /**
@@ -105,6 +105,6 @@ function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod(value: NonNullObject, name: keyof NonNullObject): boolean {
+function hasMethod<O extends NonNullObject, const K extends keyof O>(value: NonNullObject, name: K): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {
   return name in value && typeof value[name] === 'function';
 }
