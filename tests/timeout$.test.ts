@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { timeout$ } from '@/src/timeout$.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 beforeEach(() => {

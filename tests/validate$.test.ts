@@ -1,7 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { pipe$ } from '@/src/pipe$.js';
 import { validate$, ValidateError } from '@/src/validate$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('validate$', () => {

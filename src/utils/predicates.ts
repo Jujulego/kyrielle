@@ -1,4 +1,3 @@
-import type { NonNullObject } from '../defs/utils.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
@@ -6,6 +5,7 @@ import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscriba
 import type { Mapping } from '../types/mapping.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
+import type { NonNullObject } from '../types/utils.js';
 
 /**
  * Tests if given value is an Emitter object

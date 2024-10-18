@@ -1,7 +1,6 @@
-import type { Multiplexer } from '@/src/defs/concepts/multiplexer.js';
-import type { Source } from '@/src/defs/concepts/source.js';
+import type { Multiplexer } from '@/src/bases/_multiplexer.js';
 import { multiplexer$ } from '@/src/multiplexer$.js';
-import { source$ } from '@/src/source$.js';
+import { type Source, source$ } from '@/src/source$.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup

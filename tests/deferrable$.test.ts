@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { ref$ } from '@/src/ref$.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup
 beforeEach(() => {

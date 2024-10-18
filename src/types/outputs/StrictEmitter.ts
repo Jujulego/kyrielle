@@ -1,5 +1,4 @@
-import type { MappingKey } from '../../defs/index.js';
-import type { Mapping } from '../mapping.js';
+import type { Mapping, MappingKey } from '../mapping.js';
 
 /**
  * Object emitting events

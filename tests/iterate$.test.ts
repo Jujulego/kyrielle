@@ -1,7 +1,6 @@
-import { describe, expect, it } from 'vitest';
-
 import { iterate$ } from '@/src/iterate$.js';
 import { source$ } from '@/src/source$.js';
+import { describe, expect, it } from 'vitest';
 
 // Tests
 describe('iterate$', () => {

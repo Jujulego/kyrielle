@@ -1,6 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { off$ } from '@/src/off$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('off$', () => {

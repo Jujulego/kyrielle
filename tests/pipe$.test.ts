@@ -1,7 +1,7 @@
 import { observable$ } from '@/src/observable$.js';
-import { describe, expect, it, vi } from 'vitest';
 
 import { pipe$ } from '@/src/pipe$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('pipe$', () => {

@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { json$ } from '@/src/json$.js';
 import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('json$', () => {

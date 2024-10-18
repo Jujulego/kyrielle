@@ -1,8 +1,7 @@
+import { flow$ } from '@/src/flow$.js';
 import { observable$ } from '@/src/observable$.js';
 import { observer$ } from '@/src/observer$.js';
 import { describe, expect, it, vi } from 'vitest';
-
-import { flow$ } from '@/src/flow$.js';
 
 // Tests
 describe('flow$', () => {

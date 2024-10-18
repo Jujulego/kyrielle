@@ -1,9 +1,9 @@
-import { observable$ } from '@/src/observable$.js';
 import { mergeMap$ } from '@/src/merge-map$.js';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { observable$ } from '@/src/observable$.js';
 
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 beforeEach(() => {

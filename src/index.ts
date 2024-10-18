@@ -1,4 +1,3 @@
-export * from './defs/index.js';
 export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 

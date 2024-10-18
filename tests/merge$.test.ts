@@ -1,9 +1,7 @@
-import { observable$ } from '@/src/observable$.js';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import type { Source } from '@/src/defs/index.js';
 import { merge$ } from '@/src/merge$.js';
-import { source$ } from '@/src/source$.js';
+import { observable$ } from '@/src/observable$.js';
+import { type Source, source$ } from '@/src/source$.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 let a: Source<number>;

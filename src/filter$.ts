@@ -1,8 +1,8 @@
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
-import type { PredicateFn } from './types/utils.js';
 import type { AnySubscribable, Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
+import type { PredicateFn } from './types/utils.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**

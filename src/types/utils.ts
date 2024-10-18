@@ -14,6 +14,8 @@ export type AssertionFn<in D, out R extends D> = (data: D) => asserts data is R;
  */
 export type MapValueIntersection<M> = UnionToIntersection<M[keyof M]>;
 
+export interface NonNullObject extends Record<number | string | symbol, unknown> {}
+
 /**
  * Defines a predicate function
  */

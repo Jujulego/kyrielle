@@ -1,8 +1,7 @@
+import { collect$ } from '@/src/collect$.js';
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { describe, expect, it } from 'vitest';
-
-import { collect$ } from '@/src/collect$.js';
 
 // Tests
 describe('collect$', () => {

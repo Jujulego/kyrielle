@@ -1,8 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { reduce$ } from '@/src/reduce$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('reduce$', () => {
