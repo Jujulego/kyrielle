@@ -12,5 +12,7 @@
 .vitest
 coverage
 dist
+junit-report.xml
+
 *.log
 *.pid
