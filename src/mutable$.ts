@@ -54,4 +54,4 @@ export function mutable$<A, D>(fn: MutableCallback<A, D>): Mutator<A, D> {
 }
 
 // Types
-export type MutableCallback<in A = any, out D = unknown> = (arg: A, signal: AbortSignal) => D; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type MutableCallback<in A = unknown, out D = unknown> = (arg: A, signal: AbortSignal) => D;

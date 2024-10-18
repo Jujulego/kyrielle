@@ -25,4 +25,4 @@ export type PredicateFn<in D, out R extends D> = (data: D) => data is R;
  * Transforms a union into an intersection:
  * UnionToIntersection<'a' | 'b'> => 'a' & 'b'
  */
-export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
