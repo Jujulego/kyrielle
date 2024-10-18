@@ -1,6 +1,5 @@
-import { describe, expectTypeOf, it } from 'vitest';
-
 import { resource$ } from '@/src/resource$.js';
+import { describe, expectTypeOf, it } from 'vitest';
 
 // Test
 describe('resourceBuilder$', () => {

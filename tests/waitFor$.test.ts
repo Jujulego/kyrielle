@@ -1,8 +1,7 @@
-import { describe, expect, it } from 'vitest';
-
 import { multiplexer$ } from '@/src/multiplexer$.js';
-import { waitFor$ } from '@/src/waitFor$.js';
 import { source$ } from '@/src/source$.js';
+import { waitFor$ } from '@/src/waitFor$.js';
+import { describe, expect, it } from 'vitest';
 
 // Tests
 describe('waitFor$', () => {

@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { interval$ } from '@/src/interval$.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 beforeEach(() => {

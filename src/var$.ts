@@ -1,18 +1,23 @@
-import type { Deferrable, Mutable, Observable, Observer, Subscription } from './defs/index.js';
-import { parseSubscribeArgs, type SubscribeArgs } from './utils/subscribe.js';
+import type { Observer } from './types/inputs/Observer.js';
+import type { Mutator } from './types/outputs/Mutator.js';
+import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
+import type { Ref } from './types/outputs/Ref.js';
+import type { Subscription } from './types/outputs/Subscription.js';
+import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
-export interface Var<in out D> extends Observable<D>, Deferrable<D>, Mutable<D, D> {}
-export interface UninitializedVar<in out D> extends Observable<D>, Deferrable<D | undefined>, Mutable<D, D> {}
-
 /**
- * Builds an uninitialized var
+ * Builds an uninitialized mutable ref.
+ *
+ * @since 1.0.0
  */
 export function var$<D>(): UninitializedVar<D>;
 
 /**
- * Builds an initialized var
+ * Builds an initialized mutable ref.
  * @param initial
+ *
+ * @since 1.0.0
  */
 export function var$<D>(initial: D): Var<D>;
 
@@ -34,7 +39,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
       return value;
     },
     [Symbol.observable ?? '@@observable']: () => _var,
-    subscribe(...args: SubscribeArgs<D>): Subscription {
+    subscribe: (...args: SubscribeArgs<D>): Subscription => {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),
@@ -52,5 +57,9 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
     },
   };
 
-  return _var;
+  return _var as UninitializedVar<D>;
 }
+
+// Types
+export interface Var<in out D> extends Observable<D>, Ref<D>, Mutator<D, D> {}
+export interface UninitializedVar<in out D> extends Observable<D>, Ref<D | undefined>, Mutator<D, D> {}

@@ -1,9 +1,8 @@
+import type { Multiplexer } from '@/src/bases/_multiplexer.js';
 import { multiplexer$ } from '@/src/multiplexer$.js';
+import { type Source, source$ } from '@/src/source$.js';
 import { watch$ } from '@/src/watch$.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import type { Multiplexer, Source } from '@/src/defs/index.js';
-import { source$ } from '@/src/source$.js';
 
 // Tests
 describe('watch$', () => {

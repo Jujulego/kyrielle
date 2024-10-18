@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { json$ } from '@/src/json$.js';
 import { observable$ } from '@/src/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('json$', () => {
@@ -44,26 +43,11 @@ describe('json$', () => {
     await expect(res.defer()).resolves.toEqual({ life: 42 });
   });
 
-  it('should parse refresh result', () => {
-    const src = { refresh: () => '{ "life": 42 }' };
-    const res = pipe$(src, json$());
-
-    expect(res.refresh()).toEqual({ life: 42 });
-    expect(res.refresh()).toBe(res.refresh());
-  });
-
-  it('should parse async refresh result', async () => {
-    const src = { refresh: async () => '{ "life": 42 }' };
-    const res = pipe$(src, json$());
-
-    await expect(res.refresh()).resolves.toEqual({ life: 42 });
-  });
-
   it('should stringify arg and parse mutate result', () => {
     const src = { mutate: vi.fn((arg: string) => '{ "life": 42 }') };
     const res = pipe$(src, json$());
 
-    expect(res.mutate({ toto: 12 })).toEqual({ life: 42 });
+    expect(res.mutate({ toto: 12 })).toStrictEqual({ life: 42 });
     expect(res.mutate({ toto: 12 })).toBe(res.mutate({ toto: 12 }));
     expect(src.mutate).toHaveBeenCalledWith('{"toto":12}', undefined);
   });

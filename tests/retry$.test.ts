@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { pipe$ } from '@/src/pipe$.js';
 import { retry$ } from '@/src/retry$.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup
 beforeEach(() => {

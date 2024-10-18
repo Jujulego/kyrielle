@@ -1,9 +1,9 @@
 import { observable$ } from '@/src/observable$.js';
-import { switchMap$ } from '@/src/switch-map$.js';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
+import { switchMap$ } from '@/src/switch-map$.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
 beforeEach(() => {

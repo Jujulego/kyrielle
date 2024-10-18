@@ -1,12 +1,10 @@
-export * from './defs/index.js';
-export { extractObservable } from './utils/observable.js';
+export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 
 export * from './collect$.js';
 export * from './concat-map$.js';
 export * from './const$.js';
-export * from './deferrable$.js';
-export * from './each$.js';
+export * from './ref$.js';
 export * from './fetch$.js';
 export * from './filter$.js';
 export * from './flow$.js';

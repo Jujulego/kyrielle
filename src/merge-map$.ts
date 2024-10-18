@@ -1,18 +1,27 @@
-import type { Observable, Subscribable } from './defs/index.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
+import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { Observable } from './types/outputs/Observable.js';
+import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
-export function mergeMap$<T, R>(fn: (item: T) => Subscribable<R>): PipeStep<Subscribable<T>, Observable<R>> {
-  return (origin: Subscribable<T>) => {
+/**
+ * For each value emitted by the origin, this step will call `fn`, then will subscribe to its result and re-emit each
+ * emitted value.
+ * @param fn
+ *
+ * @since 1.0.0
+ */
+export function mergeMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<AnySubscribable<T>, Observable<R>> {
+  return (origin: AnySubscribable<T>) => {
     let completed = 1;
 
     return observable$((observer, signal) => {
-      boundedSubscription(origin, signal, {
+      boundedSubscription(extractSubscribable(origin), signal, {
         next(item) {
           completed++;
 
-          boundedSubscription(fn(item), signal, {
+          boundedSubscription(extractSubscribable(fn(item)), signal, {
             next: (it) => observer.next(it),
             error: (err) => observer.error(err),
             complete: () => {

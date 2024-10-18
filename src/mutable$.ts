@@ -1,32 +1,41 @@
-import type { Mutable } from './defs/index.js';
+import type { Mutator } from './types/outputs/Mutator.js';
 import { isPromise } from './utils/predicates.js';
 import { Query } from './utils/query.js';
 
 /**
- * Builds a Mutable object around fn. Produced object will deduplicate calls to fn based on given arg,
- * meaning that all mutate calls made with the same arg while fn is running won't call fn again and all will
- * return at the same time.
+ * Builds a {@link Mutator} object around fn. If "mutate" is called while a previous mutation is still running,
+ * two cases will be handled :
+ * 1. the second call uses the same `arg` => the call is deduplicated and will subscribe to the running call results.
+ * 2. the second call uses another `arg` => the previous call will be canceled in favor of the new one
  *
  * @param fn
+ *
+ * @since 1.0.0
  */
-export function mutable$<A, D>(fn: (arg: A, signal: AbortSignal) => D): Mutable<A, D> {
-  const queries = new Map<A, Query<D>>();
+export function mutable$<A, D>(fn: MutableCallback<A, D>): Mutator<A, D> {
+  let controller: AbortController;
+  let previousArg: A | undefined = undefined;
+  let query: Query<D> | undefined = undefined;
 
   // Build mutable
   return {
-    mutate(arg: A, signal?: AbortSignal): D {
+    mutate: (arg: A, signal?: AbortSignal): D => {
       signal?.throwIfAborted();
 
-      // Execute
-      let query = queries.get(arg);
+      // Cancel previous
+      if (query && !query.completed && arg !== previousArg) {
+        controller.abort(new Error('A newer mutate call has been made!'));
+        query = undefined;
+      }
 
+      // Execute
       if (!query || query.completed) {
-        const controller = new AbortController();
+        previousArg = arg;
+        controller = new AbortController();
         const result = fn(arg, controller.signal);
 
         if (isPromise<D>(result)) {
-          query = new Query(result, controller, () => queries.delete(arg));
-          queries.set(arg, query);
+          query = new Query(result, controller);
         } else {
           return result;
         }
@@ -43,3 +52,6 @@ export function mutable$<A, D>(fn: (arg: A, signal: AbortSignal) => D): Mutable<
     }
   };
 }
+
+// Types
+export type MutableCallback<in A = unknown, out D = unknown> = (arg: A, signal: AbortSignal) => D;

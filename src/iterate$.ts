@@ -1,15 +1,15 @@
 import { Repeater } from '@repeaterjs/repeater';
-import type { Subscribable, SubscribableHolder } from './defs/index.js';
-import { isSubscribableHolder } from './utils/predicates.js';
+import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import { extractSubscribable } from './utils/subscribable.js';
 
 /**
  * Wraps given observable into an async iterator.
+ *
+ * @since 1.0.0
  */
-export function iterate$<D>(observable: Subscribable<D> | SubscribableHolder<D>): Repeater<D> {
-  const obs = isSubscribableHolder(observable) ? observable[Symbol.observable ?? '@@observable']() : observable;
-
+export function iterate$<D>(observable: AnySubscribable<D>): Repeater<D> {
   return new Repeater<D>(async (push, stop) => {
-    const sub = obs.subscribe({
+    const sub = extractSubscribable(observable).subscribe({
       next: (data) => void push(data),
       error: (err) => stop(err),
       complete: () => stop(),

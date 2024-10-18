@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { of$ } from '@/src/of$.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 beforeEach(() => {
   vi.useFakeTimers();

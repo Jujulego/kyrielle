@@ -1,6 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { var$ } from '@/src/var$.js';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('var$', () => {

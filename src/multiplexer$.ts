@@ -1,5 +1,5 @@
-import { _multiplexer } from './bases/_multiplexer.js';
-import type { Mapping, Multiplexer } from './defs/index.js';
+import { _multiplexer, type Multiplexer } from './bases/_multiplexer.js';
+import type { Mapping } from './types/mapping.js';
 
 /**
  * Builds a multiplexer routing events to origins within the given map

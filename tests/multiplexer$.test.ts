@@ -1,7 +1,7 @@
-import type { Multiplexer } from '@/src/defs/concepts/multiplexer.js';
-import type { Source } from '@/src/defs/concepts/source.js';
+import type { Multiplexer } from '@/src/bases/_multiplexer.js';
 import { multiplexer$ } from '@/src/multiplexer$.js';
-import { source$ } from '@/src/source$.js';
+import { type Source, source$ } from '@/src/source$.js';
+import type { Observer } from '@/src/types/inputs/Observer.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup
@@ -72,9 +72,10 @@ describe('multiplexer$', () => {
 
       mlt.on('deep.boo', listener);
 
-      expect(boo.subscribe).toHaveBeenCalledWith(expect.objectContaining({
-        next: listener
-      }));
+      expect(boo.subscribe).toHaveBeenCalledOnce();
+
+      (vi.mocked(boo.subscribe).mock.calls[0]![0] as unknown as Observer<boolean>).next(true);
+      expect(listener).toHaveBeenCalledWith(true);
     });
 
     it('should not subscribe to child event as child doesn\'t exists', () => {
