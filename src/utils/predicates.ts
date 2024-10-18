@@ -1,26 +1,23 @@
-import type {
-  Emitter,
-  Listenable,
-  Mapping,
-  Refreshable,
-} from '../defs/index.js';
 import type { NonNullObject } from '../defs/utils.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
 import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
+import type { Mapping } from '../types/mapping.js';
+import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
+import type { StrictListenable } from '../types/outputs/StrictListenable.js';
 
 /**
  * Tests if given value is an Emitter object
  */
-export function isEmitter<M extends Mapping = Mapping>(value: unknown): value is Emitter<M> {
+export function isEmitter<M extends Mapping = Mapping>(value: unknown): value is StrictEmitter<M> {
   return isNonNullObject(value) && hasMethod(value, 'emit');
 }
 
 /**
  * Tests if given value is a Listenable object
  */
-export function isListenable<M extends Mapping = Mapping>(value: unknown): value is Listenable<M> {
+export function isListenable<M extends Mapping = Mapping>(value: unknown): value is StrictListenable<M> {
   return isNonNullObject(value) && hasMethod(value, 'on');
 }
 
@@ -64,13 +61,6 @@ export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> 
  */
 export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D> {
   return isNonNullObject(value) && hasMethod(value, 'defer');
-}
-
-/**
- * Tests if given value is a Refreshable object
- */
-export function isRefreshable<D = unknown>(value: unknown): value is Refreshable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'refresh');
 }
 
 /**
