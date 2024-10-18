@@ -12,6 +12,17 @@ export interface Iterable<out D = unknown> {
   next(): IterableResult<D>;
 }
 
+/**
+ * Object holding an {@link Iterable} feature
+ *
+ * @since 2.0.0
+ */
+export interface IterableHolder<out D = unknown> {
+  [Symbol.iterator](): Iterable<D>;
+}
+
+export type AnyIterable<D = unknown> = Iterable<D> | IterableHolder<D>;
+
 export interface IterableResultValue<out D> {
   readonly value: D;
   readonly done?: false;
