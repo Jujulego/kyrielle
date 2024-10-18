@@ -14,11 +14,10 @@ import { boundedSubscription } from './utils/subscription.js';
  */
 export function mergeMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<AnySubscribable<T>, Observable<R>> {
   return (origin: AnySubscribable<T>) => {
-    origin = extractSubscribable(origin);
     let completed = 1;
 
     return observable$((observer, signal) => {
-      boundedSubscription(origin, signal, {
+      boundedSubscription(extractSubscribable(origin), signal, {
         next(item) {
           completed++;
 

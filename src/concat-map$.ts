@@ -41,7 +41,7 @@ export function concatMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<
     }
 
     return observable$((observer, signal) => {
-      boundedSubscription(origin, signal, {
+      boundedSubscription(extractSubscribable(origin), signal, {
         next: (item) => {
           if (!childRunning) {
             childRunning = true;

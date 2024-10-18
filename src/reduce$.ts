@@ -12,11 +12,10 @@ import { boundedSubscription } from './utils/subscription.js';
  */
 export function reduce$<T, S>(cb: ReduceCallback<T, S>, init: ReduceInit<S>): PipeStep<AnySubscribable<T>, Observable<S>> {
   return (origin: AnySubscribable<T>) => {
-    origin = extractSubscribable(origin);
     let state = init();
 
     return observable$((observer, signal) => {
-      boundedSubscription(origin, signal, {
+      boundedSubscription(extractSubscribable(origin), signal, {
         next(item) {
           state = cb(state, item);
         },

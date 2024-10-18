@@ -1,3 +1,5 @@
+/// <reference types="../global.d.ts" />
+
 export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 
