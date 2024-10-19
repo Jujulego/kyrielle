@@ -1,5 +1,4 @@
 import type { Deferrable } from '../types/inputs/Deferrable.js';
-import type { IterableHolder } from '../types/inputs/Iterable.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
 import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
@@ -87,16 +86,9 @@ export function isSubscribableHolder<D = unknown>(value: unknown): value is Subs
 }
 
 /**
- * Tests if given value is an Iterable object
- */
-export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length === 0;
-}
-
-/**
  * Tests if given value is an IterableHolder object
  */
-export function isIterableHolder<D = unknown>(value: unknown): value is IterableHolder<D> {
+export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
   return isNonNullObject(value) && hasMethod(value, Symbol.iterator);
 }
 
