@@ -1,11 +1,13 @@
 import type { Deferrable } from './types/inputs/Deferrable.js';
+import type { AnyIterable } from './types/inputs/Iterable.js';
 import type { Mutable } from './types/inputs/Mutable.js';
 import type { Subscribable, SubscribableHolder } from './types/inputs/Subscribable.js';
 import type { Awaitable } from './types/utils.js';
-import { isSubscribableHolder } from './utils/predicates.js';
+import { isIterable, isSubscribableHolder } from './utils/predicates.js';
 
 // Types
 export type ResourceFeature<D> =
+  | AnyIterable<D>
   | Subscribable<D>
   | Deferrable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -40,7 +42,12 @@ export function resource$<D>(): ResourceBuilder<D> {
 
   return {
     add(feature: unknown): ResourceBuilder<D> {
-      if (isSubscribableHolder(feature)) {
+      if (isIterable(feature)) {
+        Object.assign(resource, feature[Symbol.iterator]());
+        Object.assign(resource, {
+          [Symbol.iterator]: () => resource,
+        });
+      } else if (isSubscribableHolder(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
         Object.assign(resource, {
           [Symbol.observable ?? '@@observable']: () => resource,
