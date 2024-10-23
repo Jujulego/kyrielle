@@ -52,4 +52,12 @@ describe('filter$', () => {
     subscription.unsubscribe();
     expect(fn).toHaveBeenCalled();
   });
+
+  it('should filter iterator values', () => {
+    const res = pipe$([1, 2, 3, 4], filter$((n) => (n % 2) === 0));
+
+    expect(res.next()).toStrictEqual({ done: false, value: 2 });
+    expect(res.next()).toStrictEqual({ done: false, value: 4 });
+    expect(res.next()).toStrictEqual({ done: true });
+  });
 });
