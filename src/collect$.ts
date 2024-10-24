@@ -35,8 +35,8 @@ export function collect$<D>(): PipeStep<AnyIterable<D> | AnySubscribable<D>, Awa
 
       while (true) {
         const { done, value } = iterator.next();
-
         if (done) break;
+
         result.push(value);
       }
 
