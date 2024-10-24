@@ -1,7 +1,7 @@
 import { collect$ } from '@/src/collect$.js';
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 // Tests
 describe('collect$', () => {
@@ -19,10 +19,14 @@ describe('collect$', () => {
     )).toStrictEqual([1, 2, 3]);
   });
 
-  it('should collect emitted items into an array', async () => {
-    await expect(pipe$(
+  it('should collect emitted items into an array', () => {
+    const spyResult = vi.fn();
+
+    pipe$(
       of$([1, 2, 3]),
       collect$()
-    )).resolves.toStrictEqual([1, 2, 3]);
+    ).subscribe(spyResult);
+
+    expect(spyResult).toHaveBeenCalledWith([1, 2, 3]);
   });
 });

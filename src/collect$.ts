@@ -1,11 +1,13 @@
 import type { MapOrigin } from './map$.js';
+import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { AnyIterable, IteratedValue } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
-import type { Awaitable } from './types/utils.js';
+import type { Observable } from './types/outputs/Observable.js';
 import { extractIterator } from './utils/iterator.js';
 import { isIterable, isMinimalIterator, isSubscribable, isSubscribableHolder } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
+import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type CollectOrigin<D = unknown> =
@@ -16,7 +18,7 @@ export type CollectResult<O extends MapOrigin> =
   O extends AnyIterable
     ? IteratedValue<O>[]
     : O extends AnySubscribable<infer D>
-      ? Promise<D[]>
+      ? Observable<D[]>
       : never;
 
 /**
@@ -26,7 +28,7 @@ export type CollectResult<O extends MapOrigin> =
  */
 export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>
 
-export function collect$<D>(): PipeStep<AnyIterable<D> | AnySubscribable<D>, Awaitable<D[]> | undefined> {
+export function collect$<D>(): PipeStep<CollectOrigin<D>, D[] | Observable<D[]> | undefined> {
   return (origin: AnyIterable<D> | AnySubscribable<D>) => {
     const result: D[] = [];
 
@@ -44,11 +46,16 @@ export function collect$<D>(): PipeStep<AnyIterable<D> | AnySubscribable<D>, Awa
     }
 
     if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
-      return new Promise<D[]>((resolve, reject) => {
-        extractSubscribable(origin).subscribe({
-          next: (item) => result.push(item),
-          error: reject,
-          complete: () => resolve(result),
+      return observable$((observer, signal) => {
+        boundedSubscription(extractSubscribable(origin), signal, {
+          next(item) {
+            result.push(item);
+          },
+          error: (err) => observer.error(err),
+          complete: () => {
+            observer.next(result);
+            observer.complete();
+          },
         });
       });
     }
