@@ -84,4 +84,18 @@ describe('json$', () => {
     subscription.unsubscribe();
     expect(fn).toHaveBeenCalled();
   });
+
+  it('should parse next value', () => {
+    const it = { next: () => ({ done: false, value: '{ "life": 42 }' }) as const };
+    const res = pipe$(it, json$());
+
+    expect(res.next()).toStrictEqual({ done: false, value: { life: 42 } });
+  });
+
+  it('should parse iterated values', () => {
+    const res = pipe$(['{ "life": 42 }'], json$());
+
+    expect(res.next()).toStrictEqual({ done: false, value: { life: 42 } });
+    expect(res.next()).toStrictEqual({ done: true });
+  });
 });

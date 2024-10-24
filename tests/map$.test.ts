@@ -82,4 +82,18 @@ describe('map$', () => {
     subscription.unsubscribe();
     expect(fn).toHaveBeenCalled();
   });
+
+  it('should transform next value', () => {
+    const it = { next: () => ({ done: false, value: 42 }) as const };
+    const res = pipe$(it, map$((n) => n.toString()));
+
+    expect(res.next()).toStrictEqual({ done: false, value: '42' });
+  });
+
+  it('should transform iterated values', () => {
+    const res = pipe$([42], map$((n) => n.toString()));
+
+    expect(res.next()).toStrictEqual({ done: false, value: '42' });
+    expect(res.next()).toStrictEqual({ done: true });
+  });
 });
