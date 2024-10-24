@@ -3,7 +3,7 @@ import type { MapOrigin } from './map$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import type { AnyIterable } from './types/inputs/Iterable.js';
+import type { AnyIterable, IteratedValue } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import type { SimpleIterator } from './types/outputs/SimpleIterator.js';
@@ -19,7 +19,7 @@ export type FilterOrigin<D = unknown> =
   | AnySubscribable<D>;
 
 export type FilterOriginValue<O extends MapOrigin> =
-  & (O extends AnyIterable<infer D> ? D : unknown)
+  & (O extends AnyIterable ? IteratedValue<O> : unknown)
   & (O extends AnySubscribable<infer D> ? D : unknown);
 
 export type FilterResult<O, R> =

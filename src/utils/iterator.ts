@@ -1,4 +1,4 @@
-import type { AnyIterable, MinimalIterator } from '../types/inputs/Iterable.js';
+import type { AnyIterable, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import { isIterable } from './predicates.js';
 
 /**

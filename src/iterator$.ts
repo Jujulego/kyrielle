@@ -1,4 +1,4 @@
-import type { AnyIterable } from './types/inputs/Iterable.js';
+import type { AnyIterable } from './types/inputs/MinimalIterator.js';
 import type { SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractIterator } from './utils/iterator.js';
 
@@ -11,10 +11,17 @@ import { extractIterator } from './utils/iterator.js';
 export function iterator$<D>(base: AnyIterable<D>): SimpleIterator<D> {
   const iterable = extractIterator(base);
   const iterator = {
-    next: iterable.next.bind(iterable),
-  } as SimpleIterator<D>;
+    [Symbol.iterator]: () => iterator,
+    next: () => {
+      const { done, value } = iterable.next();
 
-  iterator[Symbol.iterator] = () => iterator;
+      if (done) {
+        return { done: true } as const;
+      } else {
+        return { done: false, value } as const;
+      }
+    },
+  };
 
   return iterator;
 }

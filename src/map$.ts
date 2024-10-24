@@ -3,7 +3,7 @@ import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
-import type { AnyIterable } from './types/inputs/Iterable.js';
+import type { AnyIterable, IteratedValue } from './types/inputs/MinimalIterator.js';
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
@@ -35,7 +35,7 @@ export type MapMutable<O extends Mutable, A, D> = O extends AsyncMutable ? Async
 export type MapDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncRef<D> : Ref<D>;
 
 export type MapOriginValue<O extends MapOrigin> =
-  & (O extends AnyIterable<infer D> ? D : unknown)
+  & (O extends AnyIterable ? IteratedValue<O> : unknown)
   & (O extends AnySubscribable<infer D> ? D : unknown)
   & (O extends Deferrable<infer D> ? Awaited<D> : unknown)
   & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any

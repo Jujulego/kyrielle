@@ -1,5 +1,5 @@
 import type { Deferrable } from '../types/inputs/Deferrable.js';
-import type { MinimalIterator } from '../types/inputs/Iterable.js';
+import type { MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
 import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';

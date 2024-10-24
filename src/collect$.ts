@@ -1,6 +1,6 @@
 import type { MapOrigin } from './map$.js';
 import type { PipeStep } from './pipe$.js';
-import type { AnyIterable } from './types/inputs/Iterable.js';
+import type { AnyIterable, IteratedValue } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Awaitable } from './types/utils.js';
 import { extractIterator } from './utils/iterator.js';
@@ -13,8 +13,8 @@ export type CollectOrigin<D = unknown> =
   | AnySubscribable<D>;
 
 export type CollectResult<O extends MapOrigin> =
-  O extends AnyIterable<infer D>
-    ? D[]
+  O extends AnyIterable
+    ? IteratedValue<O>[]
     : O extends AnySubscribable<infer D>
       ? Promise<D[]>
       : never;

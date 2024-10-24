@@ -12,6 +12,13 @@ describe('collect$', () => {
     )).toStrictEqual([1, 2, 3]);
   });
 
+  it('should collect generated items into an array', () => {
+    expect(pipe$(
+      (function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
+      collect$()
+    )).toStrictEqual([1, 2, 3]);
+  });
+
   it('should collect emitted items into an array', async () => {
     await expect(pipe$(
       of$([1, 2, 3]),

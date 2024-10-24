@@ -2,7 +2,7 @@ import { iterator$ } from './iterator$.js';
 import { observable$ } from './observable$.js';
 import { resource$ } from './resource$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
-import type { AnyIterable } from './types/inputs/Iterable.js';
+import type { AnyIterable } from './types/inputs/MinimalIterator.js';
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
