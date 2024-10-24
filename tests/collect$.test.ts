@@ -5,10 +5,17 @@ import { describe, expect, it } from 'vitest';
 
 // Tests
 describe('collect$', () => {
+  it('should collect iterated items into an array', () => {
+    expect(pipe$(
+      [1, 2, 3],
+      collect$()
+    )).toStrictEqual([1, 2, 3]);
+  });
+
   it('should collect emitted items into an array', async () => {
     await expect(pipe$(
       of$([1, 2, 3]),
       collect$()
-    )).resolves.toEqual([1, 2, 3]);
+    )).resolves.toStrictEqual([1, 2, 3]);
   });
 });

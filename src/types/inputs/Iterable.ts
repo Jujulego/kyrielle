@@ -3,7 +3,7 @@
  *
  * @since 2.0.0
  */
-export interface MinimalIterator<D> {
+export interface MinimalIterator<out D = unknown> {
   /**
    * Returns next item.
    *
@@ -19,8 +19,8 @@ interface IteratorResultValue<out D> {
 
 interface IteratorResultDone {
   readonly done: true;
-  readonly value?: undefined;
+  readonly value?: never;
 }
 
-export type MinimalIteratorResult<D> = IteratorResultValue<D> | IteratorResultDone;
+export type MinimalIteratorResult<D = unknown> = IteratorResultValue<D> | IteratorResultDone;
 export type AnyIterable<D = unknown> = Iterable<D> | MinimalIterator<D>;
