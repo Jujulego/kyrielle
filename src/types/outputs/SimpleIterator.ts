@@ -1,4 +1,4 @@
-import type { MinimalIterator, MinimalIteratorResult } from '../inputs/MinimalIterator.js';
+import type { MinimalIterator } from '../inputs/MinimalIterator.js';
 
 /**
  * Object that can be iterated
@@ -13,5 +13,17 @@ export interface SimpleIterator<out D = unknown> extends MinimalIterator<D, neve
    *
    * @since 2.0.0
    */
-  next(this: void): MinimalIteratorResult<D, never>;
+  next(this: void): SimpleIteratorResult<D>;
 }
+
+interface IteratorResultValue<out D> {
+  readonly done: false;
+  readonly value: D;
+}
+
+interface IteratorResultDone {
+  readonly done: true;
+  readonly value?: never;
+}
+
+export type SimpleIteratorResult<D = unknown> = IteratorResultValue<D> | IteratorResultDone;
