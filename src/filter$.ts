@@ -18,7 +18,7 @@ export type FilterOrigin<D = unknown> =
   | AnyIterable<D>
   | AnySubscribable<D>;
 
-export type FilterOriginValue<O extends MapOrigin> =
+export type FilterOriginValue<O extends FilterOrigin> =
   & (O extends AnyIterable ? IteratedValue<O> : unknown)
   & (O extends AnySubscribable<infer D> ? D : unknown);
 
