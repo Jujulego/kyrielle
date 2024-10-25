@@ -45,6 +45,7 @@ export function scan$<D, const S>(cb: ScanCallback<D, S>, init: S) {
 
     if (isIterable<D>(origin) || isMinimalIterator<D>(origin)) {
       const iterator = extractIterator(origin);
+
       builder.add(iterator$<S>({
         next: () => {
           const { done, value } = iterator.next();
@@ -61,6 +62,7 @@ export function scan$<D, const S>(cb: ScanCallback<D, S>, init: S) {
 
     if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
       const observable = extractSubscribable(origin);
+
       builder.add(observable$<S>((observer, signal) => {
         boundedSubscription(observable, signal, {
           next: (item) => {

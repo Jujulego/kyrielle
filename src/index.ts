@@ -7,6 +7,7 @@ export * from './const$.js';
 export * from './ref$.js';
 export * from './fetch$.js';
 export * from './filter$.js';
+export * from './flat$.js';
 export * from './flow$.js';
 export * from './interval$.js';
 export * from './iterate$.js';
