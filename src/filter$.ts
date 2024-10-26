@@ -1,5 +1,4 @@
 import { iterator$ } from './iterator$.js';
-import type { MapOrigin } from './map$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
