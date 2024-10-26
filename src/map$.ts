@@ -47,8 +47,8 @@ export type MapResult<O, R> =
   & (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
 
 /**
- * Applies given function on every emitted values,
- * including values returned by defer and mutate if present.
+ * Applies given function on every emitted values, including values returned by defer and mutate if present.
+ * Then it emits or returns the value returned by fn.
  *
  * @since 1.0.0
  */

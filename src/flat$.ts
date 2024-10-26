@@ -29,7 +29,7 @@ export type FlatResultValue<D> = D extends AnyIterable ? IteratedValue<D> : unkn
 /**
  * Flattens origin.
  *
- * @since 1.0.0
+ * @since 2.1.0
  */
 export function flat$<O extends FlatOrigin>(): PipeStep<O, FlatResult<O, FlatResultValue<FlatOriginValue<O>>>>;
 
