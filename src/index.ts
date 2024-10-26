@@ -31,6 +31,7 @@ export * from './scan$.js';
 export * from './source$.js';
 export * from './store$.js';
 export * from './switch-map$.js';
+export * from './tap$.js';
 export * from './timeout$.js';
 export * from './validate$.js';
 export * from './var$.js';
