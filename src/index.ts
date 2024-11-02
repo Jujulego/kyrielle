@@ -1,3 +1,19 @@
+export * from './types/inputs/Deferrable.js';
+export * from './types/inputs/MinimalIterator.js';
+export * from './types/inputs/Mutable.js';
+export * from './types/inputs/Observer.js';
+export * from './types/inputs/Subscribable.js';
+export * from './types/inputs/Unsubscribable.js';
+
+export * from './types/outputs/Mutator.js';
+export * from './types/outputs/Observable.js';
+export * from './types/outputs/Ref.js';
+export * from './types/outputs/SimpleIterator.js';
+export * from './types/outputs/StrictEmitter.js';
+export * from './types/outputs/StrictListenable.js';
+export * from './types/outputs/StrictObserver.js';
+export * from './types/outputs/Subscription.js';
+
 export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 
