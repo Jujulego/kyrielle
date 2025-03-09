@@ -40,5 +40,5 @@ export type SubscribeOnNext<in D = unknown> = (data: D) => void;
 export type SubscribeOnError = (error: Error) => void;
 export type SubscribeOnComplete = () => void;
 
-export type SubscribeCallbacks<in D = unknown> = [onNext: SubscribeOnNext<D>, onError?: SubscribeOnError, onComplete?: SubscribeOnComplete];
+export type SubscribeCallbacks<D = unknown> = [onNext: SubscribeOnNext<D>, onError?: SubscribeOnError, onComplete?: SubscribeOnComplete];
 export type SubscribeArgs<D = unknown> = [] | [PartialObserver<D>] | SubscribeCallbacks<D>;
