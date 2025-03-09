@@ -510,17 +510,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/js@npm:*, @eslint/js@npm:9.22.0":
+  version: 9.22.0
+  resolution: "@eslint/js@npm:9.22.0"
+  checksum: 10c0/5bcd009bb579dc6c6ed760703bdd741e08a48cd9decd677aa2cf67fe66236658cb09a00185a0369f3904e5cffba9e6e0f2ff4d9ba4fdf598fcd81d34c49213a5
+  languageName: node
+  linkType: hard
+
 "@eslint/js@npm:8.57.0":
   version: 8.57.0
   resolution: "@eslint/js@npm:8.57.0"
   checksum: 10c0/9a518bb8625ba3350613903a6d8c622352ab0c6557a59fe6ff6178bf882bf57123f9d92aa826ee8ac3ee74b9c6203fe630e9ee00efb03d753962dcf65ee4bd94
-  languageName: node
-  linkType: hard
-
-"@eslint/js@npm:9.22.0":
-  version: 9.22.0
-  resolution: "@eslint/js@npm:9.22.0"
-  checksum: 10c0/5bcd009bb579dc6c6ed760703bdd741e08a48cd9decd677aa2cf67fe66236658cb09a00185a0369f3904e5cffba9e6e0f2ff4d9ba4fdf598fcd81d34c49213a5
   languageName: node
   linkType: hard
 
@@ -1353,26 +1353,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*":
-  version: 8.56.9
-  resolution: "@types/eslint@npm:8.56.9"
+"@types/eslint__js@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@types/eslint__js@npm:9.14.0"
   dependencies:
-    "@types/estree": "npm:*"
-    "@types/json-schema": "npm:*"
-  checksum: 10c0/a800e3d10bd12fc837773101c35a65c189528e306bc41eca9f30176f5ede4d35944a0c0e16b668971db3521df2f2bef62ab2471740eadc72aeb39dbaba6c9101
+    "@eslint/js": "npm:*"
+  checksum: 10c0/da5e315aaf17a3e038eff3a4e1b90e360d9d22319653f43f746ad4b7f90dca2d1f8e0ea08f4d02b1b426e7baeb15610be4a30b64d28d16ef06d2feb75c549dc1
   languageName: node
   linkType: hard
 
-"@types/eslint__js@npm:8.42.3":
-  version: 8.42.3
-  resolution: "@types/eslint__js@npm:8.42.3"
-  dependencies:
-    "@types/eslint": "npm:*"
-  checksum: 10c0/ccc5180b92155929a089ffb03ed62625216dcd5e46dd3197c6f82370ce8b52c7cb9df66c06b0a3017995409e023bc9eafe5a3f009e391960eacefaa1b62d9a56
-  languageName: node
-  linkType: hard
-
-"@types/estree@npm:*, @types/estree@npm:1.0.6, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.6":
+"@types/estree@npm:1.0.6, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.6":
   version: 1.0.6
   resolution: "@types/estree@npm:1.0.6"
   checksum: 10c0/cdfd751f6f9065442cd40957c07fd80361c962869aa853c1c2fd03e101af8b9389d8ff4955a43a6fcfa223dd387a089937f95be0f3eec21ca527039fd2d9859a
@@ -1386,7 +1376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15":
+"@types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -3801,7 +3791,7 @@ __metadata:
     "@swc/cli": "npm:0.6.0"
     "@swc/core": "npm:1.11.8"
     "@swc/helpers": "npm:^0.5.3"
-    "@types/eslint__js": "npm:8.42.3"
+    "@types/eslint__js": "npm:9.14.0"
     "@types/node": "npm:20.17.24"
     "@typescript-eslint/utils": "npm:8.26.0"
     "@vitest/coverage-v8": "npm:2.1.9"
