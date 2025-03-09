@@ -16,7 +16,6 @@ describe('map$', () => {
     expectTypeOf(res).toHaveProperty('defer');
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).not.toHaveProperty('mutate');
-    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.defer).returns.toBeString();
   });
 
@@ -47,7 +46,6 @@ describe('map$', () => {
     expectTypeOf(res).not.toHaveProperty('refresh');
     expectTypeOf(res).toHaveProperty('mutate');
     expectTypeOf(res.mutate).parameter(0).toBeString();
-    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.mutate).returns.toBeString();
   });
 

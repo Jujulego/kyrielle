@@ -1,7 +1,6 @@
 import { collect$ } from '@/src/collect$.js';
 import { filter$ } from '@/src/filter$.js';
 import { map$ } from '@/src/map$.js';
-import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { describe, expectTypeOf, it } from 'vitest';
 
@@ -14,7 +13,7 @@ describe('collect$', () => {
     );
 
     expectTypeOf(res).toBeArray();
-    expectTypeOf(res).items.toBeNumber(); // eslint-disable-line vitest/valid-expect
+    expectTypeOf(res).items.toBeNumber();
   });
 
   it('should return an array of numbers (with middle steps)', () => {
@@ -26,6 +25,6 @@ describe('collect$', () => {
     );
 
     expectTypeOf(res).toBeArray();
-    expectTypeOf(res).items.toBeNumber(); // eslint-disable-line vitest/valid-expect
+    expectTypeOf(res).items.toBeNumber();
   });
 });
