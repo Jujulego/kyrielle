@@ -15,7 +15,6 @@ describe('resourceBuilder$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('defer');
-    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.defer).returns.toBeNumber();
   });
 
@@ -36,7 +35,6 @@ describe('resourceBuilder$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('defer');
-    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.defer).returns.toBeString();
   });
 });

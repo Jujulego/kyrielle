@@ -20,13 +20,13 @@ export interface ResourceBuilder<D, R = unknown> {
    * Adds defined feature to resource.
    * @param feature
    */
-  add<F extends ResourceFeature<D>>(feature: F): ResourceBuilder<D, R & F>;
+  add<F extends ResourceFeature<D>>(feature: F): ResourceBuilder<D, Omit<R, keyof F> & F>;
 
   /**
    * Adds subscribable feature based on given holder.
    * @param holder
    */
-  add<F extends SubscribableHolder<D>>(holder: F): ResourceBuilder<D, R & Subscribable<D>>;
+  add<F extends SubscribableHolder<D>>(holder: F): ResourceBuilder<D, Omit<R, 'subscribe'> & Subscribable<D>>;
 
   /**
    * Return final resource object.
