@@ -113,6 +113,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm
     needs: [ lint, build, tests ]
+    
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
