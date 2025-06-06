@@ -72,6 +72,9 @@ jobs:
     name: 'Tests on node ${{ matrix.node }}'
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
       matrix:
         node: ['18.x', '20.x', '22.x']
