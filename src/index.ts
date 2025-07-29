@@ -1,3 +1,5 @@
+export type { Multiplexer } from './bases/_multiplexer.js';
+
 export * from './types/inputs/Deferrable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
