@@ -1,17 +1,27 @@
-import { _multiplexer, type Multiplexer } from './bases/_multiplexer.js';
-import type { Observer } from './types/inputs/Observer.js';
-import type { Subscribable } from './types/inputs/Subscribable.js';
+import { _multiplexer, type _Multiplexer } from './bases/_multiplexer.js';
+import type { Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
+import { merge$ } from './merge$.js';
+import type { Observable } from './types/outputs/Observable.js';
 
 /**
  * Builds a multiplexer routing events to origins within the given map, and an observable that emit every
  * value emitted by the given origins.
  */
-export function group$<M extends GroupMapping>(origins: M): Multiplexer<M> {
-  return _multiplexer<M>((key) => origins[key]);
+export function group$<M extends GroupMapping>(origins: M): Group<M> {
+  return Object.assign(
+    merge$(...Object.values(origins)) as GroupObservable<M>,
+    _multiplexer<M>((key) => origins[key])
+  );
 }
 
 // Types
-export type GroupMapping = Record<string,
-  | Observer<any> // eslint-disable-line @typescript-eslint/no-explicit-any
-  | Subscribable
->;
+export type GroupMapping = Record<string, Subscribable>;
+export type Group<M extends GroupMapping> = _Multiplexer<M> & GroupObservable<M>;
+
+type GroupObservable<M extends GroupMapping> = Observable<GroupValue<M>>;
+
+type GroupValue<M extends GroupMapping> = GroupValueMap<M>[keyof M];
+
+type GroupValueMap<M extends GroupMapping> = {
+  [K in keyof M]: SubscribableValue<M[K]>;
+};

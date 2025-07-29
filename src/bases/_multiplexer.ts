@@ -47,13 +47,14 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
 
       throw new Error(`Unsupported listen key ${key}`);
     }
-  } as Multiplexer<M>;
+  } as _Multiplexer<M>;
 }
 
 /**
  * Object managing multiple events
+ * @internal
  */
-export interface Multiplexer<M extends Mapping = Mapping>
+export interface _Multiplexer<M extends Mapping = Mapping>
   extends StrictEmitter<InputMapping<M>>, StrictListenable<OutputMapping<M>> {}
 
 /**

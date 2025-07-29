@@ -40,3 +40,4 @@ export interface Observer<in D = unknown> {
 }
 
 export type PartialObserver<in D = unknown> = { [K in keyof Observer<D>]?: Observer<D>[K] | undefined };
+export type AnyObserver = Observer<any>; // eslint-disable-line @typescript-eslint/no-explicit-any

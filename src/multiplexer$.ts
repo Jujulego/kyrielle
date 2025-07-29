@@ -1,5 +1,5 @@
-import { _multiplexer, type Multiplexer } from './bases/_multiplexer.js';
-import type { Observer } from './types/inputs/Observer.js';
+import { _multiplexer, type _Multiplexer } from './bases/_multiplexer.js';
+import type { AnyObserver } from './types/inputs/Observer.js';
 import type { StrictEmitter } from './types/outputs/StrictEmitter.js';
 import type { StrictListenable } from './types/outputs/StrictListenable.js';
 import type { Subscribable } from './types/inputs/Subscribable.js';
@@ -14,8 +14,10 @@ export function multiplexer$<M extends MultiplexerMapping>(origins: M): Multiple
 
 // Types
 export type MultiplexerMapping = Record<string,
-  | Observer<any> // eslint-disable-line @typescript-eslint/no-explicit-any
+  | AnyObserver
   | StrictEmitter
   | StrictListenable
   | Subscribable
 >;
+
+export type Multiplexer<M extends MultiplexerMapping = MultiplexerMapping> = _Multiplexer<M>;
