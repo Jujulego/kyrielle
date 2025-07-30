@@ -18,7 +18,8 @@ export function group$<M extends GroupMapping>(origins: M): Group<M> {
 
 // Types
 export type GroupMapping = Record<string, Subscribable>;
-export type Group<M extends GroupMapping> = _Multiplexer<M> & GroupObservable<M>;
+
+export interface Group<M extends GroupMapping> extends _Multiplexer<M>, GroupObservable<M> {}
 
 type GroupObservable<M extends GroupMapping> = Observable<GroupValue<M>>;
 
