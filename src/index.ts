@@ -26,6 +26,7 @@ export * from './filter$.js';
 export * from './flat$.js';
 export * from './flow$.js';
 export * from './group$.js';
+export * from './inherit$.js';
 export * from './interval$.js';
 export * from './iterate$.js';
 export * from './iterator$.js';
