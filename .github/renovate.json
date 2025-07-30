@@ -2,13 +2,22 @@
   "extends": [
     "config:recommended"
   ],
-  "baseBranchPatterns": [
-    "latest"
+  "baseBranches": [
+    "main"
   ],
   "labels": [
     "dependencies"
   ],
+  "rebaseWhen": "behind-base-branch",
   "packageRules": [
+    {
+      "matchCategories": [
+        "ci"
+      ],
+      "addLabels": [
+        "github-actions"
+      ]
+    },
     {
       "matchCategories": [
         "js"
@@ -19,6 +28,19 @@
       "postUpdateOptions": [
         "yarnDedupeHighest"
       ]
+    },
+    {
+      "matchDepTypes": [
+        "dependencies"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     },
     {
       "matchDepTypes": [
@@ -34,10 +56,5 @@
       "automergeType": "pr",
       "platformAutomerge": true
     }
-  ],
-  "github-actions": {
-    "addLabels": [
-      "github-actions"
-    ]
-  }
+  ]
 }
