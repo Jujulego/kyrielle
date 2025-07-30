@@ -20,4 +20,4 @@ export type MultiplexerMapping = Record<string,
   | Subscribable
 >;
 
-export type Multiplexer<M extends MultiplexerMapping = MultiplexerMapping> = _Multiplexer<M>;
+export interface Multiplexer<M extends MultiplexerMapping = MultiplexerMapping> extends _Multiplexer<M> {}
