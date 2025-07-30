@@ -1,5 +1,3 @@
-export type { Multiplexer } from './bases/_multiplexer.js';
-
 export * from './types/inputs/Deferrable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
@@ -27,6 +25,7 @@ export * from './fetch$.js';
 export * from './filter$.js';
 export * from './flat$.js';
 export * from './flow$.js';
+export * from './group$.js';
 export * from './interval$.js';
 export * from './iterate$.js';
 export * from './iterator$.js';

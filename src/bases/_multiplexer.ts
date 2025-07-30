@@ -47,17 +47,18 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
 
       throw new Error(`Unsupported listen key ${key}`);
     }
-  } as Multiplexer<M>;
+  } as _Multiplexer<M>;
 }
 
 /**
  * Object managing multiple events
+ * @internal
  */
-export interface Multiplexer<M extends Mapping = Mapping>
+export interface _Multiplexer<M extends Mapping = Mapping>
   extends StrictEmitter<InputMapping<M>>, StrictListenable<OutputMapping<M>> {}
 
 /**
- * Builds a mapping from input values of each sources in the given source mapping
+ * Builds a mapping from input values of each source in the given source mapping
  */
 type InputMapping<M extends Mapping> = AssertMapping<MapValueIntersection<{
   [K in MappingKey<M>]: _InputRecord<K, M[K]>;
@@ -68,7 +69,7 @@ type _InputRecord<K extends string, O> =
   | (O extends Observer<infer D> ? Record<K, D> : never);
 
 /**
- * Builds a mapping from output values of each sources in the given source mapping
+ * Builds a mapping from output values of each source in the given source mapping
  */
 type OutputMapping<M extends Mapping> = AssertMapping<MapValueIntersection<{
   [K in MappingKey<M>]: _OutputRecord<K, M[K]>;

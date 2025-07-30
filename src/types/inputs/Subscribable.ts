@@ -2,7 +2,7 @@ import type { PartialObserver } from './Observer.js';
 import type { Unsubscribable } from './Unsubscribable.js';
 
 /**
- * Lazy and composable push based data source.
+ * Lazy and composable push-based data source.
  *
  * @since 1.0.0
  */
