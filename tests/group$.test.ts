@@ -32,6 +32,13 @@ beforeEach(() => {
 
 // Tests
 describe('group$', () => {
+  describe('getOrigin', () => {
+    it('should return requested origin', () => {
+      expect(grp.getOrigin('int')).toBe(int);
+      expect(grp.getOrigin('str')).toBe(str);
+    });
+  });
+
   it('should emit all events from given sources', () => {
     const spy = vi.fn();
     grp.subscribe(spy);
