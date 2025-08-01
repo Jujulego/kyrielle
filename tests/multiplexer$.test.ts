@@ -30,6 +30,13 @@ beforeEach(() => {
 
 // Tests
 describe('multiplexer$', () => {
+  describe('getOrigin', () => {
+    it('should return requested origin', () => {
+      expect(mlt.getOrigin('int')).toBe(int);
+      expect(mlt.getOrigin('str')).toBe(str);
+    });
+  });
+
   describe('emit', () => {
     it('should emit child event', () => {
       vi.spyOn(int, 'next');

@@ -19,6 +19,7 @@ import { wrapUnsubscribable } from '../utils/subscription.js';
  */
 export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unknown) {
   return {
+    getOrigin: getOrigin,
     emit: (key: string, event: unknown) => {
       const [part, rest] = splitKey(key);
       const origin = getOrigin(part);
@@ -53,8 +54,22 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
 /**
  * Object managing multiple events
  */
-export interface _Multiplexer<M extends Mapping = Mapping>
-  extends StrictEmitter<InputMapping<M>>, StrictListenable<OutputMapping<M>> {}
+export interface MultiplexerUtils<M extends Mapping = Mapping> {
+  __multiplexer_origin_map?: M;
+
+  /**
+   * Returns origin matching given key
+   */
+  getOrigin<const K extends MappingKey<M>>(key: K): M[K];
+}
+
+/**
+ * Object managing multiple events
+ */
+export type _Multiplexer<M extends Mapping = Mapping> =
+  & StrictEmitter<InputMapping<M>>
+  & StrictListenable<OutputMapping<M>>
+  & MultiplexerUtils<M>;
 
 /**
  * Builds a mapping from input values of each source in the given source mapping
