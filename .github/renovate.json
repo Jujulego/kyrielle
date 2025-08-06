@@ -3,12 +3,11 @@
     "config:recommended"
   ],
   "baseBranchPatterns": [
-    "main"
+    "latest"
   ],
   "labels": [
     "dependencies"
   ],
-  "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
       "matchCategories": [
