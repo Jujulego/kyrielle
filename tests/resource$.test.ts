@@ -4,7 +4,7 @@ import type { Mutable } from '@/src/types/inputs/Mutable.js';
 import { describe, expect, it } from 'vitest';
 
 // Tests
-describe('resourceBuilder$', () => {
+describe('resource$', () => {
   it('should return an empty object', () => {
     expect(resource$().build()).toStrictEqual({});
   });

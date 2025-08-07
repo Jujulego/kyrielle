@@ -18,4 +18,14 @@ describe('iterator$', () => {
     expect(iterator.next()).toStrictEqual({ done: false, value: 3 });
     expect(iterator.next()).toStrictEqual({ done: true });
   });
+
+  it('should accept a generator', () => {
+    const generator = (function* () { yield 1; yield 2; yield 3; })();
+    const iterator = iterator$(generator);
+
+    expect(iterator.next()).toStrictEqual({ done: false, value: 1 });
+    expect(iterator.next()).toStrictEqual({ done: false, value: 2 });
+    expect(iterator.next()).toStrictEqual({ done: false, value: 3 });
+    expect(iterator.next()).toStrictEqual({ done: true });
+  });
 });

@@ -4,7 +4,6 @@ import { extractIterator } from './utils/iterator.js';
 
 /**
  * Wraps an iterable into an iterator
- * @param base
  *
  * @since 2.0.0
  */

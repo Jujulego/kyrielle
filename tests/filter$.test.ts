@@ -60,4 +60,13 @@ describe('filter$', () => {
     expect(res.next()).toStrictEqual({ done: false, value: 4 });
     expect(res.next()).toStrictEqual({ done: true });
   });
+
+  it('should filter async iterator values', async () => {
+    const generator = (async function* () { yield 1; yield 2; yield 3; yield 4; })();
+    const res = pipe$(generator, filter$((n) => (n % 2) === 0));
+
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 2 });
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 4 });
+    await expect(res.next()).resolves.toStrictEqual({ done: true });
+  });
 });

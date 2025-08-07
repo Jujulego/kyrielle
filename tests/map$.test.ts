@@ -90,10 +90,25 @@ describe('map$', () => {
     expect(res.next()).toStrictEqual({ done: false, value: '42' });
   });
 
+  it('should transform async next value', async () => {
+    const it = { next: async () => ({ done: false, value: 42 }) as const };
+    const res = pipe$(it, map$((n) => n.toString()));
+
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: '42' });
+  });
+
   it('should transform iterated values', () => {
     const res = pipe$([42], map$((n) => n.toString()));
 
     expect(res.next()).toStrictEqual({ done: false, value: '42' });
     expect(res.next()).toStrictEqual({ done: true });
+  });
+
+  it('should transform async iterated values', async () => {
+    const generator = (async function* () { yield 42; })();
+    const res = pipe$(generator, map$((n) => n.toString()));
+
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: '42' });
+    await expect(res.next()).resolves.toStrictEqual({ done: true });
   });
 });
