@@ -1,5 +1,5 @@
 import type { Deferrable } from '../types/inputs/Deferrable.js';
-import type { MinimalIterator } from '../types/inputs/MinimalIterator.js';
+import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
 import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
@@ -88,9 +88,25 @@ export function isSubscribableHolder<D = unknown>(value: unknown): value is Subs
 
 /**
  * Tests if given value is an Iterator object
+ *
+ * @deprecated use {@link isAwaitableIterator} instead, it has a more precise typing
  */
 export function isMinimalIterator<D = unknown>(value: unknown): value is MinimalIterator<D> {
   return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length === 0;
+}
+
+/**
+ * Tests if given value is an AwaitableIterator object
+ */
+export function isAwaitableIterator<D = unknown>(value: unknown): value is MinimalIterator<D> | MinimalAsyncIterator<D> {
+  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length === 0;
+}
+
+/**
+ * Tests if given value is an AsyncIterable object
+ */
+export function isAsyncIterable<D = unknown>(value: unknown): value is AsyncIterable<D> {
+  return isNonNullObject(value) && hasMethod(value, Symbol.asyncIterator);
 }
 
 /**

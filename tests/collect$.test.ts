@@ -19,6 +19,19 @@ describe('collect$', () => {
     )).toStrictEqual([1, 2, 3]);
   });
 
+  it('should collect async generated items into an array', async () => {
+    const spyResult = vi.fn();
+
+    pipe$(
+      (async function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
+      collect$()
+    ).subscribe(spyResult);
+
+    await vi.waitFor(() => {
+      expect(spyResult).toHaveBeenCalledWith([1, 2, 3]);
+    });
+  });
+
   it('should collect emitted items into an array', () => {
     const spyResult = vi.fn();
 

@@ -26,6 +26,13 @@ export interface MinimalAsyncIterator<out D = unknown, out R = unknown> {
   next(): Promise<MinimalIteratorResult<D, R>>;
 }
 
+/**
+ * Object that can be iterated, with unknown synchronicity
+ *
+ * @since 2.5.0
+ */
+export type MinimalAwaitableIterator<D = unknown, R = unknown> = MinimalIterator<D, R> | MinimalAsyncIterator<D, R>;
+
 interface IteratorResultValue<out D> {
   readonly done?: false;
   readonly value: D;
@@ -40,6 +47,7 @@ export type MinimalIteratorResult<D = unknown, R = unknown> = IteratorResultValu
 
 export type AnyIterable<D = unknown> = Iterable<D> | MinimalIterator<D>;
 export type AnyAsyncIterable<D = unknown> = AsyncIterable<D> | MinimalAsyncIterator<D>;
+export type AnyAwaitableIterable<D = unknown> = Iterable<D> | AsyncIterable<D> | MinimalIterator<D> | MinimalAsyncIterator<D>;
 
 /**
  * Extracts iterator yielded value type from an iterable
