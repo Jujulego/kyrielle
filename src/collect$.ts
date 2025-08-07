@@ -5,7 +5,9 @@ import type {
   AnyAwaitableIterable,
   AnyIterable,
   AsyncIteratedValue,
-  IteratedValue, MinimalAsyncIterator, MinimalIterator
+  IteratedValue,
+  MinimalAsyncIterator,
+  MinimalIterator
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
@@ -13,7 +15,8 @@ import { extractAwaitableIterator } from './utils/iterator.js';
 import {
   isAsyncIterable,
   isAwaitableIterator,
-  isIterable, isPromise,
+  isIterable,
+  isPromise,
   isSubscribable,
   isSubscribableHolder
 } from './utils/predicates.js';
@@ -38,12 +41,12 @@ export type CollectResult<O extends CollectOrigin> =
  * Collect all emitted items into an array, until observable complete.
  *
  * @since 1.0.0
- * @version 2.5.0 adds support for async iterators
+ * @version 2.5.0 Add support for async iterators
  */
 export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>
 
 export function collect$<D>(): PipeStep<CollectOrigin<D>, D[] | Observable<D[]> | undefined> {
-  return (origin: AnyAsyncIterable<D> | AnyIterable<D> | AnySubscribable<D>) => {
+  return (origin: AnyAwaitableIterable<D> | AnySubscribable<D>) => {
     const output: D[] = [];
 
     if (isIterable<D>(origin) || isAsyncIterable<D>(origin) || isAwaitableIterator<D>(origin)) {

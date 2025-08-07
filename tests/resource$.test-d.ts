@@ -2,7 +2,7 @@ import { resource$ } from '@/src/resource$.js';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // Test
-describe('resourceBuilder$', () => {
+describe('resource$', () => {
   it('should return an empty object type', () => {
     const res = resource$<number>().build();
 

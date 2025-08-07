@@ -17,6 +17,7 @@ export * from './types/outputs/Subscription.js';
 export { extractSubscribable } from './utils/subscribable.js';
 export * from './utils/predicates.js';
 
+export * from './async-iterator$.js';
 export * from './collect$.js';
 export * from './concat-map$.js';
 export * from './const$.js';

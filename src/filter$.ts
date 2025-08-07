@@ -1,28 +1,52 @@
+import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
-import type { AnyIterable, IteratedValue } from './types/inputs/MinimalIterator.js';
+import type {
+  AnyAsyncIterable,
+  AnyAwaitableIterable,
+  AnyIterable,
+  AsyncIteratedValue,
+  IteratedValue,
+  MinimalAsyncIterator,
+  MinimalIterator
+} from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
-import type { SimpleIterator } from './types/outputs/SimpleIterator.js';
+import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import type { PredicateFn } from './types/utils.js';
-import { extractIterator } from './utils/iterator.js';
-import { isIterable, isMinimalIterator, isSubscribable, isSubscribableHolder } from './utils/predicates.js';
+import { extractAwaitableIterator } from './utils/iterator.js';
+import {
+  isAsyncIterable,
+  isAwaitableIterator,
+  isIterable,
+  isPromise,
+  isSubscribable,
+  isSubscribableHolder
+} from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
 export type FilterOrigin<D = unknown> =
-  | AnyIterable<D>
+  | AnyAwaitableIterable<D>
   | AnySubscribable<D>;
 
 export type FilterOriginValue<O extends FilterOrigin> =
-  & (O extends AnyIterable ? IteratedValue<O> : unknown)
+  & (O extends AnyIterable
+    ? IteratedValue<O>
+    : O extends AnyAsyncIterable
+      ? AsyncIteratedValue<O>
+      : unknown)
   & (O extends AnySubscribable<infer D> ? D : unknown);
 
 export type FilterResult<O, R> =
-  & (O extends AnyIterable ? SimpleIterator<R> : unknown)
+  & (O extends AnyIterable
+    ? SimpleIterator<R>
+    : O extends AnyAsyncIterable
+      ? SimpleAsyncIterator<R>
+        : unknown)
   & (O extends AnySubscribable ? Observable<R> : unknown);
 
 /**
@@ -30,14 +54,15 @@ export type FilterResult<O, R> =
  * @param predicate
  *
  * @since 1.0.0
+ * @version 2.5.0 adds support for async iterators
  */
 export function filter$<O extends FilterOrigin, R extends FilterOriginValue<O>>(predicate: PredicateFn<FilterOriginValue<O>, R>): PipeStep<O, FilterResult<O, R>>;
 
 /**
  * Filters emitted values using given predicate
- * @param predicate
  *
  * @since 1.0.0
+ * @version 2.5.0 Add support for async iterators
  */
 export function filter$<O extends FilterOrigin>(predicate: (val: FilterOriginValue<O>) => boolean): PipeStep<O, FilterResult<O, FilterOriginValue<O>>>;
 
@@ -45,21 +70,35 @@ export function filter$<D>(predicate: (val: D) => boolean) {
   return (origin: unknown) => {
     const builder = resource$<D>();
 
-    if (isIterable<D>(origin) || isMinimalIterator<D>(origin)) {
-      const iterator = extractIterator(origin);
-      builder.add(iterator$<D>({
-        next: () => {
-          while (true) {
-            const { done, value } = iterator.next();
+    if (isIterable<D>(origin) || isAsyncIterable<D>(origin) || isAwaitableIterator<D>(origin)) {
+      const iterator = extractAwaitableIterator(origin);
+      const result = iterator.next();
 
-            if (done) {
-              return { done: true };
-            } else if (predicate(value)) {
-              return { done: false, value };
+      if (isPromise(result)) {
+        builder.add(asyncIterator$<D>((async function* () {
+          let res = await result;
+
+          while (!res.done) {
+            if (predicate(res.value)) {
+              yield res.value;
             }
+
+            res = await (iterator as MinimalAsyncIterator<D>).next();
           }
-        }
-      }));
+        })()));
+      } else {
+        let res = result;
+
+        builder.add(iterator$<D>((function* () {
+          while (!res.done) {
+            if (predicate(res.value)) {
+              yield res.value;
+            }
+
+            res = (iterator as MinimalIterator<D>).next();
+          }
+        })()));
+      }
     }
 
     if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {

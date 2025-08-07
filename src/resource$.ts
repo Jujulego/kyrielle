@@ -1,13 +1,13 @@
 import type { Deferrable } from './types/inputs/Deferrable.js';
-import type { AnyIterable } from './types/inputs/MinimalIterator.js';
+import type { AnyAwaitableIterable } from './types/inputs/MinimalIterator.js';
 import type { Mutable } from './types/inputs/Mutable.js';
 import type { Subscribable, SubscribableHolder } from './types/inputs/Subscribable.js';
 import type { Awaitable } from './types/utils.js';
-import { isIterable, isSubscribableHolder } from './utils/predicates.js';
+import { isAsyncIterable, isIterable, isSubscribableHolder } from './utils/predicates.js';
 
 // Types
 export type ResourceFeature<D> =
-  | AnyIterable<D>
+  | AnyAwaitableIterable<D>
   | Subscribable<D>
   | Deferrable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -36,24 +36,34 @@ export interface ResourceBuilder<D, R = unknown> {
 
 /**
  * Helper to build complex resource types.
+ *
+ * @since 1.0.0
+ * @version 2.5.0 Add support for async iterators
  */
 export function resource$<D>(): ResourceBuilder<D> {
   const resource: object = {};
 
   return {
     add(feature: unknown): ResourceBuilder<D> {
-      if (isIterable(feature)) {
-        Object.assign(resource, feature[Symbol.iterator]());
-        Object.assign(resource, {
-          [Symbol.iterator]: () => resource,
-        });
-      } else if (isSubscribableHolder(feature)) {
+      if (isSubscribableHolder(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
         Object.assign(resource, {
           [Symbol.observable ?? '@@observable']: () => resource,
         });
       } else {
         Object.assign(resource, feature);
+
+        if (isIterable(feature)) {
+          Object.assign(resource, {
+            [Symbol.iterator]: () => resource,
+          });
+        }
+
+        if (isAsyncIterable(feature)) {
+          Object.assign(resource, {
+            [Symbol.asyncIterator]: () => resource,
+          });
+        }
       }
 
       return this as ResourceBuilder<D, ResourceFeature<D>>;
