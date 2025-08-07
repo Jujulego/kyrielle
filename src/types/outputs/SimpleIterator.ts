@@ -1,4 +1,4 @@
-import type { MinimalIterator } from '../inputs/MinimalIterator.js';
+import type { MinimalAsyncIterator, MinimalIterator } from '../inputs/MinimalIterator.js';
 
 /**
  * Object that can be iterated
@@ -14,6 +14,22 @@ export interface SimpleIterator<out D = unknown> extends MinimalIterator<D, neve
    * @since 2.0.0
    */
   next(this: void): SimpleIteratorResult<D>;
+}
+
+/**
+ * Object that can be iterated asynchronously
+ *
+ * @since 2.5.0
+ */
+export interface SimpleAsyncIterator<out D = unknown> extends MinimalAsyncIterator<D, never> {
+  [Symbol.asyncIterator](): SimpleAsyncIterator<D>;
+
+  /**
+   * Returns next item.
+   *
+   * @since 2.5.0
+   */
+  next(this: void): Promise<SimpleIteratorResult<D>>;
 }
 
 interface IteratorResultValue<out D> {
