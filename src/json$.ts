@@ -56,6 +56,7 @@ export type JsonResult<O, D, A> =
  * Parses json items.
  *
  * @since 1.0.0
+ * @version 2.5.0 Add support for async iterators
  */
 export function json$<D = unknown, A = unknown>(): <O extends JsonOrigin>(origin: O) => JsonResult<O, D, A>;
 
