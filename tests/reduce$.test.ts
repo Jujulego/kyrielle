@@ -33,4 +33,21 @@ describe('reduce$', () => {
     expect(spyCompute).toHaveBeenCalledWith(1, 2);
     expect(spyCompute).toHaveBeenCalledWith(3, 3);
   });
+
+  it('should call compute on each async iterated value and emit final result', async () => {
+    const generator = (async function* () { yield 1; yield 2; yield 3; })();
+    const spyCompute = vi.fn((state: number, item: number) => state + item);
+    const spyResult = vi.fn();
+
+    pipe$(
+      generator,
+      reduce$(spyCompute, 0),
+    ).subscribe(spyResult);
+
+    await vi.waitFor(() => expect(spyResult).toHaveBeenCalledWith(6));
+
+    expect(spyCompute).toHaveBeenCalledWith(0, 1);
+    expect(spyCompute).toHaveBeenCalledWith(1, 2);
+    expect(spyCompute).toHaveBeenCalledWith(3, 3);
+  });
 });
