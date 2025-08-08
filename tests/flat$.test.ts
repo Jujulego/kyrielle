@@ -17,6 +17,20 @@ describe('flat$', () => {
     expect(res.next()).toStrictEqual({ done: true });
   });
 
+  it('should emit each item from async iterated iterator', async () => {
+    const generator = (async function* () { yield [1, 2]; yield []; yield [3, 4]; })();
+    const res = pipe$(
+      generator,
+      flat$()
+    );
+
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 1 });
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 2 });
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 3 });
+    await expect(res.next()).resolves.toStrictEqual({ done: false, value: 4 });
+    await expect(res.next()).resolves.toStrictEqual({ done: true });
+  });
+
   it('should emit each item from emitted iterator', () => {
     const spy = vi.fn();
 
