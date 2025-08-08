@@ -43,4 +43,25 @@ describe('scan$', () => {
 
     expect(iterator.next()).toStrictEqual({ done: true });
   });
+
+  it('should call compute on each async iterated value', async () => {
+    const generator = (async function* () { yield 1; yield 2; yield 3; })();
+    const spyCompute = vi.fn((state: number, item: number) => state + item);
+
+    const iterator = pipe$(
+      generator,
+      scan$(spyCompute, 0),
+    );
+
+    await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 1 });
+    expect(spyCompute).toHaveBeenCalledWith(0, 1);
+
+    await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 3 });
+    expect(spyCompute).toHaveBeenCalledWith(1, 2);
+
+    await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 6 });
+    expect(spyCompute).toHaveBeenCalledWith(3, 3);
+
+    await expect(iterator.next()).resolves.toStrictEqual({ done: true });
+  });
 });
