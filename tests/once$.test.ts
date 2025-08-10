@@ -7,7 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 // Tests
 describe('once$', () => {
   describe('with an observer', () => {
-    it('should be unsubscribed after first call', () => {
+    it('should be unsubscribed after first call', async () => {
       const spy = vi.fn();
       const source = source$<number>();
 
@@ -18,7 +18,7 @@ describe('once$', () => {
       source.next(42);
 
       expect(spy).toHaveBeenCalledWith(42);
-      expect(sub.unsubscribe).toHaveBeenCalled();
+      await vi.waitFor(() => expect(sub.unsubscribe).toHaveBeenCalled());
 
       // Next call
       source.next(1);
@@ -26,7 +26,7 @@ describe('once$', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should be unsubscribed after first next call', () => {
+    it('should be unsubscribed after first next call', async () => {
       const spy = vi.fn();
       const source = source$<number>();
 
@@ -37,7 +37,7 @@ describe('once$', () => {
       source.next(42);
 
       expect(spy).toHaveBeenCalledWith(42);
-      expect(sub.unsubscribe).toHaveBeenCalled();
+      await vi.waitFor(() => expect(sub.unsubscribe).toHaveBeenCalled());
 
       // Next call
       source.next(1);
@@ -45,7 +45,7 @@ describe('once$', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should be unsubscribed after first error call', () => {
+    it('should be unsubscribed after first error call', async () => {
       const spy = vi.fn();
       const source = source$<number>();
 
@@ -56,7 +56,7 @@ describe('once$', () => {
       source.error(42);
 
       expect(spy).toHaveBeenCalledWith(42);
-      expect(sub.unsubscribe).toHaveBeenCalled();
+      await vi.waitFor(() => expect(sub.unsubscribe).toHaveBeenCalled());
 
       // Next call
       source.error(1);
@@ -66,7 +66,7 @@ describe('once$', () => {
   });
 
   describe('with a listener', () => {
-    it('should be unsubscribed after first call', () => {
+    it('should be unsubscribed after first call', async () => {
       const spy = vi.fn();
       const mux = multiplexer$({
         test: source$<number>()
@@ -79,7 +79,7 @@ describe('once$', () => {
       mux.emit('test', 42);
 
       expect(spy).toHaveBeenCalledWith(42);
-      expect(sub.unsubscribe).toHaveBeenCalled();
+      await vi.waitFor(() => expect(sub.unsubscribe).toHaveBeenCalled());
 
       // Next call
       mux.emit('test', 1);
@@ -87,7 +87,7 @@ describe('once$', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should be unsubscribed after first next call', () => {
+    it('should be unsubscribed after first next call', async () => {
       const spy = vi.fn();
       const mux = multiplexer$({
         test: source$<number>()
@@ -100,7 +100,7 @@ describe('once$', () => {
       mux.emit('test', 42);
 
       expect(spy).toHaveBeenCalledWith(42);
-      expect(sub.unsubscribe).toHaveBeenCalled();
+      await vi.waitFor(() => expect(sub.unsubscribe).toHaveBeenCalled());
 
       // Next call
       mux.emit('test', 1);

@@ -57,24 +57,28 @@ export function once$(...args: [Subscribable, OnceCallback | PartialObserver] | 
 
 // Utils
 function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void): StrictObserver {
+  let called = false;
+
+  function wrap(cb: (arg: unknown) => void) {
+    return (data: unknown) => {
+      if (!called) {
+        called = true;
+
+        cb(data);
+        queueMicrotask(unsub);
+      }
+    };
+  }
+
   if (typeof arg === 'function') {
     return observer$({
-      next: (data: unknown) => {
-        unsub();
-        arg(data);
-      }
+      next: wrap(arg),
     });
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next: arg.next && ((data: unknown) => {
-        unsub();
-        arg.next!(data);
-      }),
-      error: arg.error && ((error: unknown) => {
-        unsub();
-        arg.error!(error);
-      }),
+      next: arg.next && wrap(arg.next),
+      error: arg.error && wrap(arg.error),
       complete: arg.complete?.bind(arg),
     });
   }
