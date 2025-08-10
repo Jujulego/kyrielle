@@ -1,6 +1,7 @@
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { once$ } from '@/src/once$.js';
 import { source$ } from '@/src/source$.js';
+import { var$ } from '@/src/var$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 // Tests
@@ -106,5 +107,14 @@ describe('once$', () => {
 
       expect(spy).toHaveBeenCalledOnce();
     });
+  });
+
+  it('should work with initialized var$', () => {
+    const spy = vi.fn();
+    const initialized = var$('test');
+
+    once$(initialized, spy);
+
+    expect(spy).toHaveBeenCalledWith('test');
   });
 });
