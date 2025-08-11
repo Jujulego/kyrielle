@@ -2,7 +2,7 @@ import { asyncIterator$ } from '@/src/async-iterator$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('asyncIterator$', () => {
-  it('should call given next function', async () => {
+  it('should call given next async function', async () => {
     const next = vi.fn(async () => ({ value: 42 }));
     const iterator = asyncIterator$({ next });
 
@@ -17,6 +17,13 @@ describe('asyncIterator$', () => {
     await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 1 });
     await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 2 });
     await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 3 });
+    await expect(iterator.next()).resolves.toStrictEqual({ done: true });
+  });
+
+  it('should accept an array', async () => {
+    const iterator = asyncIterator$([42]);
+
+    await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 42 });
     await expect(iterator.next()).resolves.toStrictEqual({ done: true });
   });
 });
