@@ -14,7 +14,8 @@ export * from './types/outputs/StrictListenable.js';
 export * from './types/outputs/StrictObserver.js';
 export * from './types/outputs/Subscription.js';
 
-export { extractSubscribable } from './utils/subscribable.js';
+export * from './utils/subscribable.js';
+export * from './utils/iterator.js';
 export * from './utils/predicates.js';
 
 export * from './async-iterator$.js';
