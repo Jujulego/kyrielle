@@ -55,7 +55,7 @@ export type CollectResult<O extends CollectOrigin, T extends CollectTarget<Colle
  *
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
- * @version 2.6.0 Accepts extendable target
+ * @version 2.6.0 Accepts extendable target & returns an Oncervable
  */
 export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>;
 export function collect$<O extends CollectOrigin, T extends CollectTarget<CollectData<O>>>(target: T): PipeStep<O, CollectResult<O, T>>;

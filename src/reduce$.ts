@@ -1,4 +1,4 @@
-import { observable$ } from './observable$.js';
+import { oncervable$ } from './oncervable$.js';
 import type { PipeStep } from './pipe$.js';
 import type {
   AnyAsyncIterable,
@@ -11,6 +11,7 @@ import type {
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
+import type { Oncervable } from './types/outputs/Oncervable.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import {
   isAsyncIterable,
@@ -42,9 +43,9 @@ export type ReduceResult<O, R> =
   O extends AnyIterable
     ? R
     : O extends AnyAsyncIterable
-      ? Observable<R>
+      ? Oncervable<R>
       : O extends AnySubscribable
-        ? Observable<R>
+        ? Oncervable<R>
         : never;
 
 /**
@@ -52,6 +53,7 @@ export type ReduceResult<O, R> =
  *
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
+ * @version 2.6.0 Returns an Oncervable
  */
 export function reduce$<O extends ReduceOrigin, const S>(cb: ReduceCallback<ReduceOriginValue<O>, S>, init: S): PipeStep<O, ReduceResult<O, S>>;
 
@@ -64,7 +66,7 @@ export function reduce$<D, const S>(cb: ReduceCallback<D, S>, init: S): PipeStep
       let result = iterator.next();
 
       if (isPromise(result)) {
-        return observable$(async (observer, signal) => {
+        return oncervable$(async ({ signal }) => {
           let res = await result;
 
           while (!res.done) {
@@ -74,8 +76,7 @@ export function reduce$<D, const S>(cb: ReduceCallback<D, S>, init: S): PipeStep
             res = await (iterator as MinimalAsyncIterator<D>).next();
           }
 
-          observer.next(state);
-          observer.complete();
+          return state;
         });
       } else {
         while (!result.done) {
@@ -88,15 +89,14 @@ export function reduce$<D, const S>(cb: ReduceCallback<D, S>, init: S): PipeStep
     }
 
     if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
-      return observable$((observer, signal) => {
+      return oncervable$(({ resolve, reject, signal }) => {
         boundedSubscription(extractSubscribable(origin), signal, {
           next(item) {
             state = cb(state, item);
           },
-          error: (err) => observer.error(err),
+          error: reject,
           complete: () => {
-            observer.next(state);
-            observer.complete();
+            resolve(state);
           },
         });
       });
