@@ -42,30 +42,23 @@ describe('collect$', () => {
   });
 
   it('should collect async generated items into an array', async () => {
-    const spyResult = vi.fn();
-
-    pipe$(
-      (async function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
-      collect$()
-    ).subscribe(spyResult);
-
-    await vi.waitFor(() => {
-      expect(spyResult).toHaveBeenCalledWith([1, 2, 3]);
-    });
+    await expect(
+      pipe$(
+        (async function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
+        collect$()
+      )
+    ).resolves.toStrictEqual([1, 2, 3]);
   });
 
   it('should collect async generated items into given set', async () => {
-    const spyResult = vi.fn();
     const set = new Set();
 
-    pipe$(
-      (async function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
-      collect$(set)
-    ).subscribe(spyResult);
-
-    await vi.waitFor(() => {
-      expect(spyResult).toHaveBeenCalledWith(set);
-    });
+    await expect(
+      pipe$(
+        (async function* () { yield 1; yield 2; yield 3; return 'toto'; })(),
+        collect$(set)
+      )
+    ).resolves.toBe(set);
   });
 
   it('should collect emitted items into an array', () => {

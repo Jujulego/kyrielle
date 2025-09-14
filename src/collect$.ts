@@ -1,5 +1,5 @@
 import { extend$ } from './extend$.js';
-import { observable$ } from './observable$.js';
+import { oncervable$ } from './oncervable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { AnyExtendable, Extendable } from './types/inputs/Extendable.js';
 import type {
@@ -12,7 +12,7 @@ import type {
   MinimalIterator
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Oncervable } from './types/outputs/Oncervable.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import {
   isAsyncIterable,
@@ -45,9 +45,9 @@ export type CollectResult<O extends CollectOrigin, T extends CollectTarget<Colle
   O extends AnyIterable
     ? T
     : O extends AnyAsyncIterable
-      ? Observable<T>
+      ? Oncervable<T>
       : O extends AnySubscribable
-        ? Observable<T>
+        ? Oncervable<T>
         : never;
 
 /**
@@ -60,14 +60,14 @@ export type CollectResult<O extends CollectOrigin, T extends CollectTarget<Colle
 export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>;
 export function collect$<O extends CollectOrigin, T extends CollectTarget<CollectData<O>>>(target: T): PipeStep<O, CollectResult<O, T>>;
 
-export function collect$<D>(target: Extendable<D> = []): PipeStep<CollectOrigin<D>, Extendable<D> | Observable<Extendable<D>> | undefined> {
+export function collect$<D>(target: Extendable<D> = []): PipeStep<CollectOrigin<D>, Extendable<D> | Oncervable<Extendable<D>> | undefined> {
   return (origin: AnyAwaitableIterable<D> | AnySubscribable<D>) => {
     if (isIterable<D>(origin) || isAsyncIterable<D>(origin) || isAwaitableIterator<D>(origin)) {
       const iterator = extractAwaitableIterator(origin);
       let result = iterator.next();
 
       if (isPromise(result)) {
-        return observable$(async (observer, signal) => {
+        return oncervable$(async ({ signal }) => {
           let res = await result;
 
           while (!res.done) {
@@ -77,8 +77,7 @@ export function collect$<D>(target: Extendable<D> = []): PipeStep<CollectOrigin<
             res = await (iterator as MinimalAsyncIterator<D>).next();
           }
 
-          observer.next(target);
-          observer.complete();
+          return target;
         });
       } else {
         while (!result.done) {
@@ -91,15 +90,14 @@ export function collect$<D>(target: Extendable<D> = []): PipeStep<CollectOrigin<
     }
 
     if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
-      return observable$((observer, signal) => {
+      return oncervable$(({ resolve, reject, signal }) => {
         boundedSubscription(extractSubscribable(origin), signal, {
           next(item) {
             extend$(target, item);
           },
-          error: (err) => observer.error(err),
+          error: reject,
           complete: () => {
-            observer.next(target);
-            observer.complete();
+            resolve(target);
           },
         });
       });
