@@ -55,9 +55,9 @@ export type ReduceResult<O, R> =
  * @version 2.5.0 Add support for async iterators
  * @version 2.6.0 Returns an Oncervable
  */
-export function reduce$<O extends ReduceOrigin, const S>(cb: ReduceCallback<ReduceOriginValue<O>, S>, init: S): PipeStep<O, ReduceResult<O, S>>;
+export function reduce$<O extends ReduceOrigin, S>(cb: ReduceCallback<ReduceOriginValue<O>, S>, init: S): PipeStep<O, ReduceResult<O, S>>;
 
-export function reduce$<D, const S>(cb: ReduceCallback<D, S>, init: S): PipeStep<ReduceOrigin<D>, S | Observable<S> | undefined> {
+export function reduce$<D, S>(cb: ReduceCallback<D, S>, init: S): PipeStep<ReduceOrigin<D>, S | Observable<S> | undefined> {
   return (origin: ReduceOrigin<D>) => {
     let state = init;
 
