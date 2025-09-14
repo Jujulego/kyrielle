@@ -45,6 +45,7 @@ export * from './observer$.js';
 export * from './of$.js';
 export * from './off$.js';
 export * from './once$.js';
+export * from './oncervable$.js';
 export * from './pipe$.js';
 export * from './reduce$.js';
 export * from './ref$.js';

@@ -5,7 +5,7 @@ export function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 /**
- * Polyfill for AbortSignal.any
+ * Polyfill for `AbortSignal.any`
  */
 export function abortSignalAnyPolyfill(signals: AbortSignal[]): AbortSignal {
   // Easy cases
