@@ -1,4 +1,5 @@
 export * from './types/inputs/Deferrable.js';
+export * from './types/inputs/Extendable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
 export * from './types/inputs/Observer.js';
