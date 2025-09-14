@@ -1,5 +1,7 @@
+import { extend$ } from './extend$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
+import type { AnyExtendable, Extendable } from './types/inputs/Extendable.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -28,13 +30,24 @@ export type CollectOrigin<D = unknown> =
   | AnyAwaitableIterable<D>
   | AnySubscribable<D>;
 
-export type CollectResult<O extends CollectOrigin> =
+export type CollectData<O extends CollectOrigin> =
   O extends AnyIterable
-    ? IteratedValue<O>[]
+    ? IteratedValue<O>
     : O extends AnyAsyncIterable
-      ? Observable<AsyncIteratedValue<O>[]>
+      ? AsyncIteratedValue<O>
       : O extends AnySubscribable<infer D>
-        ? Observable<D[]>
+        ? D
+        : never;
+
+export type CollectTarget<D = unknown> = AnyExtendable<D>;
+
+export type CollectResult<O extends CollectOrigin, T extends CollectTarget<CollectData<O>> = CollectData<O>[]> =
+  O extends AnyIterable
+    ? T
+    : O extends AnyAsyncIterable
+      ? Observable<T>
+      : O extends AnySubscribable
+        ? Observable<T>
         : never;
 
 /**
@@ -42,13 +55,13 @@ export type CollectResult<O extends CollectOrigin> =
  *
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
+ * @version 2.6.0 Accepts extendable target
  */
-export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>
+export function collect$<O extends CollectOrigin>(): PipeStep<O, CollectResult<O>>;
+export function collect$<O extends CollectOrigin, T extends CollectTarget<CollectData<O>>>(target: T): PipeStep<O, CollectResult<O, T>>;
 
-export function collect$<D>(): PipeStep<CollectOrigin<D>, D[] | Observable<D[]> | undefined> {
+export function collect$<D>(target: Extendable<D> = []): PipeStep<CollectOrigin<D>, Extendable<D> | Observable<Extendable<D>> | undefined> {
   return (origin: AnyAwaitableIterable<D> | AnySubscribable<D>) => {
-    const output: D[] = [];
-
     if (isIterable<D>(origin) || isAsyncIterable<D>(origin) || isAwaitableIterator<D>(origin)) {
       const iterator = extractAwaitableIterator(origin);
       let result = iterator.next();
@@ -60,20 +73,20 @@ export function collect$<D>(): PipeStep<CollectOrigin<D>, D[] | Observable<D[]> 
           while (!res.done) {
             signal.throwIfAborted();
 
-            output.push(res.value);
+            extend$(target, res.value);
             res = await (iterator as MinimalAsyncIterator<D>).next();
           }
 
-          observer.next(output);
+          observer.next(target);
           observer.complete();
         });
       } else {
         while (!result.done) {
-          output.push(result.value);
+          extend$(target, result.value);
           result = (iterator as MinimalIterator<D>).next();
         }
 
-        return output;
+        return target;
       }
     }
 
@@ -81,11 +94,11 @@ export function collect$<D>(): PipeStep<CollectOrigin<D>, D[] | Observable<D[]> 
       return observable$((observer, signal) => {
         boundedSubscription(extractSubscribable(origin), signal, {
           next(item) {
-            output.push(item);
+            extend$(target, item);
           },
           error: (err) => observer.error(err),
           complete: () => {
-            observer.next(output);
+            observer.next(target);
             observer.complete();
           },
         });
