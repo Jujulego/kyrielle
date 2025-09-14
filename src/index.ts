@@ -8,6 +8,7 @@ export * from './types/inputs/Unsubscribable.js';
 
 export * from './types/outputs/Mutator.js';
 export * from './types/outputs/Observable.js';
+export * from './types/outputs/Oncervable.js';
 export * from './types/outputs/Ref.js';
 export * from './types/outputs/SimpleIterator.js';
 export * from './types/outputs/StrictEmitter.js';
