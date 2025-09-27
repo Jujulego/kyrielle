@@ -7,6 +7,7 @@ import type { AnySubscribable, Subscribable, SubscribableValue } from './types/i
 import type { Observable } from './types/outputs/Observable.js';
 import type { Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
+import { isDeferrable, isPromise } from './utils/predicates.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -18,10 +19,27 @@ export function store$<O extends StoreOrigin, R extends StoreRef<SubscribableVal
 
 export function store$<D>(reference: StoreRef<D>) {
   return (origin: Subscribable<D>) => {
+    const controller = new AbortController();
+
+    if (isDeferrable<Awaitable<D | undefined>>(origin)) {
+      const initial = origin.defer(controller.signal);
+
+      if (isPromise(initial)) {
+        initial.then((value) => {
+          if (value !== undefined) {
+            reference.mutate(value);
+          }
+        });
+      } else if (initial !== undefined) {
+        reference.mutate(initial);
+      }
+    }
+
     return resource$()
       .add(observable$<D>((obs, signal) => {
         boundedSubscription(origin, signal, {
           next(data) {
+            controller.abort();
             reference.mutate(data);
             obs.next(data);
           },
@@ -35,7 +53,7 @@ export function store$<D>(reference: StoreRef<D>) {
 }
 
 // Types
-export type StoreOrigin<D = unknown> = AnySubscribable<D>;
+export type StoreOrigin<D = unknown> = AnySubscribable<D> & Partial<Deferrable<Awaitable<D | undefined>>>;
 export type StoreRef<D = unknown> = Deferrable<Awaitable<D | undefined>> & Mutable<D, Awaitable<D>>;
 
 export type StoreResult<O extends StoreOrigin, R extends StoreRef<SubscribableValue<O>>> = Observable<SubscribableValue<O>>

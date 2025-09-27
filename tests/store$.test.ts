@@ -55,4 +55,43 @@ describe('store$', () => {
     await expect(result.defer()).resolves.toBe(42);
     expect(reference.defer).toHaveBeenCalled();
   });
+
+  it('should mutate reference on initialisation, if origin is a reference', () => {
+    // Setup
+    const origin = var$<number>(42);
+
+    const reference = var$<number>();
+    vi.spyOn(reference, 'defer');
+    vi.spyOn(reference, 'mutate');
+
+    const result = pipe$(origin, store$(reference));
+
+    expect(reference.mutate).toHaveBeenCalledWith(42);
+
+    // Defer !
+    expect(result.defer()).toBe(42);
+    expect(reference.defer).toHaveBeenCalled();
+  });
+
+  it('should mutate reference on initialisation, if origin is an async reference', async () => {
+    // Setup
+    const origin = resource$<number>()
+      .add(source$<number>())
+      .add({ defer: vi.fn(async () => 42) })
+      .build();
+
+    const reference = var$<number>();
+    vi.spyOn(reference, 'defer');
+    vi.spyOn(reference, 'mutate');
+
+    const result = pipe$(origin, store$(reference));
+
+    await vi.waitFor(() => {
+      expect(reference.mutate).toHaveBeenCalledWith(42);
+    });
+
+    // Defer !
+    expect(result.defer()).toBe(42);
+    expect(reference.defer).toHaveBeenCalled();
+  });
 });
