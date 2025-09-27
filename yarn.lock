@@ -3711,9 +3711,6 @@ __metadata:
     vite: "npm:7.1.7"
     vite-tsconfig-paths: "npm:5.1.4"
     vitest: "npm:3.2.4"
-  dependenciesMeta:
-    vitest@3.2.4:
-      unplugged: true
   languageName: unknown
   linkType: soft
 

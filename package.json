@@ -1,6 +1,6 @@
 {
   "name": "kyrielle",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": {
@@ -54,10 +54,5 @@
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
   },
-  "packageManager": "yarn@4.10.3",
-  "dependenciesMeta": {
-    "vitest@3.2.4": {
-      "unplugged": true
-    }
-  }
+  "packageManager": "yarn@4.10.3"
 }
