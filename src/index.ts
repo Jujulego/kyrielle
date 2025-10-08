@@ -31,6 +31,7 @@ export * from './flow$.js';
 export * from './group$.js';
 export * from './inherit$.js';
 export * from './interval$.js';
+export * from './is$.js';
 export * from './iterate$.js';
 export * from './iterator$.js';
 export * from './json$.js';
