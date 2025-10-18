@@ -138,8 +138,11 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: yarn
 
-      - name: Install
-        run: yarn install --immutable
+      - name: Update npm
+        run: npm install -g npm@latest
+
+#      - name: Install
+#        run: yarn install --immutable
 
       - uses: actions/download-artifact@v5.0.0
         with:
