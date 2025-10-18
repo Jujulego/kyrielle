@@ -4,7 +4,6 @@ import type { AsyncMutable } from './types/inputs/Mutable.js';
 import type { Mutator } from './types/outputs/Mutator.js';
 import type { Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
-import { abortSignalAny } from './utils/abort.js';
 import { isDeferrable, isMutable } from './utils/predicates.js';
 
 // Types
@@ -79,7 +78,7 @@ export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): 
 
       try {
         // Try !
-        return await fn(signals.length ? abortSignalAny(signals) : undefined);
+        return await fn(signals.length ? AbortSignal.any(signals) : undefined);
       } catch (err) {
         // Aborted
         if (signal?.aborted) {
