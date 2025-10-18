@@ -5,7 +5,12 @@
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": "github:Jujulego/kyrielle",
   "description": "Tools to handle an (almost) infinite flow of data",
-  "keywords": ["kyrielle", "events", "iterators", "observables"],
+  "keywords": [
+    "kyrielle",
+    "events",
+    "iterators",
+    "observables"
+  ],
   "sideEffects": false,
   "files": [
     "./dist"
