@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": "github:Jujulego/kyrielle",
+  "description": "Tools to handle an (almost) infinite flow of data",
   "sideEffects": false,
   "files": [
     "./dist"
