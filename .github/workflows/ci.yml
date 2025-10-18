@@ -26,8 +26,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
-          cache: yarn
+          node-version: 24.x
 
       - name: Install
         run: yarn install --immutable
@@ -55,8 +54,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
-          cache: yarn
+          node-version: 24.x
 
       - name: Install
         run: yarn install --immutable
@@ -90,7 +88,6 @@ jobs:
         uses: actions/setup-node@v6.0.0
         with:
           node-version: ${{ matrix.node }}
-          cache: yarn
 
       - name: Install
         run: yarn install --immutable
@@ -136,13 +133,6 @@ jobs:
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
-          cache: yarn
-
-      - name: Update npm
-        run: npm install -g npm@latest
-
-#      - name: Install
-#        run: yarn install --immutable
 
       - uses: actions/download-artifact@v5.0.0
         with:
