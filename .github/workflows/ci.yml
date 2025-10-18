@@ -134,7 +134,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
           cache: yarn
 
@@ -150,7 +150,7 @@ jobs:
           path: dist
 
       - name: Publish
-        run: yarn npm publish --access public --tag ${{ github.ref_name }} --tolerate-republish --provenance
+        run: npm publish --access public --tag ${{ github.ref_name }} --provenance
 #        env:
 #          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
