@@ -140,9 +140,16 @@ jobs:
           path: dist
 
       - name: Publish
-        run: npm publish --access public --tag ${{ github.ref_name }} --provenance
-#        env:
-#          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # language=Bash
+        run: |
+          name=$(jq -j ".name" package.json)
+          version=$(npm search $name --json | jq -j ".[] | select(.name==\"$name\") | .version")
+          
+          if [[ "$version" == "$(jq -j ".version" package.json)" ]]; then
+            echo "::notice::$version already exists in npm registry"
+          else
+            npm publish --access public --tag ${{ github.ref_name }} --provenance
+          fi
 
   release:
     if: ${{ github.event_name == 'push' }}
@@ -160,10 +167,11 @@ jobs:
 
       - name: Read package.json
         id: info
-        run: echo "version=$(jq -r ".version" package.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(jq -j ".version" package.json)" >> $GITHUB_OUTPUT
 
       - name: Tag version
         id: tag
+        # language=Bash
         run: |
           echo "::group::git fetch --tags"
           
