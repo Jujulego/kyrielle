@@ -1,9 +1,11 @@
 import { swc } from '@jujulego/vite-plugin-swc';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   cacheDir: '.vite',
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     reporters: ['default', 'junit'],
     coverage: {
@@ -18,7 +20,6 @@ export default defineConfig({
     }
   },
   plugins: [
-    tsconfigPaths(),
     swc()
   ]
 });
