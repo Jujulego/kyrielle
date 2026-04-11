@@ -32,7 +32,7 @@ describe('filter$', () => {
     const src = source$<number>();
     const res = pipe$(src, filter$((n): n is 42 => n === 42));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: 42) => void>());
     expect(subscription.closed).toBe(false);
 
     src.complete();
@@ -46,7 +46,7 @@ describe('filter$', () => {
     });
     const res = pipe$(src, filter$((n) => n === 42));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: 42) => void>());
     expect(fn).not.toHaveBeenCalled();
 
     subscription.unsubscribe();

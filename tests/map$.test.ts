@@ -62,7 +62,7 @@ describe('map$', () => {
     const src = source$<number>();
     const res = pipe$(src, map$((n) => n.toString()));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: string) => void>());
     expect(subscription.closed).toBe(false);
 
     src.complete();
@@ -76,7 +76,7 @@ describe('map$', () => {
     });
     const res = pipe$(src, map$((n) => n.toString()));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: string) => void>());
     expect(fn).not.toHaveBeenCalled();
 
     subscription.unsubscribe();

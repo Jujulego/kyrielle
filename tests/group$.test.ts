@@ -1,5 +1,4 @@
 import { type Group, group$ } from '@/src/group$.js';
-import { merge$ } from '@/src/merge$.js';
 import { observable$ } from '@/src/observable$.js';
 import { type Source, source$ } from '@/src/source$.js';
 import type { Observer } from '@/src/types/inputs/Observer.js';
@@ -81,7 +80,7 @@ describe('group$', () => {
       }),
     });
 
-    const sub = grouped.subscribe(vi.fn());
+    const sub = grouped.subscribe(vi.fn<(arg: number) => void>());
     sub.unsubscribe();
 
     expect(fn).toHaveBeenCalledTimes(3);
@@ -135,7 +134,7 @@ describe('group$', () => {
     });
 
     it('should not subscribe to child event as child doesn\'t exists', () => {
-      expect(() => grp.on('toto' as 'int', vi.fn()))
+      expect(() => grp.on('toto' as 'int', vi.fn<(arg: unknown) => void>()))
         .toThrow(new Error('Unsupported listen key toto'));
     });
   });

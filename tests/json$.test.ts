@@ -64,7 +64,7 @@ describe('json$', () => {
     const src = source$<string>();
     const res = pipe$(src, json$());
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: unknown) => void>());
     expect(subscription.closed).toBe(false);
 
     src.complete();
@@ -78,7 +78,7 @@ describe('json$', () => {
     });
     const res = pipe$(src, json$());
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: unknown) => void>());
     expect(fn).not.toHaveBeenCalled();
 
     subscription.unsubscribe();

@@ -61,7 +61,7 @@ describe('merge$', () => {
       }),
     );
 
-    const sub = merged.subscribe(vi.fn());
+    const sub = merged.subscribe(vi.fn<(arg: number) => void>());
     sub.unsubscribe();
 
     expect(fn).toHaveBeenCalledTimes(3);

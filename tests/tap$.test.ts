@@ -74,7 +74,7 @@ describe('tap$', () => {
     const src = source$<number>();
     const res = pipe$(src, tap$(() => null));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: number) => void>());
     expect(subscription.closed).toBe(false);
 
     src.complete();
@@ -88,7 +88,7 @@ describe('tap$', () => {
     });
     const res = pipe$(src, tap$(() => null));
 
-    const subscription = res.subscribe(vi.fn());
+    const subscription = res.subscribe(vi.fn<(arg: number) => void>());
     expect(fn).not.toHaveBeenCalled();
 
     subscription.unsubscribe();
