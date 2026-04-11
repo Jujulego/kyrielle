@@ -85,7 +85,7 @@ describe('multiplexer$', () => {
     });
 
     it('should not subscribe to child event as child doesn\'t exists', () => {
-      expect(() => mlt.on('toto' as 'int', vi.fn()))
+      expect(() => mlt.on('toto' as 'int', vi.fn<(arg: unknown) => void>()))
         .toThrow(new Error('Unsupported listen key toto'));
     });
   });
