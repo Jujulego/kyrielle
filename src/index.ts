@@ -47,6 +47,7 @@ export * from './off$.js';
 export * from './once$.js';
 export * from './pick$.js';
 export * from './pipe$.js';
+export * from './step$.js';
 export * from './reduce$.js';
 export * from './ref$.js';
 export * from './resource$.js';

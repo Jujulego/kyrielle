@@ -1,3 +1,5 @@
+import { step$ } from './step$.js';
+
 /**
  * Run step on input value allowing to change its shape or emitted data.
  *
@@ -146,7 +148,7 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
  * @since 1.0.0
  */
 export function pipe$(value: unknown, ...steps: PipeStep[]): unknown {
-  return steps.reduce((val, step) => step(val), value);
+  return step$(...steps)(value);
 }
 
 // Types

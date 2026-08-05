@@ -1,4 +1,5 @@
 import type { PipeStep } from './pipe$.js';
+import { step$ } from './step$.js';
 import type { PartialObserver } from './types/inputs/Observer.js';
 import type { Subscribable } from './types/inputs/Subscribable.js';
 import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
@@ -183,7 +184,7 @@ export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Subscribable>(
  */
 export function flow$(value: unknown, ...rest: [...PipeStep[], observer: PartialObserver]): Unsubscribable {
   const observer = rest.pop() as PartialObserver;
-  return ((rest as PipeStep[]).reduce((obs, step) => step(obs), value) as Subscribable).subscribe(observer);
+  return (step$(...(rest as PipeStep[]))(value) as Subscribable).subscribe(observer);
 }
 
 /**
