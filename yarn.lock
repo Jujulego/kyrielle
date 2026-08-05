@@ -285,16 +285,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/jill@npm:3.0.9":
-  version: 3.0.9
-  resolution: "@jujulego/jill@npm:3.0.9"
+"@jujulego/jill@npm:3.0.10":
+  version: 3.0.10
+  resolution: "@jujulego/jill@npm:3.0.10"
   dependencies:
     "@sentry/node": "npm:^10.0.0"
     "@swc/helpers": "npm:^0.5.0"
     yargs: "npm:^18.0.0"
   bin:
     jill: bin/jill.js
-  checksum: 10c0/a2fedfd6999f53c7a0e6765209e7c75ca42a52d1063d17a3d7acf63fd5a5c9d6bf83a3a06a1a50b9ccd200548202641680e368b2fcb7ebf05f077bbd36f3b3c5
+  checksum: 10c0/4ac0d7a2df9ddd422db6a364a3d8d8f933c10606fb5cea9086f611f8012c1b04c12fb37a5761d9d80720afe928b14cb94c37050a45da9400884af73213c0b35f
   languageName: node
   linkType: hard
 
@@ -3533,7 +3533,7 @@ __metadata:
   resolution: "kyrielle@workspace:."
   dependencies:
     "@eslint/js": "npm:10.0.1"
-    "@jujulego/jill": "npm:3.0.9"
+    "@jujulego/jill": "npm:3.0.10"
     "@jujulego/vite-plugin-swc": "npm:1.2.1"
     "@microsoft/eslint-formatter-sarif": "npm:3.1.0"
     "@repeaterjs/repeater": "npm:^3.0.5"
