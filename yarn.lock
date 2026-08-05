@@ -1755,9 +1755,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/eslint-plugin@npm:1.6.16":
-  version: 1.6.16
-  resolution: "@vitest/eslint-plugin@npm:1.6.16"
+"@vitest/eslint-plugin@npm:1.6.26":
+  version: 1.6.26
+  resolution: "@vitest/eslint-plugin@npm:1.6.26"
   dependencies:
     "@typescript-eslint/scope-manager": "npm:^8.58.0"
     "@typescript-eslint/utils": "npm:^8.58.0"
@@ -1773,7 +1773,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/b2871ce12b831ea1e1ff8cf01d978d0746aaeac951830880ad966ad2783de4fbe835a1c74c44f5bccca73ca6007174cd0434c2725269cfafdcc6fbb43d4da495
+  checksum: 10c0/e1dd39f6ae26f7e53261f95ee5ec1cf6b9a8b9eabf0b908d3cf589bff30f86051ab6b86364dc3fdb11fce3684e90255173988a56091f778c4f77e3d75afbd62e
   languageName: node
   linkType: hard
 
@@ -3543,7 +3543,7 @@ __metadata:
     "@types/node": "npm:24.13.3"
     "@typescript-eslint/utils": "npm:8.66.0"
     "@vitest/coverage-v8": "npm:4.1.10"
-    "@vitest/eslint-plugin": "npm:1.6.16"
+    "@vitest/eslint-plugin": "npm:1.6.26"
     eslint: "npm:10.8.0"
     jiti: "npm:2.7.0"
     shx: "npm:0.4.0"
