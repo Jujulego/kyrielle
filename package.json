@@ -46,7 +46,7 @@
     "@typescript-eslint/utils": "8.66.0",
     "@vitest/coverage-v8": "4.1.10",
     "@vitest/eslint-plugin": "1.6.26",
-    "eslint": "10.8.0",
+    "eslint": "10.10.0",
     "jiti": "2.7.0",
     "shx": "0.4.0",
     "typescript": "6.0.3",
