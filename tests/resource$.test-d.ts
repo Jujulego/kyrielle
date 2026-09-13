@@ -24,7 +24,6 @@ describe('resource$', () => {
       .build();
 
     expectTypeOf(res).toHaveProperty('defer');
-    // eslint-disable-next-line vitest/valid-expect
     expectTypeOf(res.defer).returns.resolves.toBeNumber();
   });
 
