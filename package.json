@@ -42,7 +42,7 @@
     "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@swc/cli": "0.8.1",
     "@swc/core": "1.16.13",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.5",
     "@typescript-eslint/utils": "8.71.1",
     "@vitest/coverage-v8": "5.0.3",
     "@vitest/eslint-plugin": "1.6.27",
