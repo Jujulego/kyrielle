@@ -66,9 +66,9 @@ export interface MultiplexerUtils<M extends Mapping = Mapping> {
 /**
  * Object managing multiple events
  */
-export type _Multiplexer<M extends Mapping = Mapping> = StrictEmitter<InputMapping<M>> &
-  StrictListenable<OutputMapping<M>> &
-  MultiplexerUtils<M>;
+export type _Multiplexer<M extends Mapping = Mapping> = StrictEmitter<InputMapping<M>>
+  & StrictListenable<OutputMapping<M>>
+  & MultiplexerUtils<M>;
 
 /**
  * Builds a mapping from input values of each source in the given source mapping

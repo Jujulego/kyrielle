@@ -53,19 +53,19 @@ export type MapOriginValue<O extends MapOrigin> = (O extends AnyIterable
   ? IteratedValue<O>
   : O extends AnyAsyncIterable
     ? AsyncIteratedValue<O>
-    : unknown) &
-  (O extends AnySubscribable<infer D> ? D : unknown) &
-  (O extends Deferrable<infer D> ? Awaited<D> : unknown) &
-  (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
+    : unknown)
+  & (O extends AnySubscribable<infer D> ? D : unknown)
+  & (O extends Deferrable<infer D> ? Awaited<D> : unknown)
+  & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export type MapResult<O, R> = (O extends AnyIterable
   ? SimpleIterator<R>
   : O extends AnyAsyncIterable
     ? SimpleAsyncIterator<R>
-    : unknown) &
-  (O extends AnySubscribable ? Observable<R> : unknown) &
-  (O extends Deferrable ? MapDeferrable<O, R> : unknown) &
-  (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
+    : unknown)
+  & (O extends AnySubscribable ? Observable<R> : unknown)
+  & (O extends Deferrable ? MapDeferrable<O, R> : unknown)
+  & (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
 
 /**
  * Applies given function on every emitted values, including values returned by defer and mutate if present.

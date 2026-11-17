@@ -65,11 +65,9 @@ export function yield$<O extends YieldOrigin>(): PipeStep<O, YieldResult<O>> {
 export type YieldOrigin<D = unknown> = Deferrable<D> | Mutable<D>;
 export type YieldOriginValue<O extends YieldOrigin> = (O extends Deferrable<infer D>
   ? Awaited<D>
-  : unknown) &
-  (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
+  : unknown)
+  & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type YieldResult<O extends YieldOrigin> = (O extends Deferrable<infer D>
-  ? Ref<D>
-  : unknown) &
-  (O extends Mutable<infer A, infer D> ? Mutator<A, D> : unknown) &
-  Observable<YieldOriginValue<O>>;
+export type YieldResult<O extends YieldOrigin> = (O extends Deferrable<infer D> ? Ref<D> : unknown)
+  & (O extends Mutable<infer A, infer D> ? Mutator<A, D> : unknown)
+  & Observable<YieldOriginValue<O>>;

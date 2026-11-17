@@ -90,14 +90,14 @@ function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): StrictObs
     return observer$({
       start: arg.start?.bind(arg),
       next:
-        arg.next &&
-        ((data: unknown) => {
+        arg.next
+        && ((data: unknown) => {
           if (cleanup) cleanup();
           cleanup = arg.next!(data);
         }),
       error:
-        arg.error &&
-        ((error: unknown) => {
+        arg.error
+        && ((error: unknown) => {
           if (cleanup) cleanup();
           cleanup = arg.error!(error);
         }),

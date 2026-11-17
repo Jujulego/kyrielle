@@ -37,8 +37,8 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
  */
 export function isPartialObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
   return (
-    isNonNullObject(value) &&
-    (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'))
+    isNonNullObject(value)
+    && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'))
   );
 }
 

@@ -35,15 +35,15 @@ export type FilterOriginValue<O extends FilterOrigin> = (O extends AnyIterable
   ? IteratedValue<O>
   : O extends AnyAsyncIterable
     ? AsyncIteratedValue<O>
-    : unknown) &
-  (O extends AnySubscribable<infer D> ? D : unknown);
+    : unknown)
+  & (O extends AnySubscribable<infer D> ? D : unknown);
 
 export type FilterResult<O, R> = (O extends AnyIterable
   ? SimpleIterator<R>
   : O extends AnyAsyncIterable
     ? SimpleAsyncIterator<R>
-    : unknown) &
-  (O extends AnySubscribable ? Observable<R> : unknown);
+    : unknown)
+  & (O extends AnySubscribable ? Observable<R> : unknown);
 
 /**
  * Filters emitted values using given predicate

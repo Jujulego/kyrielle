@@ -50,10 +50,10 @@ export type JsonResult<O, D, A> = (O extends AnyIterable
   ? SimpleIterator<D>
   : O extends AnyAsyncIterable
     ? SimpleAsyncIterator<D>
-    : unknown) &
-  (O extends AnySubscribable ? Observable<D> : unknown) &
-  (O extends Deferrable ? JsonDeferrable<O, D> : unknown) &
-  (O extends Mutable ? JsonMutable<O, D, A> : unknown);
+    : unknown)
+  & (O extends AnySubscribable ? Observable<D> : unknown)
+  & (O extends Deferrable ? JsonDeferrable<O, D> : unknown)
+  & (O extends Mutable ? JsonMutable<O, D, A> : unknown);
 
 /**
  * Parses json items.
@@ -91,9 +91,9 @@ export function json$() {
     const builder = resource$();
 
     if (
-      isIterable<string>(origin) ||
-      isAsyncIterable<string>(origin) ||
-      isAwaitableIterator<string>(origin)
+      isIterable<string>(origin)
+      || isAsyncIterable<string>(origin)
+      || isAwaitableIterator<string>(origin)
     ) {
       const iterator = extractAwaitableIterator(origin);
       const result = iterator.next();

@@ -30,8 +30,8 @@ export type ReduceOriginValue<O extends ReduceOrigin> = (O extends AnyIterable
   ? IteratedValue<O>
   : O extends AnyAsyncIterable
     ? AsyncIteratedValue<O>
-    : unknown) &
-  (O extends AnySubscribable<infer D> ? D : unknown);
+    : unknown)
+  & (O extends AnySubscribable<infer D> ? D : unknown);
 
 export type ReduceCallback<T, S> = (state: S, item: T) => S;
 

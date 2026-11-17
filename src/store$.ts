@@ -61,8 +61,8 @@ export function store$<D>(reference: StoreRef<D>) {
 }
 
 // Types
-export type StoreOrigin<D = unknown> = AnySubscribable<D> &
-  Partial<Deferrable<Awaitable<D | undefined>>>;
+export type StoreOrigin<D = unknown> = AnySubscribable<D>
+  & Partial<Deferrable<Awaitable<D | undefined>>>;
 export type StoreRef<D = unknown> = Deferrable<Awaitable<D | undefined>> & Mutable<D, Awaitable<D>>;
 
 export type StoreResult<
