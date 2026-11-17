@@ -28,4 +28,5 @@ export interface SubscribableHolder<out D = unknown> {
 }
 
 export type AnySubscribable<D = unknown> = Subscribable<D> | SubscribableHolder<D>;
-export type SubscribableValue<T extends AnySubscribable> = T extends AnySubscribable<infer D> ? D : never;
+export type SubscribableValue<T extends AnySubscribable> =
+  T extends AnySubscribable<infer D> ? D : never;

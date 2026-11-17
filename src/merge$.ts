@@ -35,7 +35,7 @@ export function merge$<D>(...observables: Subscribable<D>[]): Observable<D> {
             signal.removeEventListener('abort', handleAbort);
             observer.complete();
           }
-        }
+        },
       });
     }
 

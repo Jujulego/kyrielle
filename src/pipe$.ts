@@ -12,11 +12,7 @@ export function pipe$<A, B>(value: A, stepA: PipeStep<A, B>): B;
  *
  * @since 1.0.0
  */
-export function pipe$<A, B, C>(
-  value: A,
-  stepA: PipeStep<A, B>,
-  stepB: PipeStep<B, C>
-): C;
+export function pipe$<A, B, C>(value: A, stepA: PipeStep<A, B>, stepB: PipeStep<B, C>): C;
 
 /**
  * Runs all steps one after another on input value allowing to change its shape or emitted data.
@@ -27,7 +23,7 @@ export function pipe$<A, B, C, D>(
   value: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
-  stepC: PipeStep<C, D>
+  stepC: PipeStep<C, D>,
 ): D;
 
 /**
@@ -40,7 +36,7 @@ export function pipe$<A, B, C, D, E>(
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
-  stepD: PipeStep<D, E>
+  stepD: PipeStep<D, E>,
 ): E;
 
 /**
@@ -54,7 +50,7 @@ export function pipe$<A, B, C, D, E, F>(
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
-  stepE: PipeStep<E, F>
+  stepE: PipeStep<E, F>,
 ): F;
 
 /**
@@ -69,7 +65,7 @@ export function pipe$<A, B, C, D, E, F, G>(
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
-  stepF: PipeStep<F, G>
+  stepF: PipeStep<F, G>,
 ): G;
 
 /**
@@ -85,7 +81,7 @@ export function pipe$<A, B, C, D, E, F, G, H>(
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
-  stepG: PipeStep<G, H>
+  stepG: PipeStep<G, H>,
 ): H;
 
 /**
@@ -102,7 +98,7 @@ export function pipe$<A, B, C, D, E, F, G, H, I>(
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
-  stepH: PipeStep<G, I>
+  stepH: PipeStep<G, I>,
 ): I;
 
 /**
@@ -120,7 +116,7 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J>(
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
-  stepI: PipeStep<I, J>
+  stepI: PipeStep<I, J>,
 ): J;
 
 /**
@@ -139,7 +135,7 @@ export function pipe$<A, B, C, D, E, F, G, H, I, J, K>(
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
-  stepJ: PipeStep<J, K>
+  stepJ: PipeStep<J, K>,
 ): K;
 
 /**

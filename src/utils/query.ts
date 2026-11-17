@@ -10,7 +10,7 @@ export class Query<T = unknown> {
   constructor(
     readonly promise: PromiseLike<T>,
     readonly controller: AbortController,
-    readonly onCleanUp?: () => void
+    readonly onCleanUp?: () => void,
   ) {
     promise.then(this._cleanup, this._cleanup);
   }

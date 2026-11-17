@@ -100,7 +100,9 @@ describe('json$', () => {
   });
 
   it('should parse async iterated values', async () => {
-    const generator = (async function* () { yield '{ "life": 42 }'; })();
+    const generator = (async function* () {
+      yield '{ "life": 42 }';
+    })();
     const res = pipe$(generator, json$());
 
     await expect(res.next()).resolves.toStrictEqual({ done: false, value: { life: 42 } });

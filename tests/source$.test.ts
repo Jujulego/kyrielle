@@ -21,18 +21,18 @@ beforeEach(() => {
 });
 
 describe('source$', () => {
-  it('should call observer\'s start method on subscription', () => {
+  it("should call observer's start method on subscription", () => {
     expect(observer.start).toHaveBeenCalledWith(subscription);
   });
 
   describe('next', () => {
-    it('should call observer\'s next method', () => {
+    it("should call observer's next method", () => {
       source.next(42);
 
       expect(observer.next).toHaveBeenCalledWith(42);
     });
 
-    it('should not call observer\'s next method after unsubscribe', () => {
+    it("should not call observer's next method after unsubscribe", () => {
       subscription.unsubscribe();
       source.next(42);
 
@@ -48,13 +48,13 @@ describe('source$', () => {
   });
 
   describe('error', () => {
-    it('should call observer\'s error method', () => {
+    it("should call observer's error method", () => {
       source.error(new Error('Failed !'));
 
       expect(observer.error).toHaveBeenCalledWith(new Error('Failed !'));
     });
 
-    it('should not call observer\'s error method after unsubscribe', () => {
+    it("should not call observer's error method after unsubscribe", () => {
       subscription.unsubscribe();
       source.error(new Error('Failed !'));
 
@@ -70,14 +70,14 @@ describe('source$', () => {
   });
 
   describe('complete', () => {
-    it('should call observer\'s complete method, and close subscription', () => {
+    it("should call observer's complete method, and close subscription", () => {
       source.complete();
 
       expect(observer.complete).toHaveBeenCalled();
       expect(subscription.closed).toBe(true);
     });
 
-    it('should not call observer\'s complete method after unsubscribe', () => {
+    it("should not call observer's complete method after unsubscribe", () => {
       subscription.unsubscribe();
       source.complete();
 

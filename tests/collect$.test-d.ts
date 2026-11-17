@@ -7,10 +7,7 @@ import { assertType, describe, expectTypeOf, it } from 'vitest';
 // Tests
 describe('collect$', () => {
   it('should return an array of numbers', () => {
-    const res = pipe$(
-      [1, 2, 3],
-      collect$(),
-    );
+    const res = pipe$([1, 2, 3], collect$());
 
     expectTypeOf(res).toBeArray();
     expectTypeOf(res).items.toBeNumber();
@@ -20,7 +17,7 @@ describe('collect$', () => {
     const res = pipe$(
       ['1', '2', '3'],
       map$((v) => parseInt(v)),
-      filter$((v) => (v % 2 === 0)),
+      filter$((v) => v % 2 === 0),
       collect$(),
     );
 
@@ -29,10 +26,7 @@ describe('collect$', () => {
   });
 
   it('should return a set', () => {
-    const res = pipe$(
-      [1, 2, 3],
-      collect$(new Set()),
-    );
+    const res = pipe$([1, 2, 3], collect$(new Set()));
 
     expectTypeOf(res).toEqualTypeOf<Set<unknown>>();
   });

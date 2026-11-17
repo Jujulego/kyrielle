@@ -31,7 +31,10 @@ export interface FetchOpts<D = Response> extends Omit<RequestInit, 'signal'> {
  * @since 1.0.0
  * @see ref$
  */
-export function fetch$<D>(url: string | URL, opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> }): Ref<Promise<D>>;
+export function fetch$<D>(
+  url: string | URL,
+  opts: FetchOpts & { onSuccess(res: Response): PromiseLike<D> },
+): Ref<Promise<D>>;
 export function fetch$(url: string | URL, opts?: FetchOpts): Ref<Promise<Response>>;
 
 export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {}): Ref<Promise<D>> {
@@ -43,7 +46,7 @@ export function fetch$<D = Response>(url: string | URL, opts: FetchOpts<D> = {})
       throw new FetchError(res);
     }
 
-    return opts.onSuccess ? opts.onSuccess(res) : res as D;
+    return opts.onSuccess ? opts.onSuccess(res) : (res as D);
   });
 }
 

@@ -30,7 +30,7 @@ describe('waitFor$', () => {
   describe('with a listener', () => {
     it('should resolve to emitted value', async () => {
       const mux = multiplexer$({
-        test: source$<number>()
+        test: source$<number>(),
       });
 
       const promise = waitFor$(mux, 'test');

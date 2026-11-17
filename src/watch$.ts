@@ -20,29 +20,51 @@ export interface WatchObserver<in D = unknown> extends PartialObserver<D> {
  * Register a callback that may return a cleanup function.
  * The cleanup function will be called before next call of the callback or when the observable completes.
  */
-export function watch$<O extends Subscribable>(observable: O, callback: WatchCallback<SubscribableValue<O>>): ReturnType<O['subscribe']>;
+export function watch$<O extends Subscribable>(
+  observable: O,
+  callback: WatchCallback<SubscribableValue<O>>,
+): ReturnType<O['subscribe']>;
 
 /**
  * Register an observer that may return a cleanup function.
  * The cleanup function will be called before next call of the callback or when the observable completes.
  */
-export function watch$<O extends Subscribable>(observable: O, observer: Partial<WatchObserver<SubscribableValue<O>>>): ReturnType<O['subscribe']>;
+export function watch$<O extends Subscribable>(
+  observable: O,
+  observer: Partial<WatchObserver<SubscribableValue<O>>>,
+): ReturnType<O['subscribe']>;
 
 /**
  * Register a callback to a given event that may return a cleanup function.
  * The cleanup function will be called before next call of the callback or when the observable completes.
  */
-export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(listenable: L, key: K, observer: WatchCallback<ListenEventMap<L>[K]>): ReturnType<L['on']>;
+export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
+  listenable: L,
+  key: K,
+  observer: WatchCallback<ListenEventMap<L>[K]>,
+): ReturnType<L['on']>;
 
 /**
  * Register an observer to a given event that may return a cleanup function.
  * The cleanup function will be called before next call of the callback or when the observable completes.
  */
-export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(listenable: L, key: K, observer: Partial<WatchObserver<ListenEventMap<L>[K]>>): ReturnType<L['on']>;
+export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
+  listenable: L,
+  key: K,
+  observer: Partial<WatchObserver<ListenEventMap<L>[K]>>,
+): ReturnType<L['on']>;
 
-export function watch$(...args: [Subscribable, WatchCallback | Partial<WatchObserver>] | [StrictListenable, string, WatchCallback | Partial<WatchObserver>]): Subscription {
+export function watch$(
+  ...args:
+    | [Subscribable, WatchCallback | Partial<WatchObserver>]
+    | [StrictListenable, string, WatchCallback | Partial<WatchObserver>]
+): Subscription {
   if (typeof args[1] === 'string') {
-    const [listener, key, observer] = args as [StrictListenable, string, WatchCallback | Partial<WatchObserver>];
+    const [listener, key, observer] = args as [
+      StrictListenable,
+      string,
+      WatchCallback | Partial<WatchObserver>,
+    ];
     return listener.on(key, prepareObserver(observer));
   } else {
     const [observable, observer] = args as [Subscribable, WatchCallback | Partial<WatchObserver>];
@@ -62,23 +84,27 @@ function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): StrictObs
       },
       complete: () => {
         if (cleanup) cleanup();
-      }
+      },
     });
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next: arg.next && ((data: unknown) => {
-        if (cleanup) cleanup();
-        cleanup = arg.next!(data);
-      }),
-      error: arg.error && ((error: unknown) => {
-        if (cleanup) cleanup();
-        cleanup = arg.error!(error);
-      }),
+      next:
+        arg.next
+        && ((data: unknown) => {
+          if (cleanup) cleanup();
+          cleanup = arg.next!(data);
+        }),
+      error:
+        arg.error
+        && ((error: unknown) => {
+          if (cleanup) cleanup();
+          cleanup = arg.error!(error);
+        }),
       complete: () => {
         if (cleanup) cleanup();
         if (arg.complete) arg.complete();
-      }
+      },
     });
   }
 }

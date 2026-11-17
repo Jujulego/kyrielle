@@ -8,9 +8,12 @@ describe('validate$', () => {
     const src = { defer: vi.fn(() => 42) };
 
     // Setup
-    const res = pipe$(src, validate$((n): asserts n is 42 => {
-      if (n !== 42) throw new Error('Not 42 !');
-    }));
+    const res = pipe$(
+      src,
+      validate$((n): asserts n is 42 => {
+        if (n !== 42) throw new Error('Not 42 !');
+      }),
+    );
 
     // Ok
     expect(res.defer()).toBe(42);
@@ -24,7 +27,10 @@ describe('validate$', () => {
     const src = { defer: vi.fn(() => 42) };
 
     // Setup
-    const res = pipe$(src, validate$((n): n is 42 => n === 42));
+    const res = pipe$(
+      src,
+      validate$((n): n is 42 => n === 42),
+    );
 
     // Ok
     expect(res.defer()).toBe(42);
@@ -41,7 +47,10 @@ describe('validate$', () => {
     });
 
     // Setup
-    const res = pipe$(src, validate$((n): n is 42 => n === 42, { onMiss }));
+    const res = pipe$(
+      src,
+      validate$((n): n is 42 => n === 42, { onMiss }),
+    );
 
     // Ko
     expect(res.defer).toThrow(new Error('Missed !'));

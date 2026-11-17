@@ -27,10 +27,7 @@ describe('retry$', () => {
     const mutate = vi.fn(async (_: string) => 42);
     mutate.mockRejectedValueOnce(new Error('Try again !'));
 
-    const piped = pipe$(
-      { mutate },
-      retry$('mutate')
-    );
+    const piped = pipe$({ mutate }, retry$('mutate'));
 
     await expect(piped.mutate('life')).resolves.toBe(42);
     expect(mutate).toHaveBeenCalledTimes(2);
@@ -41,10 +38,7 @@ describe('retry$', () => {
     const defer = vi.fn(async () => 42);
     defer.mockRejectedValueOnce(new Error('Try again !'));
 
-    const piped = pipe$(
-      { defer },
-      retry$('defer', { onRetry })
-    );
+    const piped = pipe$({ defer }, retry$('defer', { onRetry }));
 
     await expect(piped.defer()).rejects.toStrictEqual(new Error('Try again !'));
 
@@ -77,7 +71,7 @@ describe('retry$', () => {
     defer.mockRejectedValueOnce(new Error('Try again !'));
 
     const retry = {
-      defer: vi.fn(() => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000)))
+      defer: vi.fn(() => new Promise<void>((resolve) => setTimeout(() => resolve(), 1000))),
     };
 
     const piped = pipe$(
@@ -100,25 +94,33 @@ describe('retry$', () => {
 
   it('should abort call after given timeout', async () => {
     const piped = pipe$(
-      { defer: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
+      {
+        defer: (signal: AbortSignal) =>
+          new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))),
+      },
       retry$('defer', {
         onRetry: () => false,
-        tryTimeout: 1000
-      })
+        tryTimeout: 1000,
+      }),
     );
 
     const prom = piped.defer();
     await vi.advanceTimersByTimeAsync(1000);
 
-    await expect(prom).rejects.toStrictEqual(new DOMException('The operation was aborted due to timeout', 'TimeoutError'));
+    await expect(prom).rejects.toStrictEqual(
+      new DOMException('The operation was aborted due to timeout', 'TimeoutError'),
+    );
   });
 
   it('should abort call if given signal aborts', async () => {
     const piped = pipe$(
-      { defer: (signal: AbortSignal) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))) },
+      {
+        defer: (signal: AbortSignal) =>
+          new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason))),
+      },
       retry$('defer', {
         onRetry: () => false,
-      })
+      }),
     );
 
     const ctrl = new AbortController();
@@ -136,11 +138,12 @@ describe('retry$', () => {
       { defer },
       retry$('defer', {
         onRetry: () => false,
-      })
+      }),
     );
 
-    await expect(piped.defer(AbortSignal.abort(new Error('Abort !'))))
-      .rejects.toStrictEqual(new Error('Abort !'));
+    await expect(piped.defer(AbortSignal.abort(new Error('Abort !')))).rejects.toStrictEqual(
+      new Error('Abort !'),
+    );
 
     expect(defer).not.toHaveBeenCalled();
   });

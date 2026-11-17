@@ -8,7 +8,7 @@ beforeEach(() => {
 
 // Tests
 describe('mutable$', () => {
-  it('should call fn and return it\'s result', () => {
+  it("should call fn and return it's result", () => {
     const fn = vi.fn(() => 42);
     const mutable = mutable$(fn);
 
@@ -21,8 +21,9 @@ describe('mutable$', () => {
     const mutable = mutable$(fn);
 
     // 2 calls "at the same time"
-    await expect(Promise.all([mutable.mutate('life'), mutable.mutate('life')]))
-      .resolves.toStrictEqual([42, 42]);
+    await expect(
+      Promise.all([mutable.mutate('life'), mutable.mutate('life')]),
+    ).resolves.toStrictEqual([42, 42]);
 
     expect(fn).toHaveBeenCalledOnce();
 

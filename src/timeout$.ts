@@ -7,18 +7,19 @@ import type { Ref } from './types/outputs/Ref.js';
  */
 export function timeout$(ms: number): Ref<Promise<void>> {
   return {
-    defer: (signal?: AbortSignal) => new Promise<void>((resolve, reject) => {
-      const id = setTimeout(() => {
-        signal?.removeEventListener('abort', handleAbort);
-        resolve();
-      }, ms);
+    defer: (signal?: AbortSignal) =>
+      new Promise<void>((resolve, reject) => {
+        const id = setTimeout(() => {
+          signal?.removeEventListener('abort', handleAbort);
+          resolve();
+        }, ms);
 
-      function handleAbort(this: AbortSignal) {
-        clearTimeout(id);
-        reject(this.reason as Error);
-      }
+        function handleAbort(this: AbortSignal) {
+          clearTimeout(id);
+          reject(this.reason as Error);
+        }
 
-      signal?.addEventListener('abort', handleAbort, { once: true });
-    })
+        signal?.addEventListener('abort', handleAbort, { once: true });
+      }),
   };
 }

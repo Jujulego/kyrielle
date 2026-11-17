@@ -43,13 +43,13 @@ export function mutable$<A, D>(fn: MutableCallback<A, D>): Mutator<A, D> {
 
       // Manage signal
       if (signal) {
-        return <D> query.registerSignal(signal);
+        return <D>query.registerSignal(signal);
       } else {
         query.preventCancel();
       }
 
-      return <D> query.promise;
-    }
+      return <D>query.promise;
+    },
   };
 }
 

@@ -48,7 +48,7 @@ export function source$<D>(): Source<D> {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),
-        isClosed: () => !observers.has(observer)
+        isClosed: () => !observers.has(observer),
       });
 
       observers.add(observer);
@@ -58,7 +58,7 @@ export function source$<D>(): Source<D> {
     },
     get isCompleted() {
       return isCompleted;
-    }
+    },
   };
 
   return source as Source<D>;
@@ -70,7 +70,8 @@ export function source$<D>(): Source<D> {
  *
  * @since 1.0.0
  */
-export interface Source<in out D = unknown> extends Observable<D>, Omit<StrictObserver<D>, 'start'> {
+export interface Source<in out D = unknown>
+  extends Observable<D>, Omit<StrictObserver<D>, 'start'> {
   /**
    * Indicates if source is completed.
    * A completed source does not emit anymore, as no subscription and refuse any new ones.

@@ -13,13 +13,11 @@ export default defineConfig({
       reporter: ['text', 'lcovonly'],
     },
     outputFile: {
-      junit: 'junit-report.xml'
+      junit: 'junit-report.xml',
     },
     typecheck: {
       tsconfig: 'tests/tsconfig.json',
-    }
+    },
   },
-  plugins: [
-    swc()
-  ]
+  plugins: [swc()],
 });

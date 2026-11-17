@@ -1,57 +1,28 @@
 {
-  "extends": [
-    "config:recommended"
-  ],
-  "baseBranchPatterns": [
-    "latest"
-  ],
-  "labels": [
-    "dependencies"
-  ],
+  "extends": ["config:recommended"],
+  "baseBranchPatterns": ["latest"],
+  "labels": ["dependencies"],
   "minimumReleaseAge": "7 days",
   "packageRules": [
     {
-      "matchCategories": [
-        "ci"
-      ],
-      "addLabels": [
-        "github-actions"
-      ]
+      "matchCategories": ["ci"],
+      "addLabels": ["github-actions"]
     },
     {
-      "matchCategories": [
-        "js"
-      ],
-      "addLabels": [
-        "javascript"
-      ],
-      "postUpdateOptions": [
-        "yarnDedupeHighest"
-      ]
+      "matchCategories": ["js"],
+      "addLabels": ["javascript"],
+      "postUpdateOptions": ["yarnDedupeHighest"]
     },
     {
-      "matchDepTypes": [
-        "dependencies"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
     },
     {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true

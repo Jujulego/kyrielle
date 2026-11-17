@@ -1,9 +1,10 @@
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
-  AnyIterable, MinimalAsyncIterator,
+  AnyIterable,
+  MinimalAsyncIterator,
   MinimalAwaitableIterator,
-  MinimalIterator
+  MinimalIterator,
 } from '../types/inputs/MinimalIterator.js';
 import { isAsyncIterable, isIterable } from './predicates.js';
 
@@ -38,7 +39,9 @@ export function extractAsyncIterator<D>(object: AnyAsyncIterable<D>): MinimalAsy
  *
  * @version 2.5.3
  */
-export function extractAwaitableIterator<D>(object: AnyAwaitableIterable<D>): MinimalAwaitableIterator<D> {
+export function extractAwaitableIterator<D>(
+  object: AnyAwaitableIterable<D>,
+): MinimalAwaitableIterator<D> {
   if (isIterable<D>(object)) {
     return object[Symbol.iterator]();
   }

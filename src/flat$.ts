@@ -8,7 +8,7 @@ import type {
   AnyIterable,
   AsyncIteratedValue,
   IteratedValue,
-  MinimalIterator
+  MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
@@ -17,9 +17,10 @@ import { extractAwaitableIterator, extractIterator } from './utils/iterator.js';
 import {
   isAsyncIterable,
   isAwaitableIterator,
-  isIterable, isPromise,
+  isIterable,
+  isPromise,
   isSubscribable,
-  isSubscribableHolder
+  isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
@@ -30,7 +31,10 @@ import { boundedSubscription } from './utils/subscription.js';
  * @since 2.1.0
  * @version 2.5.0 Add support for async iterators
  */
-export function flat$<O extends FlatOrigin>(): PipeStep<O, FlatResult<O, FlatResultValue<FlatOriginValue<O>>>>;
+export function flat$<O extends FlatOrigin>(): PipeStep<
+  O,
+  FlatResult<O, FlatResultValue<FlatOriginValue<O>>>
+>;
 
 export function flat$<D, I extends AnyIterable<D>>() {
   return (origin: FlatOrigin) => {
@@ -41,70 +45,80 @@ export function flat$<D, I extends AnyIterable<D>>() {
       const result = iterator.next();
 
       if (isPromise(result)) {
-        builder.add(asyncIterator$<D>((async function* () {
-          let res = await result;
+        builder.add(
+          asyncIterator$<D>(
+            (async function* () {
+              let res = await result;
 
-          while (!res.done) {
-            const it = extractIterator(res.value);
+              while (!res.done) {
+                const it = extractIterator(res.value);
 
-            while (true) {
-              const { value, done } = it.next();
+                while (true) {
+                  const { value, done } = it.next();
 
-              if (done) {
-                break;
-              } else {
-                yield value;
+                  if (done) {
+                    break;
+                  } else {
+                    yield value;
+                  }
+                }
+
+                res = await iterator.next();
               }
-            }
-
-            res = await iterator.next();
-          }
-        })()));
+            })(),
+          ),
+        );
       } else {
         let res = result;
 
-        builder.add(iterator$<D>((function* () {
-          while (!res.done) {
-            const it = extractIterator(res.value);
+        builder.add(
+          iterator$<D>(
+            (function* () {
+              while (!res.done) {
+                const it = extractIterator(res.value);
 
-            while (true) {
-              const { value, done } = it.next();
+                while (true) {
+                  const { value, done } = it.next();
 
-              if (done) {
-                break;
-              } else {
-                yield value;
+                  if (done) {
+                    break;
+                  } else {
+                    yield value;
+                  }
+                }
+
+                res = (iterator as MinimalIterator<I>).next();
               }
-            }
-
-            res = (iterator as MinimalIterator<I>).next();
-          }
-        })()));
+            })(),
+          ),
+        );
       }
     }
 
     if (isSubscribable<I>(origin) || isSubscribableHolder<I>(origin)) {
       const observable = extractSubscribable(origin);
 
-      builder.add(observable$<D>((observer, signal) => {
-        boundedSubscription(observable, signal, {
-          next: (item) => {
-            const iterator = extractIterator(item);
+      builder.add(
+        observable$<D>((observer, signal) => {
+          boundedSubscription(observable, signal, {
+            next: (item) => {
+              const iterator = extractIterator(item);
 
-            while (true) {
-              const { done, value } = iterator.next();
+              while (true) {
+                const { done, value } = iterator.next();
 
-              if (done) {
-                break;
-              } else {
-                observer.next(value);
+                if (done) {
+                  break;
+                } else {
+                  observer.next(value);
+                }
               }
-            }
-          },
-          error: (err) => observer.error(err),
-          complete: () => observer.complete(),
-        });
-      }));
+            },
+            error: (err) => observer.error(err),
+            complete: () => observer.complete(),
+          });
+        }),
+      );
     }
 
     return builder.build();
@@ -113,24 +127,20 @@ export function flat$<D, I extends AnyIterable<D>>() {
 
 // Types
 export type FlatOrigin<D = unknown> =
-  | AnyIterable<AnyIterable<D>>
-  | AnyAsyncIterable<AnyIterable<D>>
-  | AnySubscribable<AnyIterable<D>>;
+  AnyIterable<AnyIterable<D>> | AnyAsyncIterable<AnyIterable<D>> | AnySubscribable<AnyIterable<D>>;
 
-export type FlatOriginValue<O extends FlatOrigin> =
-  & (O extends AnyIterable
-    ? IteratedValue<O>
-    : O extends AnyAsyncIterable
-      ? AsyncIteratedValue<O>
-      : unknown)
+export type FlatOriginValue<O extends FlatOrigin> = (O extends AnyIterable
+  ? IteratedValue<O>
+  : O extends AnyAsyncIterable
+    ? AsyncIteratedValue<O>
+    : unknown)
   & (O extends AnySubscribable<infer D> ? D : unknown);
 
-export type FlatResult<O, R> =
-  & (O extends AnyIterable
-    ? SimpleIterator<R>
-    : O extends AnyAsyncIterable
-      ? SimpleAsyncIterator<R>
-      : unknown)
+export type FlatResult<O, R> = (O extends AnyIterable
+  ? SimpleIterator<R>
+  : O extends AnyAsyncIterable
+    ? SimpleAsyncIterator<R>
+    : unknown)
   & (O extends AnySubscribable ? Observable<R> : unknown);
 
 export type FlatResultValue<D> = D extends AnyIterable ? IteratedValue<D> : unknown;

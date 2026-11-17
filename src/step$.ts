@@ -5,19 +5,14 @@ import type { PipeStep } from './pipe$.js';
  *
  * @since 2.9.0
  */
-export function step$<A, B>(
-  stepA: PipeStep<A, B>
-): PipeStep<A, B>;
+export function step$<A, B>(stepA: PipeStep<A, B>): PipeStep<A, B>;
 
 /**
  * Combines multiple steps into one
  *
  * @since 2.9.0
  */
-export function step$<A, B, C>(
-  stepA: PipeStep<A, B>,
-  stepB: PipeStep<B, C>
-): PipeStep<A, C>;
+export function step$<A, B, C>(stepA: PipeStep<A, B>, stepB: PipeStep<B, C>): PipeStep<A, C>;
 
 /**
  * Combines multiple steps into one
@@ -27,7 +22,7 @@ export function step$<A, B, C>(
 export function step$<A, B, C, D>(
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
-  stepC: PipeStep<C, D>
+  stepC: PipeStep<C, D>,
 ): PipeStep<A, D>;
 
 /**
@@ -39,7 +34,7 @@ export function step$<A, B, C, D, E>(
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
-  stepD: PipeStep<D, E>
+  stepD: PipeStep<D, E>,
 ): PipeStep<A, E>;
 
 /**
@@ -52,7 +47,7 @@ export function step$<A, B, C, D, E, F>(
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
-  stepE: PipeStep<E, F>
+  stepE: PipeStep<E, F>,
 ): PipeStep<A, F>;
 
 /**
@@ -66,7 +61,7 @@ export function step$<A, B, C, D, E, F, G>(
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
-  stepF: PipeStep<F, G>
+  stepF: PipeStep<F, G>,
 ): PipeStep<A, G>;
 
 /**
@@ -81,7 +76,7 @@ export function step$<A, B, C, D, E, F, G, H>(
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
-  stepG: PipeStep<G, H>
+  stepG: PipeStep<G, H>,
 ): PipeStep<A, H>;
 
 /**
@@ -97,7 +92,7 @@ export function step$<A, B, C, D, E, F, G, H, I>(
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
-  stepH: PipeStep<G, I>
+  stepH: PipeStep<G, I>,
 ): PipeStep<A, I>;
 
 /**
@@ -114,7 +109,7 @@ export function step$<A, B, C, D, E, F, G, H, I, J>(
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
-  stepI: PipeStep<I, J>
+  stepI: PipeStep<I, J>,
 ): PipeStep<A, J>;
 
 /**
@@ -132,7 +127,7 @@ export function step$<A, B, C, D, E, F, G, H, I, J, K>(
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
-  stepJ: PipeStep<J, K>
+  stepJ: PipeStep<J, K>,
 ): PipeStep<A, K>;
 
 /**

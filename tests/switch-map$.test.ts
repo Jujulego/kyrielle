@@ -16,21 +16,20 @@ afterEach(() => {
 
 describe('switchMap$', () => {
   it('should emit all values emitted by last returned subscribable', async () => {
-    const spyFn = vi.fn((i: number) => observable$((observer) => {
-      setTimeout(() => {
-        observer.next(i);
-        observer.next(i * 10);
-        observer.next(i * 100);
-        observer.complete();
-      }, 1000);
-    }));
+    const spyFn = vi.fn((i: number) =>
+      observable$((observer) => {
+        setTimeout(() => {
+          observer.next(i);
+          observer.next(i * 10);
+          observer.next(i * 100);
+          observer.complete();
+        }, 1000);
+      }),
+    );
     const spyResult = vi.fn();
     const spyComplete = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      switchMap$(spyFn),
-    ).subscribe({ next: spyResult, complete: spyComplete });
+    pipe$(of$([1, 2, 3]), switchMap$(spyFn)).subscribe({ next: spyResult, complete: spyComplete });
 
     expect(spyFn).toHaveBeenCalledTimes(3);
     expect(spyFn).toHaveBeenCalledWith(1);
@@ -51,26 +50,29 @@ describe('switchMap$', () => {
 
   it('should unsubscribe from intermediate observable', async () => {
     const spyCancel = vi.fn();
-    const spyFn = vi.fn((i: number) => observable$((observer, signal) => {
-      const id = setTimeout(() => {
-        observer.next(i);
-        observer.next(i * 10);
-        observer.next(i * 100);
-        observer.complete();
-      }, 1000);
+    const spyFn = vi.fn((i: number) =>
+      observable$((observer, signal) => {
+        const id = setTimeout(() => {
+          observer.next(i);
+          observer.next(i * 10);
+          observer.next(i * 100);
+          observer.complete();
+        }, 1000);
 
-      signal.addEventListener('abort', () => {
-        spyCancel(i);
-        clearTimeout(id);
-      }, { once: true });
-    }));
+        signal.addEventListener(
+          'abort',
+          () => {
+            spyCancel(i);
+            clearTimeout(id);
+          },
+          { once: true },
+        );
+      }),
+    );
     const spyResult = vi.fn();
     const spyComplete = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      switchMap$(spyFn),
-    ).subscribe({ next: spyResult, complete: spyComplete });
+    pipe$(of$([1, 2, 3]), switchMap$(spyFn)).subscribe({ next: spyResult, complete: spyComplete });
 
     expect(spyCancel).toHaveBeenCalledTimes(2);
     expect(spyCancel).toHaveBeenCalledWith(1);

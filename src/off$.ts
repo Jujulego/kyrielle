@@ -37,6 +37,6 @@ export function off$(...subscriptions: Unsubscribable[]): SubscriptionGroup {
       for (const sub of subscriptions) {
         store.add(sub);
       }
-    }
+    },
   };
 }

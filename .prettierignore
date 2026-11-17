@@ -1,0 +1,7 @@
+/.husky
+/.idea
+/.vite
+/.yarn
+/.pnp*
+/coverage
+/dist

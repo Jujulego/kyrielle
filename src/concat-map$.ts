@@ -13,7 +13,9 @@ import { boundedSubscription } from './utils/subscription.js';
  *
  * @since 1.0.0
  */
-export function concatMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<AnySubscribable<T>, Observable<R>> {
+export function concatMap$<T, R>(
+  fn: (item: T) => AnySubscribable<R>,
+): PipeStep<AnySubscribable<T>, Observable<R>> {
   return (origin: AnySubscribable<T>) => {
     origin = extractSubscribable(origin);
     const queue: T[] = [];
@@ -36,7 +38,7 @@ export function concatMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<
               observer.complete();
             }
           }
-        }
+        },
       });
     }
 
@@ -57,9 +59,8 @@ export function concatMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<
           if (!childRunning) {
             observer.complete();
           }
-        }
+        },
       });
     });
   };
 }
-

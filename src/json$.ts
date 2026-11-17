@@ -8,7 +8,7 @@ import type {
   AnyAwaitableIterable,
   AnyIterable,
   MinimalAsyncIterator,
-  MinimalIterator
+  MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
@@ -27,7 +27,7 @@ import {
   isMutable,
   isPromise,
   isSubscribable,
-  isSubscribableHolder
+  isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
@@ -39,15 +39,18 @@ export type JsonOrigin =
   | Deferrable<Awaitable<string>>
   | Mutable<string, Awaitable<string>>;
 
-export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable ? AsyncMutator<A, D> : Mutator<A, D>;
-export type JsonDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncRef<D> : Ref<D>;
+export type JsonMutable<O extends Mutable, D, A> = O extends AsyncMutable
+  ? AsyncMutator<A, D>
+  : Mutator<A, D>;
+export type JsonDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable
+  ? AsyncRef<D>
+  : Ref<D>;
 
-export type JsonResult<O, D, A> =
-  & (O extends AnyIterable
-    ? SimpleIterator<D>
-    : O extends AnyAsyncIterable
-      ? SimpleAsyncIterator<D>
-      : unknown)
+export type JsonResult<O, D, A> = (O extends AnyIterable
+  ? SimpleIterator<D>
+  : O extends AnyAsyncIterable
+    ? SimpleAsyncIterator<D>
+    : unknown)
   & (O extends AnySubscribable ? Observable<D> : unknown)
   & (O extends Deferrable ? JsonDeferrable<O, D> : unknown)
   & (O extends Mutable ? JsonMutable<O, D, A> : unknown);
@@ -58,7 +61,9 @@ export type JsonResult<O, D, A> =
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
  */
-export function json$<D = unknown, A = unknown>(): <O extends JsonOrigin>(origin: O) => JsonResult<O, D, A>;
+export function json$<D = unknown, A = unknown>(): <O extends JsonOrigin>(
+  origin: O,
+) => JsonResult<O, D, A>;
 
 export function json$() {
   return <O extends JsonOrigin>(origin: O) => {
@@ -85,44 +90,58 @@ export function json$() {
     // Builder
     const builder = resource$();
 
-    if (isIterable<string>(origin) || isAsyncIterable<string>(origin) || isAwaitableIterator<string>(origin)) {
+    if (
+      isIterable<string>(origin)
+      || isAsyncIterable<string>(origin)
+      || isAwaitableIterator<string>(origin)
+    ) {
       const iterator = extractAwaitableIterator(origin);
       const result = iterator.next();
 
       if (isPromise(result)) {
-        builder.add(asyncIterator$<unknown>((async function* () {
-          let res = await result;
+        builder.add(
+          asyncIterator$<unknown>(
+            (async function* () {
+              let res = await result;
 
-          while (!res.done) {
-            yield parser(res.value);
+              while (!res.done) {
+                yield parser(res.value);
 
-            res = await (iterator as MinimalAsyncIterator<string>).next();
-          }
-        })()));
+                res = await (iterator as MinimalAsyncIterator<string>).next();
+              }
+            })(),
+          ),
+        );
       } else {
         let res = result;
 
-        builder.add(iterator$<unknown>((function* () {
-          while (!res.done) {
-            yield parser(res.value);
+        builder.add(
+          iterator$<unknown>(
+            (function* () {
+              while (!res.done) {
+                yield parser(res.value);
 
-            res = (iterator as MinimalIterator<string>).next();
-          }
-        })()));
+                res = (iterator as MinimalIterator<string>).next();
+              }
+            })(),
+          ),
+        );
       }
     }
 
     if (isSubscribable<string>(origin) || isSubscribableHolder<string>(origin)) {
       const observable = extractSubscribable(origin);
-      builder.add(observable$((observer, signal) => {
-        boundedSubscription(observable, signal, {
-          next: (val) => {
-            observer.next(parser(val));
-          },
-          error: (err) => observer.error(err),
-          complete: () => observer.complete(),
-        });
-      }));
+      builder.add(
+        observable$((observer, signal) => {
+          boundedSubscription(observable, signal, {
+            next: (val) => {
+              observer.next(parser(val));
+            },
+            error: (err) => observer.error(err),
+            complete: () => observer.complete(),
+          });
+        }),
+      );
     }
 
     if (isDeferrable<string>(origin)) {

@@ -9,10 +9,7 @@ describe('scan$', () => {
     const spyCompute = vi.fn((state: number, item: number) => state + item);
     const spyResult = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      scan$(spyCompute, 0),
-    ).subscribe(spyResult);
+    pipe$(of$([1, 2, 3]), scan$(spyCompute, 0)).subscribe(spyResult);
 
     expect(spyCompute).toHaveBeenCalledWith(0, 1);
     expect(spyResult).toHaveBeenCalledWith(1);
@@ -27,10 +24,7 @@ describe('scan$', () => {
   it('should call compute on each iterated value', () => {
     const spyCompute = vi.fn((state: number, item: number) => state + item);
 
-    const iterator = pipe$(
-      [1, 2, 3],
-      scan$(spyCompute, 0),
-    );
+    const iterator = pipe$([1, 2, 3], scan$(spyCompute, 0));
 
     expect(iterator.next()).toStrictEqual({ done: false, value: 1 });
     expect(spyCompute).toHaveBeenCalledWith(0, 1);
@@ -45,13 +39,14 @@ describe('scan$', () => {
   });
 
   it('should call compute on each async iterated value', async () => {
-    const generator = (async function* () { yield 1; yield 2; yield 3; })();
+    const generator = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
     const spyCompute = vi.fn((state: number, item: number) => state + item);
 
-    const iterator = pipe$(
-      generator,
-      scan$(spyCompute, 0),
-    );
+    const iterator = pipe$(generator, scan$(spyCompute, 0));
 
     await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 1 });
     expect(spyCompute).toHaveBeenCalledWith(0, 1);
