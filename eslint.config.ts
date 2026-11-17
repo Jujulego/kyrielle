@@ -1,18 +1,17 @@
 import eslint from '@eslint/js';
 import vitest from '@vitest/eslint-plugin';
 import tsEslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import prettier from 'eslint-config-prettier';
 
-export default tsEslint.config(
-  {
-    ignores: ['.pnp.*', '.yarn', 'coverage', 'dist'],
-  },
+export default defineConfig([
+  globalIgnores(['.pnp.*', '.yarn', 'coverage', 'dist']),
   eslint.configs.recommended,
-  ...tsEslint.configs.recommendedTypeChecked.map((cfg) => ({ ...cfg, files: ['**/*.{ts,tsx}'] })),
+  tsEslint.configs.recommendedTypeChecked.map((cfg) => ({ ...cfg, files: ['**/*.{ts,tsx}'] })),
+  prettier,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
       'no-console': [
         'error',
         {
@@ -37,8 +36,6 @@ export default tsEslint.config(
           allowInterfaces: 'with-single-extends',
         },
       ],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
       'no-console': [
         'error',
         {
@@ -82,4 +79,4 @@ export default tsEslint.config(
       ],
     },
   },
-);
+]);

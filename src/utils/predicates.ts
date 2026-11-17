@@ -27,8 +27,8 @@ export function isListenable<M extends Mapping = Mapping>(
 /**
  * Tests if given value is a Mutable object
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isMutable<A = any, D = unknown>(value: unknown): value is Mutable<A, D> {
-  // eslint-disable-line @typescript-eslint/no-explicit-any
   return isNonNullObject(value) && hasMethod(value, 'mutate');
 }
 
