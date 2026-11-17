@@ -22,7 +22,9 @@ describe('fetch$', () => {
     const ref = fetch$('life');
     await expect(ref.defer()).resolves.toBe(res);
 
-    expect(mockFetch).toHaveBeenCalledWith('life', { signal: expect.any(AbortSignal) as AbortSignal });
+    expect(mockFetch).toHaveBeenCalledWith('life', {
+      signal: expect.any(AbortSignal) as AbortSignal,
+    });
   });
 
   it('should call onFetch with url just before initiating the request', async () => {
@@ -40,7 +42,7 @@ describe('fetch$', () => {
     const res = Response.json({ life: 42 });
     mockFetch.mockResolvedValue(res);
 
-    const ref = fetch$('life', { onSuccess: (res) => res.json()});
+    const ref = fetch$('life', { onSuccess: (res) => res.json() });
     await expect(ref.defer()).resolves.toStrictEqual({ life: 42 });
   });
 

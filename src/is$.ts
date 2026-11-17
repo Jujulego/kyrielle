@@ -1,4 +1,9 @@
-import { filter$, type FilterOrigin, type FilterOriginValue, type FilterResult } from './filter$.js';
+import {
+  filter$,
+  type FilterOrigin,
+  type FilterOriginValue,
+  type FilterResult,
+} from './filter$.js';
 import type { PipeStep } from './pipe$.js';
 
 /**
@@ -6,6 +11,8 @@ import type { PipeStep } from './pipe$.js';
  *
  * @since 2.7.0
  */
-export function is$<O extends FilterOrigin, const R extends FilterOriginValue<O>>(value: R): PipeStep<O, FilterResult<O, R>> {
+export function is$<O extends FilterOrigin, const R extends FilterOriginValue<O>>(
+  value: R,
+): PipeStep<O, FilterResult<O, R>> {
   return filter$((v): v is R => v === value);
 }

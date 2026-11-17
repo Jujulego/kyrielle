@@ -11,41 +11,34 @@ describe('resource$', () => {
 
   it('should add methods from given readable feature', () => {
     const deferrable: Deferrable<number> = {
-      defer: () => 42
+      defer: () => 42,
     };
 
-    const resource = resource$<number>()
-      .add(deferrable)
-      .build();
+    const resource = resource$<number>().add(deferrable).build();
 
     expect(resource).toHaveProperty('defer', deferrable.defer);
   });
 
   it('should add methods from given mutable feature', () => {
     const mutable: Mutable<string, number> = {
-      mutate: () => 42
+      mutate: () => 42,
     };
 
-    const resource = resource$<number>()
-      .add(mutable)
-      .build();
+    const resource = resource$<number>().add(mutable).build();
 
     expect(resource).toHaveProperty('mutate', mutable.mutate);
   });
 
   it('should add methods from many features', () => {
     const deferrable: Deferrable<number> = {
-      defer: () => 42
+      defer: () => 42,
     };
 
     const mutable: Mutable<string, number> = {
-      mutate: () => 42
+      mutate: () => 42,
     };
 
-    const resource = resource$<number>()
-      .add(deferrable)
-      .add(mutable)
-      .build();
+    const resource = resource$<number>().add(deferrable).add(mutable).build();
 
     expect(resource).toHaveProperty('defer', deferrable.defer);
     expect(resource).toHaveProperty('mutate', mutable.mutate);

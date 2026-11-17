@@ -38,5 +38,5 @@ export interface StrictObserver<in D = unknown> extends Observer<D> {
    *
    * @since 2.0.0
    */
-  complete(this: void, ): void;
+  complete(this: void): void;
 }

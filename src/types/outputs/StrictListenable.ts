@@ -18,7 +18,11 @@ export interface StrictListenable<M extends Mapping = Mapping> {
    *
    * @since 2.0.0
    */
-  on<const K extends MappingKey<M>>(this: void, key: K, observer: PartialObserver<M[K]>): Subscription;
+  on<const K extends MappingKey<M>>(
+    this: void,
+    key: K,
+    observer: PartialObserver<M[K]>,
+  ): Subscription;
 
   /**
    * Registers listener on given "key" event
@@ -29,7 +33,13 @@ export interface StrictListenable<M extends Mapping = Mapping> {
    *
    * @since 2.0.0
    */
-  on<const K extends MappingKey<M>>(this: void, key: K, onNext: SubscribeOnNext<M[K]>, onError?: SubscribeOnError, onComplete?: SubscribeOnComplete): Subscription;
+  on<const K extends MappingKey<M>>(
+    this: void,
+    key: K,
+    onNext: SubscribeOnNext<M[K]>,
+    onError?: SubscribeOnError,
+    onComplete?: SubscribeOnComplete,
+  ): Subscription;
 }
 
 /**
@@ -37,4 +47,5 @@ export interface StrictListenable<M extends Mapping = Mapping> {
  *
  * @since 2.0.0
  */
-export type ListenEventMap<L extends StrictListenable> = L extends StrictListenable<infer M> ? M : never;
+export type ListenEventMap<L extends StrictListenable> =
+  L extends StrictListenable<infer M> ? M : never;

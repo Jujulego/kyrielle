@@ -16,7 +16,9 @@ export function of$<T>(iterable: Iterable<T> | AsyncIterable<T>): Observable<T> 
         }
       } else {
         const iterator = iterable[Symbol.asyncIterator]();
-        const abort = new Promise<never>((_, reject) => signal.addEventListener('abort', reject, { once: true }));
+        const abort = new Promise<never>((_, reject) =>
+          signal.addEventListener('abort', reject, { once: true }),
+        );
 
         while (!signal.aborted) {
           const result = await Promise.race([iterator.next(), abort]);
@@ -25,7 +27,7 @@ export function of$<T>(iterable: Iterable<T> | AsyncIterable<T>): Observable<T> 
           observer.next(result.value);
         }
       }
-    } catch(error) {
+    } catch (error) {
       observer.error(error);
     } finally {
       observer.complete();

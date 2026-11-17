@@ -9,10 +9,7 @@ describe('reduce$', () => {
     const spyCompute = vi.fn((state: number, item: number) => state + item);
     const spyResult = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      reduce$(spyCompute, 0),
-    ).subscribe(spyResult);
+    pipe$(of$([1, 2, 3]), reduce$(spyCompute, 0)).subscribe(spyResult);
 
     expect(spyCompute).toHaveBeenCalledWith(0, 1);
     expect(spyCompute).toHaveBeenCalledWith(1, 2);
@@ -24,10 +21,7 @@ describe('reduce$', () => {
   it('should call compute on each iterated value and emit final result', () => {
     const spyCompute = vi.fn((state: number, item: number) => state + item);
 
-    expect(pipe$(
-      [1, 2, 3],
-      reduce$(spyCompute, 0),
-    )).toBe(6);
+    expect(pipe$([1, 2, 3], reduce$(spyCompute, 0))).toBe(6);
 
     expect(spyCompute).toHaveBeenCalledWith(0, 1);
     expect(spyCompute).toHaveBeenCalledWith(1, 2);
@@ -35,14 +29,15 @@ describe('reduce$', () => {
   });
 
   it('should call compute on each async iterated value and emit final result', async () => {
-    const generator = (async function* () { yield 1; yield 2; yield 3; })();
+    const generator = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
     const spyCompute = vi.fn((state: number, item: number) => state + item);
     const spyResult = vi.fn();
 
-    pipe$(
-      generator,
-      reduce$(spyCompute, 0),
-    ).subscribe(spyResult);
+    pipe$(generator, reduce$(spyCompute, 0)).subscribe(spyResult);
 
     await vi.waitFor(() => expect(spyResult).toHaveBeenCalledWith(6));
 

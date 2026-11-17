@@ -23,6 +23,9 @@ export function inherit$<const A extends MultiplexerUtils[]>(...multiplexers: A)
 // Type
 export interface Inherit<A extends MultiplexerUtils[]> extends _Multiplexer<_InheritedMapping<A>> {}
 
-type _InheritedMapping<A extends MultiplexerUtils[]> = A extends [MultiplexerUtils<infer M>, ...(infer R extends MultiplexerUtils[])]
+type _InheritedMapping<A extends MultiplexerUtils[]> = A extends [
+  MultiplexerUtils<infer M>,
+  ...infer R extends MultiplexerUtils[],
+]
   ? OverrideMapping<M, _InheritedMapping<R>>
   : EmptyMapping;

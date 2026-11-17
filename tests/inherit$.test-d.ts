@@ -12,7 +12,7 @@ describe('base nested source', () => {
     }),
     multiplexer$({
       c: source$<'c'>(),
-    })
+    }),
   );
 
   it('should accept "a" events', () => {
@@ -51,7 +51,7 @@ describe('overridden nested source', () => {
     }),
     multiplexer$({
       b: source$<'b2'>(),
-    })
+    }),
   );
 
   it('should accept "b2" events', () => {
@@ -86,7 +86,7 @@ describe('base nested multiplexer', () => {
       c: multiplexer$({
         life: source$<42>(),
       }),
-    })
+    }),
   );
 
   it('should accept valid "a.life" events', () => {
@@ -129,7 +129,7 @@ describe('overridden nested multiplexer', () => {
       b: multiplexer$({
         life: source$<42>(),
       }),
-    })
+    }),
   );
 
   it('should accept valid "b.life" events', () => {

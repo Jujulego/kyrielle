@@ -11,7 +11,11 @@ describe('asyncIterator$', () => {
   });
 
   it('should accept an async generator', async () => {
-    const generator = (async function* () { yield 1; yield 2; yield 3; })();
+    const generator = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
     const iterator = asyncIterator$(generator);
 
     await expect(iterator.next()).resolves.toStrictEqual({ done: false, value: 1 });

@@ -10,7 +10,7 @@ describe('map$', () => {
       resource$<number>()
         .add({ defer: () => 42 })
         .build(),
-      map$((n) => n.toString())
+      map$((n) => n.toString()),
     );
 
     expectTypeOf(res).toHaveProperty('defer');
@@ -24,7 +24,7 @@ describe('map$', () => {
       resource$<number>()
         .add({ defer: async () => 42 })
         .build(),
-      map$((n) => n.toString())
+      map$((n) => n.toString()),
     );
 
     expectTypeOf(res).toHaveProperty('defer');
@@ -38,7 +38,7 @@ describe('map$', () => {
       resource$<number>()
         .add({ mutate: (arg: string) => 42 })
         .build(),
-      map$((n) => n.toString())
+      map$((n) => n.toString()),
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');
@@ -53,7 +53,7 @@ describe('map$', () => {
       resource$<number>()
         .add({ mutate: async (arg: string) => 42 })
         .build(),
-      map$((n) => n.toString())
+      map$((n) => n.toString()),
     );
 
     expectTypeOf(res).not.toHaveProperty('defer');

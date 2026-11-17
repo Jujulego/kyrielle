@@ -12,7 +12,7 @@ import type { Observable } from './types/outputs/Observable.js';
 export function group$<M extends GroupMapping>(origins: M): Group<M> {
   return Object.assign(
     merge$(...Object.values(origins)) as GroupObservable<M>,
-    _multiplexer<M>((key) => origins[key])
+    _multiplexer<M>((key) => origins[key]),
   );
 }
 

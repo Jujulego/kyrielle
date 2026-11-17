@@ -16,21 +16,20 @@ afterEach(() => {
 
 describe('concatMap$', () => {
   it('should emit all values emitted by every returned subscribable', async () => {
-    const spyFn = vi.fn((i: number) => observable$((observer) => {
-      setTimeout(() => {
-        observer.next(i);
-        observer.next(i * 10);
-        observer.next(i * 100);
-        observer.complete();
-      }, 1000);
-    }));
+    const spyFn = vi.fn((i: number) =>
+      observable$((observer) => {
+        setTimeout(() => {
+          observer.next(i);
+          observer.next(i * 10);
+          observer.next(i * 100);
+          observer.complete();
+        }, 1000);
+      }),
+    );
     const spyResult = vi.fn();
     const spyComplete = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      concatMap$(spyFn),
-    ).subscribe({ next: spyResult, complete: spyComplete });
+    pipe$(of$([1, 2, 3]), concatMap$(spyFn)).subscribe({ next: spyResult, complete: spyComplete });
 
     expect(spyFn).toHaveBeenCalledTimes(1);
     expect(spyFn).toHaveBeenCalledWith(1);

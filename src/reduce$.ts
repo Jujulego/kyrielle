@@ -7,7 +7,7 @@ import type {
   AsyncIteratedValue,
   IteratedValue,
   MinimalAsyncIterator,
-  MinimalIterator
+  MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
@@ -18,34 +18,30 @@ import {
   isIterable,
   isPromise,
   isSubscribable,
-  isSubscribableHolder
+  isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
-export type ReduceOrigin<D = unknown> =
-  | AnyAwaitableIterable<D>
-  | AnySubscribable<D>;
+export type ReduceOrigin<D = unknown> = AnyAwaitableIterable<D> | AnySubscribable<D>;
 
-export type ReduceOriginValue<O extends ReduceOrigin> =
-  & (O extends AnyIterable
-    ? IteratedValue<O>
-    : O extends AnyAsyncIterable
-      ? AsyncIteratedValue<O>
-      : unknown)
-  & (O extends AnySubscribable<infer D> ? D : unknown);
+export type ReduceOriginValue<O extends ReduceOrigin> = (O extends AnyIterable
+  ? IteratedValue<O>
+  : O extends AnyAsyncIterable
+    ? AsyncIteratedValue<O>
+    : unknown) &
+  (O extends AnySubscribable<infer D> ? D : unknown);
 
 export type ReduceCallback<T, S> = (state: S, item: T) => S;
 
-export type ReduceResult<O, R> =
-  O extends AnyIterable
-    ? R
-    : O extends AnyAsyncIterable
+export type ReduceResult<O, R> = O extends AnyIterable
+  ? R
+  : O extends AnyAsyncIterable
+    ? Observable<R>
+    : O extends AnySubscribable
       ? Observable<R>
-      : O extends AnySubscribable
-        ? Observable<R>
-        : never;
+      : never;
 
 /**
  * Apply reducer-like function to each emitted value, emitting final result with origin completes.
@@ -53,9 +49,15 @@ export type ReduceResult<O, R> =
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
  */
-export function reduce$<O extends ReduceOrigin, const S>(cb: ReduceCallback<ReduceOriginValue<O>, S>, init: S): PipeStep<O, ReduceResult<O, S>>;
+export function reduce$<O extends ReduceOrigin, const S>(
+  cb: ReduceCallback<ReduceOriginValue<O>, S>,
+  init: S,
+): PipeStep<O, ReduceResult<O, S>>;
 
-export function reduce$<D, const S>(cb: ReduceCallback<D, S>, init: S): PipeStep<ReduceOrigin<D>, S | Observable<S> | undefined> {
+export function reduce$<D, const S>(
+  cb: ReduceCallback<D, S>,
+  init: S,
+): PipeStep<ReduceOrigin<D>, S | Observable<S> | undefined> {
   return (origin: ReduceOrigin<D>) => {
     let state = init;
 

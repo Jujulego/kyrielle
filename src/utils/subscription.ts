@@ -36,7 +36,11 @@ export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps
 /**
  * Subscribes to given observer, bounded to a signal.
  */
-export function boundedSubscription<T>(observable: Subscribable<T>, signal: AbortSignal, observer: StrictObserver<T>): Subscription {
+export function boundedSubscription<T>(
+  observable: Subscribable<T>,
+  signal: AbortSignal,
+  observer: StrictObserver<T>,
+): Subscription {
   let internal: Subscription;
   let isClosed = false;
 
@@ -47,7 +51,7 @@ export function boundedSubscription<T>(observable: Subscribable<T>, signal: Abor
           isClosed = true;
           sub.unsubscribe();
         },
-        isClosed: () => isClosed
+        isClosed: () => isClosed,
       });
 
       signal.addEventListener('abort', internal.unsubscribe, { once: true });
@@ -60,7 +64,7 @@ export function boundedSubscription<T>(observable: Subscribable<T>, signal: Abor
       isClosed = true;
 
       observer.complete();
-    }
+    },
   });
 
   return buildSubscription({
@@ -68,7 +72,7 @@ export function boundedSubscription<T>(observable: Subscribable<T>, signal: Abor
       isClosed = true;
       sub.unsubscribe();
     },
-    isClosed: () => isClosed
+    isClosed: () => isClosed,
   });
 }
 
@@ -84,6 +88,6 @@ export function wrapUnsubscribable(unsub: Unsubscribable): Subscription {
       isClosed = true;
       unsub.unsubscribe();
     },
-    isClosed: () => isClosed
+    isClosed: () => isClosed,
   });
 }

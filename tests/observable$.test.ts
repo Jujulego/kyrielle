@@ -12,11 +12,15 @@ describe('observable$', () => {
 
     observable.subscribe(() => {});
 
-    await vi.waitFor(() => expect(subscriber).toHaveBeenCalledWith(expect.anything(), expect.any(AbortSignal)));
+    await vi.waitFor(() =>
+      expect(subscriber).toHaveBeenCalledWith(expect.anything(), expect.any(AbortSignal)),
+    );
   });
 
   it('should abort subscriber using signal when all subscription are unsubscribed & call subscriber again on next subscription', async () => {
-    const subscriber = vi.fn<(obs: SubscriberObserver, sig: AbortSignal) => Promise<void>>(() => new Promise<void>(() => {}));
+    const subscriber = vi.fn<(obs: SubscriberObserver, sig: AbortSignal) => Promise<void>>(
+      () => new Promise<void>(() => {}),
+    );
     const observable = observable$(subscriber);
 
     // first subscription

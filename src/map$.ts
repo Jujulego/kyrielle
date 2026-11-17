@@ -11,7 +11,7 @@ import type {
   AsyncIteratedValue,
   IteratedValue,
   MinimalAsyncIterator,
-  MinimalIterator
+  MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
 import type { AnySubscribable } from './types/inputs/Subscribable.js';
@@ -30,7 +30,7 @@ import {
   isMutable,
   isPromise,
   isSubscribable,
-  isSubscribableHolder
+  isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
@@ -42,28 +42,30 @@ export type MapOrigin<D = unknown> =
   | Deferrable<Awaitable<D>>
   | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type MapMutable<O extends Mutable, A, D> = O extends AsyncMutable ? AsyncMutator<A, D> : Mutator<A, D>;
-export type MapDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable ? AsyncRef<D> : Ref<D>;
+export type MapMutable<O extends Mutable, A, D> = O extends AsyncMutable
+  ? AsyncMutator<A, D>
+  : Mutator<A, D>;
+export type MapDeferrable<O extends Deferrable, D> = O extends AsyncDeferrable
+  ? AsyncRef<D>
+  : Ref<D>;
 
-export type MapOriginValue<O extends MapOrigin> =
-  & (O extends AnyIterable
-    ? IteratedValue<O>
-    : O extends AnyAsyncIterable
-      ? AsyncIteratedValue<O>
-      : unknown)
-  & (O extends AnySubscribable<infer D> ? D : unknown)
-  & (O extends Deferrable<infer D> ? Awaited<D> : unknown)
-  & (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
+export type MapOriginValue<O extends MapOrigin> = (O extends AnyIterable
+  ? IteratedValue<O>
+  : O extends AnyAsyncIterable
+    ? AsyncIteratedValue<O>
+    : unknown) &
+  (O extends AnySubscribable<infer D> ? D : unknown) &
+  (O extends Deferrable<infer D> ? Awaited<D> : unknown) &
+  (O extends Mutable<any, infer D> ? Awaited<D> : unknown); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type MapResult<O, R> =
-  & (O extends AnyIterable
-    ? SimpleIterator<R>
-    : O extends AnyAsyncIterable
-      ? SimpleAsyncIterator<R>
-      : unknown)
-  & (O extends AnySubscribable ? Observable<R> : unknown)
-  & (O extends Deferrable ? MapDeferrable<O, R> : unknown)
-  & (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
+export type MapResult<O, R> = (O extends AnyIterable
+  ? SimpleIterator<R>
+  : O extends AnyAsyncIterable
+    ? SimpleAsyncIterator<R>
+    : unknown) &
+  (O extends AnySubscribable ? Observable<R> : unknown) &
+  (O extends Deferrable ? MapDeferrable<O, R> : unknown) &
+  (O extends Mutable<infer A> ? MapMutable<O, A, R> : unknown);
 
 /**
  * Applies given function on every emitted values, including values returned by defer and mutate if present.
@@ -72,7 +74,9 @@ export type MapResult<O, R> =
  * @since 1.0.0
  * @version 2.5.0 Add support for async iterators
  */
-export function map$<O extends MapOrigin, R>(fn: (arg: MapOriginValue<O>) => R): PipeStep<O, MapResult<O, R>>;
+export function map$<O extends MapOrigin, R>(
+  fn: (arg: MapOriginValue<O>) => R,
+): PipeStep<O, MapResult<O, R>>;
 
 export function map$<A, R>(fn: (arg: A) => R) {
   return (origin: unknown) => {
@@ -83,39 +87,49 @@ export function map$<A, R>(fn: (arg: A) => R) {
       const result = iterator.next();
 
       if (isPromise(result)) {
-        builder.add(asyncIterator$<R>((async function* () {
-          let res = await result;
+        builder.add(
+          asyncIterator$<R>(
+            (async function* () {
+              let res = await result;
 
-          while (!res.done) {
-            yield fn(res.value);
+              while (!res.done) {
+                yield fn(res.value);
 
-            res = await (iterator as MinimalAsyncIterator<A>).next();
-          }
-        })()));
+                res = await (iterator as MinimalAsyncIterator<A>).next();
+              }
+            })(),
+          ),
+        );
       } else {
         let res = result;
 
-        builder.add(iterator$<R>((function* () {
-          while (!res.done) {
-            yield fn(res.value);
+        builder.add(
+          iterator$<R>(
+            (function* () {
+              while (!res.done) {
+                yield fn(res.value);
 
-            res = (iterator as MinimalIterator<A>).next();
-          }
-        })()));
+                res = (iterator as MinimalIterator<A>).next();
+              }
+            })(),
+          ),
+        );
       }
     }
 
     if (isSubscribable<A>(origin) || isSubscribableHolder<A>(origin)) {
       const observable = extractSubscribable(origin);
-      builder.add(observable$<R>((observer, signal) => {
-        boundedSubscription(observable, signal, {
-          next: (val) => {
-            observer.next(fn(val));
-          },
-          error: (err) => observer.error(err),
-          complete: () => observer.complete(),
-        });
-      }));
+      builder.add(
+        observable$<R>((observer, signal) => {
+          boundedSubscription(observable, signal, {
+            next: (val) => {
+              observer.next(fn(val));
+            },
+            error: (err) => observer.error(err),
+            complete: () => observer.complete(),
+          });
+        }),
+      );
     }
 
     if (isDeferrable<A>(origin)) {

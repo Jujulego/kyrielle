@@ -18,14 +18,17 @@ export function isEmitter<M extends Mapping = Mapping>(value: unknown): value is
 /**
  * Tests if given value is a Listenable object
  */
-export function isListenable<M extends Mapping = Mapping>(value: unknown): value is StrictListenable<M> {
+export function isListenable<M extends Mapping = Mapping>(
+  value: unknown,
+): value is StrictListenable<M> {
   return isNonNullObject(value) && hasMethod(value, 'on');
 }
 
 /**
  * Tests if given value is a Mutable object
  */
-export function isMutable<A = any, D = unknown>(value: unknown): value is Mutable<A, D> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export function isMutable<A = any, D = unknown>(value: unknown): value is Mutable<A, D> {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   return isNonNullObject(value) && hasMethod(value, 'mutate');
 }
 
@@ -33,7 +36,10 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
  * Tests if given value is a partial Observer object
  */
 export function isPartialObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
-  return isNonNullObject(value) && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'));
+  return (
+    isNonNullObject(value) &&
+    (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'))
+  );
 }
 
 /**
@@ -98,7 +104,9 @@ export function isMinimalIterator<D = unknown>(value: unknown): value is Minimal
 /**
  * Tests if given value is an AwaitableIterator object
  */
-export function isAwaitableIterator<D = unknown>(value: unknown): value is MinimalIterator<D> | MinimalAsyncIterator<D> {
+export function isAwaitableIterator<D = unknown>(
+  value: unknown,
+): value is MinimalIterator<D> | MinimalAsyncIterator<D> {
   return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length === 0;
 }
 
@@ -121,6 +129,9 @@ function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod<O extends NonNullObject, const K extends keyof O>(value: NonNullObject, name: K): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {
+function hasMethod<O extends NonNullObject, const K extends keyof O>(
+  value: NonNullObject,
+  name: K,
+): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {
   return name in value && typeof value[name] === 'function';
 }

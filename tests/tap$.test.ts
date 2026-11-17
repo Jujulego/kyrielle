@@ -72,7 +72,10 @@ describe('tap$', () => {
 
   it('should complete when source completes', () => {
     const src = source$<number>();
-    const res = pipe$(src, tap$(() => null));
+    const res = pipe$(
+      src,
+      tap$(() => null),
+    );
 
     const subscription = res.subscribe(vi.fn<(arg: number) => void>());
     expect(subscription.closed).toBe(false);
@@ -86,7 +89,10 @@ describe('tap$', () => {
     const src = observable$<number>((_, signal) => {
       signal.addEventListener('abort', fn, { once: true });
     });
-    const res = pipe$(src, tap$(() => null));
+    const res = pipe$(
+      src,
+      tap$(() => null),
+    );
 
     const subscription = res.subscribe(vi.fn<(arg: number) => void>());
     expect(fn).not.toHaveBeenCalled();

@@ -11,7 +11,10 @@ describe('filter$', () => {
     vi.spyOn(src, 'subscribe');
 
     // Setup
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(
+      src,
+      filter$((n) => n === 42),
+    );
     expect(src.subscribe).not.toHaveBeenCalled();
 
     // Subscribe
@@ -30,7 +33,10 @@ describe('filter$', () => {
 
   it('should complete when source completes', () => {
     const src = source$<number>();
-    const res = pipe$(src, filter$((n): n is 42 => n === 42));
+    const res = pipe$(
+      src,
+      filter$((n): n is 42 => n === 42),
+    );
 
     const subscription = res.subscribe(vi.fn<(arg: 42) => void>());
     expect(subscription.closed).toBe(false);
@@ -44,7 +50,10 @@ describe('filter$', () => {
     const src = observable$<number>((_, signal) => {
       signal.addEventListener('abort', fn, { once: true });
     });
-    const res = pipe$(src, filter$((n) => n === 42));
+    const res = pipe$(
+      src,
+      filter$((n) => n === 42),
+    );
 
     const subscription = res.subscribe(vi.fn<(arg: 42) => void>());
     expect(fn).not.toHaveBeenCalled();
@@ -54,7 +63,10 @@ describe('filter$', () => {
   });
 
   it('should filter iterator values', () => {
-    const res = pipe$([1, 2, 3, 4], filter$((n) => (n % 2) === 0));
+    const res = pipe$(
+      [1, 2, 3, 4],
+      filter$((n) => n % 2 === 0),
+    );
 
     expect(res.next()).toStrictEqual({ done: false, value: 2 });
     expect(res.next()).toStrictEqual({ done: false, value: 4 });
@@ -62,8 +74,16 @@ describe('filter$', () => {
   });
 
   it('should filter async iterator values', async () => {
-    const generator = (async function* () { yield 1; yield 2; yield 3; yield 4; })();
-    const res = pipe$(generator, filter$((n) => (n % 2) === 0));
+    const generator = (async function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+      yield 4;
+    })();
+    const res = pipe$(
+      generator,
+      filter$((n) => n % 2 === 0),
+    );
 
     await expect(res.next()).resolves.toStrictEqual({ done: false, value: 2 });
     await expect(res.next()).resolves.toStrictEqual({ done: false, value: 4 });

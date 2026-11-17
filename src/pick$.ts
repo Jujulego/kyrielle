@@ -8,7 +8,10 @@ import type { ListenEventMap, StrictListenable } from './types/outputs/StrictLis
  *
  * @since 2.8.0
  */
-export function pick$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(listenable: L, key: K): Observable<ListenEventMap<L>[K]> {
+export function pick$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
+  listenable: L,
+  key: K,
+): Observable<ListenEventMap<L>[K]> {
   return observable$((observer, signal) => {
     const { unsubscribe } = listenable.on(key, observer);
     signal.addEventListener('abort', unsubscribe, { once: true });

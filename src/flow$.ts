@@ -9,7 +9,10 @@ import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
  *
  * @since 1.0.0
  */
-export function flow$<A extends Subscribable>(observable: A, observer: FlowObserver<A>): ReturnType<A['subscribe']>;
+export function flow$<A extends Subscribable>(
+  observable: A,
+  observer: FlowObserver<A>,
+): ReturnType<A['subscribe']>;
 
 /**
  * Run step on input observable allowing to change its shape or emitted data.
@@ -20,7 +23,7 @@ export function flow$<A extends Subscribable>(observable: A, observer: FlowObser
 export function flow$<A, B extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
-  observer: FlowObserver<B>
+  observer: FlowObserver<B>,
 ): ReturnType<B['subscribe']>;
 
 /**
@@ -33,7 +36,7 @@ export function flow$<A, B, C extends Subscribable>(
   observable: A,
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
-  observer: FlowObserver<C>
+  observer: FlowObserver<C>,
 ): ReturnType<C['subscribe']>;
 
 /**
@@ -47,7 +50,7 @@ export function flow$<A, B, C, D extends Subscribable>(
   stepA: PipeStep<A, B>,
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
-  observer: FlowObserver<D>
+  observer: FlowObserver<D>,
 ): ReturnType<D['subscribe']>;
 
 /**
@@ -62,7 +65,7 @@ export function flow$<A, B, C, D, E extends Subscribable>(
   stepB: PipeStep<B, C>,
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
-  observer: FlowObserver<E>
+  observer: FlowObserver<E>,
 ): ReturnType<E['subscribe']>;
 
 /**
@@ -78,7 +81,7 @@ export function flow$<A, B, C, D, E, F extends Subscribable>(
   stepC: PipeStep<C, D>,
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
-  observer: FlowObserver<F>
+  observer: FlowObserver<F>,
 ): ReturnType<F['subscribe']>;
 
 /**
@@ -95,7 +98,7 @@ export function flow$<A, B, C, D, E, F, G extends Subscribable>(
   stepD: PipeStep<D, E>,
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
-  observer: FlowObserver<G>
+  observer: FlowObserver<G>,
 ): ReturnType<G['subscribe']>;
 
 /**
@@ -113,7 +116,7 @@ export function flow$<A, B, C, D, E, F, G, H extends Subscribable>(
   stepE: PipeStep<E, F>,
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
-  observer: FlowObserver<H>
+  observer: FlowObserver<H>,
 ): ReturnType<H['subscribe']>;
 
 /**
@@ -132,7 +135,7 @@ export function flow$<A, B, C, D, E, F, G, H, I extends Subscribable>(
   stepF: PipeStep<F, G>,
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
-  observer: FlowObserver<I>
+  observer: FlowObserver<I>,
 ): ReturnType<I['subscribe']>;
 
 /**
@@ -152,7 +155,7 @@ export function flow$<A, B, C, D, E, F, G, H, I, J extends Subscribable>(
   stepG: PipeStep<G, H>,
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
-  observer: FlowObserver<J>
+  observer: FlowObserver<J>,
 ): ReturnType<J['subscribe']>;
 
 /**
@@ -173,7 +176,7 @@ export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Subscribable>(
   stepH: PipeStep<G, I>,
   stepI: PipeStep<I, J>,
   stepJ: PipeStep<J, K>,
-  observer: FlowObserver<K>
+  observer: FlowObserver<K>,
 ): ReturnType<K['subscribe']>;
 
 /**
@@ -182,7 +185,10 @@ export function flow$<A, B, C, D, E, F, G, H, I, J, K extends Subscribable>(
  *
  * @since 1.0.0
  */
-export function flow$(value: unknown, ...rest: [...PipeStep[], observer: PartialObserver]): Unsubscribable {
+export function flow$(
+  value: unknown,
+  ...rest: [...PipeStep[], observer: PartialObserver]
+): Unsubscribable {
   const observer = rest.pop() as PartialObserver;
   return (step$(...(rest as PipeStep[]))(value) as Subscribable).subscribe(observer);
 }
@@ -192,4 +198,5 @@ export function flow$(value: unknown, ...rest: [...PipeStep[], observer: Partial
  *
  * @since 2.0.0
  */
-export type FlowObserver<T extends Subscribable> = T extends Subscribable<infer D> ? PartialObserver<D> : never;
+export type FlowObserver<T extends Subscribable> =
+  T extends Subscribable<infer D> ? PartialObserver<D> : never;
