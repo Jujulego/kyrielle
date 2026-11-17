@@ -29,7 +29,8 @@
     "build:esm": "swc src -d dist --strip-leading-paths",
     "build:types": "tsc --project tsconfig.build.json",
     "test": "vitest run --typecheck",
-    "test:types": "tsc --project tests"
+    "test:types": "tsc --project tests",
+    "prepare": "husky"
   },
   "dependencies": {
     "@repeaterjs/repeater": "^3.0.5",
@@ -47,15 +48,16 @@
     "@swc/core": "1.16.21",
     "@types/node": "24.19.2",
     "@typescript-eslint/utils": "8.71.1",
-    "@vitest/coverage-v8": "5.0.3",
+    "@vitest/coverage-v8": "5.0.5",
     "@vitest/eslint-plugin": "1.6.28",
     "eslint": "10.14.0",
+    "husky": "9.1.7",
     "jiti": "2.7.0",
     "shx": "0.4.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.1",
     "vite": "8.3.4",
-    "vitest": "5.0.3"
+    "vitest": "5.0.5"
   },
   "packageManager": "yarn@4.18.1"
 }
