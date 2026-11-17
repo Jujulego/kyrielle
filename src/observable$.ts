@@ -35,7 +35,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       state = State.Inactive;
       controller.abort();
       observers.clear();
-    }
+    },
   };
 
   // Inner state
@@ -78,7 +78,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
             state = State.Inactive;
           }
         },
-        isClosed: () => !observers.has(observer)
+        isClosed: () => !observers.has(observer),
       });
       observer.start?.(subscription);
 
@@ -88,7 +88,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
       }
 
       return subscription;
-    }
+    },
   } as Observable<D>;
 
   return observable;
@@ -114,7 +114,10 @@ export interface SubscriberObserver<in D = unknown> {
   readonly complete: () => void;
 }
 
-export type SubscriberFn<out D> = (observer: SubscriberObserver<D>, signal: AbortSignal) => Promise<void> | void;
+export type SubscriberFn<out D> = (
+  observer: SubscriberObserver<D>,
+  signal: AbortSignal,
+) => Promise<void> | void;
 
 // Enum
 const enum State {

@@ -9,12 +9,12 @@ let b1: Source<'b1'>;
 let b2: Source<'b2'>;
 let c: Source<'c'>;
 let base: Multiplexer<{
-  a: typeof a,
-  b: typeof b1,
+  a: typeof a;
+  b: typeof b1;
 }>;
 let override: Multiplexer<{
-  b: typeof b2,
-  c: typeof c,
+  b: typeof b2;
+  c: typeof c;
 }>;
 let inherited: Inherit<[typeof base, typeof override]>;
 
@@ -63,9 +63,10 @@ describe('inherit$', () => {
       expect(b2.next).toHaveBeenCalledWith('b2');
     });
 
-    it('should not emit child event as child doesn\'t exists', () => {
-      expect(() => inherited.emit('toto' as 'a', 'a'))
-        .toThrow(new Error('Unsupported emit key toto'));
+    it("should not emit child event as child doesn't exists", () => {
+      expect(() => inherited.emit('toto' as 'a', 'a')).toThrow(
+        new Error('Unsupported emit key toto'),
+      );
     });
   });
 
@@ -76,9 +77,11 @@ describe('inherit$', () => {
 
       inherited.on('a', listener);
 
-      expect(a.subscribe).toHaveBeenCalledWith(expect.objectContaining({
-        next: listener
-      }));
+      expect(a.subscribe).toHaveBeenCalledWith(
+        expect.objectContaining({
+          next: listener,
+        }),
+      );
     });
 
     it('should subscribe to overridden child event', () => {
@@ -89,14 +92,17 @@ describe('inherit$', () => {
       inherited.on('b', listener);
 
       expect(b1.subscribe).not.toHaveBeenCalled();
-      expect(b2.subscribe).toHaveBeenCalledWith(expect.objectContaining({
-        next: listener
-      }));
+      expect(b2.subscribe).toHaveBeenCalledWith(
+        expect.objectContaining({
+          next: listener,
+        }),
+      );
     });
 
-    it('should not subscribe to child event as child doesn\'t exists', () => {
-      expect(() => inherited.on('toto' as 'a', () => null))
-        .toThrow(new Error('Unsupported listen key toto'));
+    it("should not subscribe to child event as child doesn't exists", () => {
+      expect(() => inherited.on('toto' as 'a', () => null)).toThrow(
+        new Error('Unsupported listen key toto'),
+      );
     });
   });
 });

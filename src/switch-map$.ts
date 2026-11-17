@@ -13,7 +13,9 @@ import { boundedSubscription } from './utils/subscription.js';
  *
  * @since 1.0.0
  */
-export function switchMap$<T, R>(fn: (item: T) => Subscribable<R>): PipeStep<Subscribable<T>, Observable<R>> {
+export function switchMap$<T, R>(
+  fn: (item: T) => Subscribable<R>,
+): PipeStep<Subscribable<T>, Observable<R>> {
   return (origin: Subscribable<T>) => {
     let previous: Unsubscribable;
     let originCompleted = false;
@@ -32,7 +34,7 @@ export function switchMap$<T, R>(fn: (item: T) => Subscribable<R>): PipeStep<Sub
               if (originCompleted) {
                 observer.complete();
               }
-            }
+            },
           });
         },
         error: (err) => observer.error(err),
@@ -42,9 +44,8 @@ export function switchMap$<T, R>(fn: (item: T) => Subscribable<R>): PipeStep<Sub
           if (childCompleted) {
             observer.complete();
           }
-        }
+        },
       });
     });
   };
 }
-

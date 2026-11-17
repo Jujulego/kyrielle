@@ -69,7 +69,7 @@ describe('once$', () => {
     it('should be unsubscribed after first call', async () => {
       const spy = vi.fn();
       const mux = multiplexer$({
-        test: source$<number>()
+        test: source$<number>(),
       });
 
       const sub = once$(mux, 'test', spy);
@@ -90,7 +90,7 @@ describe('once$', () => {
     it('should be unsubscribed after first next call', async () => {
       const spy = vi.fn();
       const mux = multiplexer$({
-        test: source$<number>()
+        test: source$<number>(),
       });
 
       const sub = once$(mux, 'test', { next: spy });

@@ -41,12 +41,12 @@ export function ref$<D>(fn: (signal: AbortSignal) => D): Ref<D> {
 
       // Manage signal
       if (signal) {
-        return <D> query.registerSignal(signal);
+        return <D>query.registerSignal(signal);
       } else {
         query.preventCancel();
       }
 
-      return <D> query.promise;
-    }
+      return <D>query.promise;
+    },
   };
 }

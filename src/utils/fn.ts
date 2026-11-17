@@ -10,4 +10,6 @@ export function applyFn<A, R>(fn: (arg: A) => R, res: Awaitable<A>): Awaitable<R
   }
 }
 
-export const noop = () => { /* noop */ };
+export const noop = () => {
+  /* noop */
+};

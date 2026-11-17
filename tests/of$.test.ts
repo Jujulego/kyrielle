@@ -25,11 +25,13 @@ describe('of$', () => {
     const spyNext = vi.fn();
     const spyComplete = vi.fn();
 
-    const result = of$((async function* () {
-      yield 1;
-      yield 2;
-      yield 3;
-    })());
+    const result = of$(
+      (async function* () {
+        yield 1;
+        yield 2;
+        yield 3;
+      })(),
+    );
     result.subscribe({ next: spyNext, complete: spyComplete });
 
     await vi.waitFor(() => expect(spyNext).toHaveBeenCalledWith(1));
@@ -43,13 +45,15 @@ describe('of$', () => {
     const spyNext = vi.fn();
     const spyComplete = vi.fn();
 
-    const result = of$((async function* () {
-      yield 1;
+    const result = of$(
+      (async function* () {
+        yield 1;
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      yield 2;
-      yield 3;
-    })());
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        yield 2;
+        yield 3;
+      })(),
+    );
     const unsub = result.subscribe({ next: spyNext, complete: spyComplete });
 
     await vi.waitFor(() => expect(spyNext).toHaveBeenCalledWith(1));

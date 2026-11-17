@@ -12,7 +12,9 @@ import { boundedSubscription } from './utils/subscription.js';
  *
  * @since 1.0.0
  */
-export function mergeMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<AnySubscribable<T>, Observable<R>> {
+export function mergeMap$<T, R>(
+  fn: (item: T) => AnySubscribable<R>,
+): PipeStep<AnySubscribable<T>, Observable<R>> {
   return (origin: AnySubscribable<T>) => {
     let completed = 1;
 
@@ -30,7 +32,7 @@ export function mergeMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<A
               if (completed === 0) {
                 observer.complete();
               }
-            }
+            },
           });
         },
         error: (err) => observer.error(err),
@@ -40,9 +42,8 @@ export function mergeMap$<T, R>(fn: (item: T) => AnySubscribable<R>): PipeStep<A
           if (completed === 0) {
             observer.complete();
           }
-        }
+        },
       });
     });
   };
 }
-

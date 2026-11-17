@@ -13,11 +13,11 @@ export function multiplexer$<M extends MultiplexerMapping>(origins: M): Multiple
 }
 
 // Types
-export type MultiplexerMapping = Record<string,
-  | AnyObserver
-  | StrictEmitter
-  | StrictListenable
-  | Subscribable
+export type MultiplexerMapping = Record<
+  string,
+  AnyObserver | StrictEmitter | StrictListenable | Subscribable
 >;
 
-export interface Multiplexer<M extends MultiplexerMapping = MultiplexerMapping> extends _Multiplexer<M> {}
+export interface Multiplexer<
+  M extends MultiplexerMapping = MultiplexerMapping,
+> extends _Multiplexer<M> {}

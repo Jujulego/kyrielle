@@ -34,7 +34,7 @@ export type MappingKey<M extends Mapping> = Extract<keyof M, string>;
  */
 export type OverrideMapping<B extends Mapping, O extends Mapping> = {
   [K in MappingKey<B> | MappingKey<O>]: K extends MappingKey<O> ? O[K] : B[K];
-}
+};
 
 /**
  * Prepends the given key part to all type mapping's keys
@@ -42,5 +42,5 @@ export type OverrideMapping<B extends Mapping, O extends Mapping> = {
  * @since 1.0.0
  */
 export type PrependMapping<P extends string, M extends Mapping> = {
-  [K in MappingKey<M> as `${P}.${K}`]: M[K]
-}
+  [K in MappingKey<M> as `${P}.${K}`]: M[K];
+};

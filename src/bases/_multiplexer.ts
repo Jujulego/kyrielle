@@ -47,7 +47,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
       }
 
       throw new Error(`Unsupported listen key ${key}`);
-    }
+    },
   } as _Multiplexer<M>;
 }
 
@@ -66,17 +66,18 @@ export interface MultiplexerUtils<M extends Mapping = Mapping> {
 /**
  * Object managing multiple events
  */
-export type _Multiplexer<M extends Mapping = Mapping> =
-  & StrictEmitter<InputMapping<M>>
+export type _Multiplexer<M extends Mapping = Mapping> = StrictEmitter<InputMapping<M>>
   & StrictListenable<OutputMapping<M>>
   & MultiplexerUtils<M>;
 
 /**
  * Builds a mapping from input values of each source in the given source mapping
  */
-type InputMapping<M extends Mapping> = AssertMapping<MapValueIntersection<{
-  [K in MappingKey<M>]: _InputRecord<K, M[K]>;
-}>>;
+type InputMapping<M extends Mapping> = AssertMapping<
+  MapValueIntersection<{
+    [K in MappingKey<M>]: _InputRecord<K, M[K]>;
+  }>
+>;
 
 type _InputRecord<K extends string, O> =
   | (O extends StrictEmitter<infer EM> ? PrependMapping<K, EM> : never)
@@ -85,9 +86,11 @@ type _InputRecord<K extends string, O> =
 /**
  * Builds a mapping from output values of each source in the given source mapping
  */
-type OutputMapping<M extends Mapping> = AssertMapping<MapValueIntersection<{
-  [K in MappingKey<M>]: _OutputRecord<K, M[K]>;
-}>>;
+type OutputMapping<M extends Mapping> = AssertMapping<
+  MapValueIntersection<{
+    [K in MappingKey<M>]: _OutputRecord<K, M[K]>;
+  }>
+>;
 
 type _OutputRecord<K extends string, O> =
   | (O extends StrictListenable<infer LM> ? PrependMapping<K, LM> : never)

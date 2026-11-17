@@ -7,7 +7,9 @@ import type { AssertionFn, PredicateFn } from './types/utils.js';
  *
  * @since 1.0.0
  */
-export function validate$<O extends MapOrigin, R extends MapOriginValue<O>>(assert: AssertionFn<MapOriginValue<O>, R>): PipeStep<O, MapResult<O, R>>;
+export function validate$<O extends MapOrigin, R extends MapOriginValue<O>>(
+  assert: AssertionFn<MapOriginValue<O>, R>,
+): PipeStep<O, MapResult<O, R>>;
 
 /**
  * Uses given predicate to validate emitted values.
@@ -15,7 +17,10 @@ export function validate$<O extends MapOrigin, R extends MapOriginValue<O>>(asse
  *
  * @since 1.0.0
  */
-export function validate$<O extends MapOrigin, R extends MapOriginValue<O>>(predicate: PredicateFn<MapOriginValue<O>, R>, opts?: ValidatePredicateOpts<MapOriginValue<O>>): PipeStep<O, MapResult<O, R>>;
+export function validate$<O extends MapOrigin, R extends MapOriginValue<O>>(
+  predicate: PredicateFn<MapOriginValue<O>, R>,
+  opts?: ValidatePredicateOpts<MapOriginValue<O>>,
+): PipeStep<O, MapResult<O, R>>;
 
 export function validate$(fn: (data: unknown) => boolean | void, opts: ValidatePredicateOpts = {}) {
   return map$((data) => {

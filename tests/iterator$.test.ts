@@ -20,7 +20,11 @@ describe('iterator$', () => {
   });
 
   it('should accept a generator', () => {
-    const generator = (function* () { yield 1; yield 2; yield 3; })();
+    const generator = (function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    })();
     const iterator = iterator$(generator);
 
     expect(iterator.next()).toStrictEqual({ done: false, value: 1 });

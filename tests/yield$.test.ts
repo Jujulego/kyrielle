@@ -5,10 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 // Tests
 describe('yield$', () => {
   it('should emit defer result', () => {
-    const res = pipe$(
-      { defer: () => 42 },
-      yield$()
-    );
+    const res = pipe$({ defer: () => 42 }, yield$());
 
     const cb = vi.fn();
     res.subscribe(cb);
@@ -18,10 +15,7 @@ describe('yield$', () => {
   });
 
   it('should emit resolved defer result', async () => {
-    const res = pipe$(
-      { defer: async () => 42 },
-      yield$()
-    );
+    const res = pipe$({ defer: async () => 42 }, yield$());
 
     const cb = vi.fn();
     res.subscribe(cb);
@@ -31,10 +25,7 @@ describe('yield$', () => {
   });
 
   it('should emit mutate result', () => {
-    const res = pipe$(
-      { mutate: (_: string) => 42 },
-      yield$()
-    );
+    const res = pipe$({ mutate: (_: string) => 42 }, yield$());
 
     const cb = vi.fn();
     res.subscribe(cb);
@@ -44,10 +35,7 @@ describe('yield$', () => {
   });
 
   it('should emit resolved mutate result', async () => {
-    const res = pipe$(
-      { mutate: async (_: string) => 42 },
-      yield$()
-    );
+    const res = pipe$({ mutate: async (_: string) => 42 }, yield$());
 
     const cb = vi.fn();
     res.subscribe(cb);

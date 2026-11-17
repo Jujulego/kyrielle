@@ -8,14 +8,14 @@ import type { Subscription } from './Subscription.js';
  * @since 1.0.0
  */
 export interface Observable<out D = unknown> extends Subscribable<D>, SubscribableHolder<D> {
-   [Symbol.observable](): Observable<D>;
+  [Symbol.observable](): Observable<D>;
 
   /**
    * Subscribe to the observable.
    *
    * @since 1.0.0
    */
-   subscribe(this: void): Subscription;
+  subscribe(this: void): Subscription;
 
   /**
    * Subscribe to observable using an observer.
@@ -23,7 +23,7 @@ export interface Observable<out D = unknown> extends Subscribable<D>, Subscribab
    *
    * @since 1.0.0
    */
-   subscribe(this: void, observer: PartialObserver<D>): Subscription;
+  subscribe(this: void, observer: PartialObserver<D>): Subscription;
 
   /**
    * Subscribe to observable using callbacks.
@@ -33,12 +33,21 @@ export interface Observable<out D = unknown> extends Subscribable<D>, Subscribab
    *
    * @since 1.0.0
    */
-   subscribe(this: void, onNext: SubscribeOnNext<D>, onError?: SubscribeOnError, onComplete?: SubscribeOnComplete): Subscription;
+  subscribe(
+    this: void,
+    onNext: SubscribeOnNext<D>,
+    onError?: SubscribeOnError,
+    onComplete?: SubscribeOnComplete,
+  ): Subscription;
 }
 
 export type SubscribeOnNext<in D = unknown> = (data: D) => void;
 export type SubscribeOnError = (error: Error) => void;
 export type SubscribeOnComplete = () => void;
 
-export type SubscribeCallbacks<D = unknown> = [onNext: SubscribeOnNext<D>, onError?: SubscribeOnError, onComplete?: SubscribeOnComplete];
+export type SubscribeCallbacks<D = unknown> = [
+  onNext: SubscribeOnNext<D>,
+  onError?: SubscribeOnError,
+  onComplete?: SubscribeOnComplete,
+];
 export type SubscribeArgs<D = unknown> = [] | [PartialObserver<D>] | SubscribeCallbacks<D>;

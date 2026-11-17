@@ -7,7 +7,9 @@ import type { PipeStep } from './pipe$.js';
  *
  * @since 2.2.0
  */
-export function tap$<O extends MapOrigin>(fn: (arg: MapOriginValue<O>) => void): PipeStep<O, MapResult<O, MapOriginValue<O>>> {
+export function tap$<O extends MapOrigin>(
+  fn: (arg: MapOriginValue<O>) => void,
+): PipeStep<O, MapResult<O, MapOriginValue<O>>> {
   return map$((item) => {
     fn(item);
     return item;

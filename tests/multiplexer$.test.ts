@@ -8,11 +8,11 @@ let int: Source<number>;
 let str: Source<string>;
 let boo: Source<boolean>;
 let mlt: Multiplexer<{
-  int: Source<number>,
-  str: Source<string>,
+  int: Source<number>;
+  str: Source<string>;
   deep: Multiplexer<{
-    boo: Source<boolean>,
-  }>
+    boo: Source<boolean>;
+  }>;
 }>;
 
 beforeEach(() => {
@@ -23,8 +23,8 @@ beforeEach(() => {
     int,
     str,
     deep: multiplexer$({
-      boo
-    })
+      boo,
+    }),
   });
 });
 
@@ -54,9 +54,8 @@ describe('multiplexer$', () => {
       expect(boo.next).toHaveBeenCalledWith(true);
     });
 
-    it('should not emit child event as child doesn\'t exists', () => {
-      expect(() => mlt.emit('toto' as 'int', 1))
-        .toThrow(new Error('Unsupported emit key toto'));
+    it("should not emit child event as child doesn't exists", () => {
+      expect(() => mlt.emit('toto' as 'int', 1)).toThrow(new Error('Unsupported emit key toto'));
     });
   });
 
@@ -67,9 +66,11 @@ describe('multiplexer$', () => {
 
       mlt.on('int', listener);
 
-      expect(int.subscribe).toHaveBeenCalledWith(expect.objectContaining({
-        next: listener
-      }));
+      expect(int.subscribe).toHaveBeenCalledWith(
+        expect.objectContaining({
+          next: listener,
+        }),
+      );
     });
 
     it('should subscribe to deep child event', () => {
@@ -84,9 +85,10 @@ describe('multiplexer$', () => {
       expect(listener).toHaveBeenCalledWith(true);
     });
 
-    it('should not subscribe to child event as child doesn\'t exists', () => {
-      expect(() => mlt.on('toto' as 'int', vi.fn<(arg: unknown) => void>()))
-        .toThrow(new Error('Unsupported listen key toto'));
+    it("should not subscribe to child event as child doesn't exists", () => {
+      expect(() => mlt.on('toto' as 'int', vi.fn<(arg: unknown) => void>())).toThrow(
+        new Error('Unsupported listen key toto'),
+      );
     });
   });
 });

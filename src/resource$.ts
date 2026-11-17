@@ -7,10 +7,7 @@ import { isAsyncIterable, isIterable, isSubscribableHolder } from './utils/predi
 
 // Types
 export type ResourceFeature<D> =
-  | AnyAwaitableIterable<D>
-  | Subscribable<D>
-  | Deferrable<Awaitable<D>>
-  | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  AnyAwaitableIterable<D> | Subscribable<D> | Deferrable<Awaitable<D>> | Mutable<any, Awaitable<D>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 /**
  * Helper to build complex resource types.
@@ -26,7 +23,9 @@ export interface ResourceBuilder<D, R = unknown> {
    * Adds subscribable feature based on given holder.
    * @param holder
    */
-  add<F extends SubscribableHolder<D>>(holder: F): ResourceBuilder<D, Omit<R, 'subscribe'> & Subscribable<D>>;
+  add<F extends SubscribableHolder<D>>(
+    holder: F,
+  ): ResourceBuilder<D, Omit<R, 'subscribe'> & Subscribable<D>>;
 
   /**
    * Return final resource object.
@@ -70,6 +69,6 @@ export function resource$<D>(): ResourceBuilder<D> {
     },
     build() {
       return resource;
-    }
+    },
   } as ResourceBuilder<D>;
 }

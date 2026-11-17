@@ -16,19 +16,18 @@ afterEach(() => {
 
 describe('mergeMap$', () => {
   it('should emit all values emitted by last returned subscribable', async () => {
-    const spyFn = vi.fn((i: number) => observable$((observer) => {
-      setTimeout(() => observer.next(i), 1000);
-      setTimeout(() => observer.next(i * 10), 2000);
-      setTimeout(() => observer.next(i * 100), 3000);
-      setTimeout(() => observer.complete(), 4000);
-    }));
+    const spyFn = vi.fn((i: number) =>
+      observable$((observer) => {
+        setTimeout(() => observer.next(i), 1000);
+        setTimeout(() => observer.next(i * 10), 2000);
+        setTimeout(() => observer.next(i * 100), 3000);
+        setTimeout(() => observer.complete(), 4000);
+      }),
+    );
     const spyResult = vi.fn();
     const spyComplete = vi.fn();
 
-    pipe$(
-      of$([1, 2, 3]),
-      mergeMap$(spyFn),
-    ).subscribe({ next: spyResult, complete: spyComplete });
+    pipe$(of$([1, 2, 3]), mergeMap$(spyFn)).subscribe({ next: spyResult, complete: spyComplete });
 
     expect(spyFn).toHaveBeenCalledTimes(3);
     expect(spyFn).toHaveBeenCalledWith(1);

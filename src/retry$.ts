@@ -10,7 +10,8 @@ import { isDeferrable, isMutable } from './utils/predicates.js';
 export type RetryableMethod = 'defer' | 'mutate' | 'both';
 
 export type RetriedDeferrable<O> = O extends AsyncDeferrable<infer D> ? Ref<Promise<D>> : never;
-export type RetriedMutable<O> = O extends AsyncMutable<infer A, infer D> ? Mutator<A, Promise<D>> : never;
+export type RetriedMutable<O> =
+  O extends AsyncMutable<infer A, infer D> ? Mutator<A, Promise<D>> : never;
 
 export type OnRetryResult = Awaitable<boolean | void> | Deferrable<Awaitable<boolean | void>>;
 
@@ -41,21 +42,30 @@ export interface RetryOptions {
  *
  * @since 1.0.0
  */
-export function retry$<O extends AsyncDeferrable>(method: 'defer', options?: RetryOptions): PipeStep<O, Omit<O, 'defer'> & RetriedDeferrable<O>>
+export function retry$<O extends AsyncDeferrable>(
+  method: 'defer',
+  options?: RetryOptions,
+): PipeStep<O, Omit<O, 'defer'> & RetriedDeferrable<O>>;
 
 /**
  * Retry calls to origin's mutate method.
  *
  * @since 1.0.0
  */
-export function retry$<O extends AsyncMutable>(method: 'mutate', options?: RetryOptions): PipeStep<O, Omit<O, 'mutate'> & RetriedMutable<O>>
+export function retry$<O extends AsyncMutable>(
+  method: 'mutate',
+  options?: RetryOptions,
+): PipeStep<O, Omit<O, 'mutate'> & RetriedMutable<O>>;
 
 /**
  * Retry calls to origin's both defer & mutate methods.
  *
  * @since 1.0.0
  */
-export function retry$<O extends AsyncDeferrable & AsyncMutable>(method: 'both', options?: RetryOptions): PipeStep<O, Omit<O, 'defer' | 'mutate'> & RetriedDeferrable<O> & RetriedMutable<O>>
+export function retry$<O extends AsyncDeferrable & AsyncMutable>(
+  method: 'both',
+  options?: RetryOptions,
+): PipeStep<O, Omit<O, 'defer' | 'mutate'> & RetriedDeferrable<O> & RetriedMutable<O>>;
 
 /**
  * Retry calls to origin's defer method.
@@ -65,7 +75,10 @@ export function retry$<O extends AsyncDeferrable & AsyncMutable>(method: 'both',
 export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): PipeStep<O, O> {
   const { onRetry = () => true, tryTimeout } = options;
 
-  async function retryStrategy(fn: (signal?: AbortSignal) => PromiseLike<unknown>, signal?: AbortSignal): Promise<unknown> {
+  async function retryStrategy(
+    fn: (signal?: AbortSignal) => PromiseLike<unknown>,
+    signal?: AbortSignal,
+  ): Promise<unknown> {
     let count = 0;
 
     while (!signal?.aborted) {
@@ -100,7 +113,7 @@ export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): 
       const originalDefer = origin.defer.bind(origin);
 
       Object.assign(origin, {
-        defer: (signal?: AbortSignal) => retryStrategy(originalDefer, signal)
+        defer: (signal?: AbortSignal) => retryStrategy(originalDefer, signal),
       });
     }
 
@@ -108,7 +121,8 @@ export function retry$<O>(method: RetryableMethod, options: RetryOptions = {}): 
       const originalMutate = origin.mutate.bind(origin);
 
       Object.assign(origin, {
-        mutate: (arg: unknown, signal?: AbortSignal) => retryStrategy((sig) => originalMutate(arg, sig), signal)
+        mutate: (arg: unknown, signal?: AbortSignal) =>
+          retryStrategy((sig) => originalMutate(arg, sig), signal),
       });
     }
 
@@ -121,5 +135,5 @@ async function shouldStop(result: OnRetryResult, signal?: AbortSignal): Promise<
     result = result.defer(signal);
   }
 
-  return !(await result ?? true);
+  return !((await result) ?? true);
 }

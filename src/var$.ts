@@ -43,7 +43,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({
         onUnsubscribe: () => observers.delete(observer),
-        isClosed: () => !observers.has(observer)
+        isClosed: () => !observers.has(observer),
       });
 
       observers.add(observer);
@@ -62,4 +62,5 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
 
 // Types
 export interface Var<in out D> extends Observable<D>, Ref<D>, Mutator<D, D> {}
-export interface UninitializedVar<in out D> extends Observable<D>, Ref<D | undefined>, Mutator<D, D> {}
+export interface UninitializedVar<in out D>
+  extends Observable<D>, Ref<D | undefined>, Mutator<D, D> {}

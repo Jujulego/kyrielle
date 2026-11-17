@@ -2,10 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "rootDir": "../",
-    "types": [
-      "node",
-      "../global.d.ts"
-    ],
+    "types": ["node", "../global.d.ts"],
     "paths": {
       "@/src/*": ["../src/*"]
     }
