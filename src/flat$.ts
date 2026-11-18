@@ -17,7 +17,7 @@ import type { Observable } from './types/outputs/Observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractAwaitableIterator, extractIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './observables/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -91,7 +91,7 @@ export function flat$<D, I extends AnyIterable<D>>() {
     }
 
     if (isSubscribable$<I>(origin) || hasObservableProtocol$<I>(origin)) {
-      const observable = extractSubscribable(origin);
+      const observable = extractSubscribable$(origin);
 
       builder.add(
         observable$<D>((observer, signal) => {

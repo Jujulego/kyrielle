@@ -29,7 +29,7 @@ import {
   isMutable,
   isPromise,
 } from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './observables/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -130,7 +130,7 @@ export function json$() {
     }
 
     if (isSubscribable$<string>(origin) || hasObservableProtocol$<string>(origin)) {
-      const observable = extractSubscribable(origin);
+      const observable = extractSubscribable$(origin);
       builder.add(
         observable$((observer, signal) => {
           boundedSubscription(observable, signal, {

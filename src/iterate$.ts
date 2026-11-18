@@ -1,6 +1,6 @@
 import { Repeater } from '@repeaterjs/repeater';
 import type { AnySubscribable } from './features/subscribable.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './observables/extract-subscribable$.js';
 
 /**
  * Wraps given observable into an async iterator.
@@ -9,7 +9,7 @@ import { extractSubscribable } from './utils/subscribable.js';
  */
 export function iterate$<D>(observable: AnySubscribable<D>): Repeater<D> {
   return new Repeater<D>(async (push, stop) => {
-    const sub = extractSubscribable(observable).subscribe({
+    const sub = extractSubscribable$(observable).subscribe({
       next: (data) => void push(data),
       error: (err) => stop(err),
       complete: () => stop(),

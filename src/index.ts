@@ -1,5 +1,8 @@
 export * from './features/subscribable.js';
 
+export * from './observables/extract-subscribable$.js';
+
+export * from './predicates/has-observable-protocol$.js';
 export * from './predicates/is-subscribable$.js';
 
 export * from './types/inputs/Deferrable.js';
@@ -18,7 +21,6 @@ export * from './types/outputs/StrictListenable.js';
 export * from './types/outputs/StrictObserver.js';
 export * from './types/outputs/Subscription.js';
 
-export * from './utils/subscribable.js';
 export * from './utils/iterator.js';
 export * from './utils/predicates.js';
 
@@ -66,4 +68,3 @@ export * from './var$.js';
 export * from './waitFor$.js';
 export * from './watch$.js';
 export * from './yield$.js';
-export { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';

@@ -32,7 +32,7 @@ import {
   isMutable,
   isPromise,
 } from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './observables/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -118,7 +118,7 @@ export function map$<A, R>(fn: (arg: A) => R) {
     }
 
     if (isSubscribable$<A>(origin) || hasObservableProtocol$<A>(origin)) {
-      const observable = extractSubscribable(origin);
+      const observable = extractSubscribable$(origin);
       builder.add(
         observable$<R>((observer, signal) => {
           boundedSubscription(observable, signal, {

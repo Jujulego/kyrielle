@@ -4,7 +4,7 @@ import { hasObservableProtocol$ } from '../predicates/has-observable-protocol$.j
 /**
  * Extracts the {@link Subscribable} from a subscribable or subscribable holder.
  *
- * For a `SubscribableHolder`, this calls its `[Symbol.observable]()` method
+ * For a {@link ObservableProtocol}, this calls its `[Symbol.observable]()` method
  * (falling back to `@@observable` in environments without `Symbol.observable`).
  *
  * @template D - Type of values emitted by the subscribable.
@@ -15,7 +15,7 @@ import { hasObservableProtocol$ } from '../predicates/has-observable-protocol$.j
  * @see {@link AnySubscribable}
  * @see {@link Subscribable}
  */
-export function extractSubscribable<D>(object: AnySubscribable<D>): Subscribable<D> {
+export function extractSubscribable$<D>(object: AnySubscribable<D>): Subscribable<D> {
   if (hasObservableProtocol$(object)) {
     return object[Symbol.observable ?? '@@observable']();
   }

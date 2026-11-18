@@ -20,7 +20,7 @@ import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/Simple
 import type { PredicateFn } from './types/utils.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './observables/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -105,7 +105,7 @@ export function filter$<D>(predicate: (val: D) => boolean) {
     }
 
     if (isSubscribable$<D>(origin) || hasObservableProtocol$<D>(origin)) {
-      const observable = extractSubscribable(origin);
+      const observable = extractSubscribable$(origin);
       builder.add(
         observable$<D>((observer, signal) => {
           boundedSubscription(observable, signal, {
