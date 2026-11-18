@@ -1,5 +1,5 @@
 import type { PartialObserver } from '../inputs/Observer.js';
-import type { Subscribable, SubscribableHolder } from '../inputs/Subscribable.js';
+import type { Subscribable, SubscribableHolder } from '../../features/subscribable.js';
 import type { Subscription } from './Subscription.js';
 
 /**

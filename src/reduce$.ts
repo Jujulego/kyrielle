@@ -9,7 +9,7 @@ import type {
   MinimalAsyncIterator,
   MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import {

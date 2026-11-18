@@ -1,7 +1,7 @@
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { AnyAwaitableIterable } from './types/inputs/MinimalIterator.js';
 import type { Mutable } from './types/inputs/Mutable.js';
-import type { Subscribable, SubscribableHolder } from './types/inputs/Subscribable.js';
+import type { Subscribable, SubscribableHolder } from './features/subscribable.js';
 import type { Awaitable } from './types/utils.js';
 import { isAsyncIterable, isIterable, isSubscribableHolder } from './utils/predicates.js';
 

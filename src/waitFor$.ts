@@ -1,5 +1,5 @@
 import { once$ } from './once$.js';
-import type { Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
+import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
 

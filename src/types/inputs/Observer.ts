@@ -6,7 +6,7 @@ import type { Unsubscribable } from './Unsubscribable.js';
  * @since 1.0.0
  * @see StrictObserver
  */
-export interface Observer<in D = unknown> {
+export interface Observer<D = unknown> {
   /**
    * Called at the start of a subscription with the generated subscription object
    * @param subscription
@@ -39,7 +39,7 @@ export interface Observer<in D = unknown> {
   complete(): void;
 }
 
-export type PartialObserver<in D = unknown> = {
+export type PartialObserver<D = unknown> = {
   [K in keyof Observer<D>]?: Observer<D>[K] | undefined;
 };
 export type AnyObserver<D = any> = Observer<D>; // eslint-disable-line @typescript-eslint/no-explicit-any

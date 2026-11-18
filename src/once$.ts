@@ -1,6 +1,6 @@
 import { observer$ } from './observer$.js';
 import type { PartialObserver } from './types/inputs/Observer.js';
-import type { Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
+import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
 import type { StrictObserver } from './types/outputs/StrictObserver.js';

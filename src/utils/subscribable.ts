@@ -1,4 +1,4 @@
-import type { AnySubscribable, Subscribable } from '../types/inputs/Subscribable.js';
+import type { AnySubscribable, Subscribable } from '../features/subscribable.js';
 import { isSubscribableHolder } from './predicates.js';
 
 /**

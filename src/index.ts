@@ -3,7 +3,7 @@ export * from './types/inputs/Extendable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
 export * from './types/inputs/Observer.js';
-export * from './types/inputs/Subscribable.js';
+export * from './features/subscribable.js';
 export * from './types/inputs/Unsubscribable.js';
 
 export * from './types/outputs/Mutator.js';

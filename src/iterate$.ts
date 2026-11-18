@@ -1,5 +1,5 @@
 import { Repeater } from '@repeaterjs/repeater';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AnySubscribable } from './features/subscribable.js';
 import { extractSubscribable } from './utils/subscribable.js';
 
 /**

@@ -1,6 +1,6 @@
 import { _multiplexer, type _Multiplexer } from './bases/_multiplexer.js';
 import { merge$ } from './merge$.js';
-import type { Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
+import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 
 /**

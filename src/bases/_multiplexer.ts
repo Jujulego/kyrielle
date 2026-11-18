@@ -1,5 +1,5 @@
 import type { Observer } from '../types/inputs/Observer.js';
-import type { Subscribable } from '../types/inputs/Subscribable.js';
+import type { Subscribable } from '../features/subscribable.js';
 import type { AssertMapping, Mapping, MappingKey, PrependMapping } from '../types/mapping.js';
 import type { SubscribeArgs } from '../types/outputs/Observable.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';

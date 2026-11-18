@@ -3,7 +3,7 @@
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { source$ } from '@/src/source$.js';
 import type { Observer } from '@/src/types/inputs/Observer.js';
-import type { Subscribable } from '@/src/types/inputs/Subscribable.js';
+import type { Subscribable } from '@/src/features/subscribable.js';
 import { assertType, describe, it } from 'vitest';
 
 describe('nested source', () => {

@@ -1,6 +1,6 @@
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
-import type { Subscribable } from './types/inputs/Subscribable.js';
+import type { Subscribable } from './features/subscribable.js';
 import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import { boundedSubscription } from './utils/subscription.js';
