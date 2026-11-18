@@ -5,6 +5,8 @@ import type { Subscription } from './Subscription.js';
 /**
  * Lazy and composable push based data source.
  *
+ * @template D - Type of values emitted by the observable.
+ *
  * @since 1.0.0
  */
 export interface Observable<out D = unknown> extends Subscribable<D>, SubscribableHolder<D> {
@@ -27,9 +29,9 @@ export interface Observable<out D = unknown> extends Subscribable<D>, Subscribab
 
   /**
    * Subscribe to observable using callbacks.
-   * @param onNext called with each emitted value
-   * @param onError called when an error occurs in the observable
-   * @param onComplete called when the observable completes. No other data or error will then be received.
+   * @param onNext - Called with each emitted value.
+   * @param onError - Called when an error occurs in the observable.
+   * @param onComplete - Called when the observable completes. No other data or error will then be received.
    *
    * @since 1.0.0
    */
@@ -41,13 +43,37 @@ export interface Observable<out D = unknown> extends Subscribable<D>, Subscribab
   ): Subscription;
 }
 
+/**
+ * Callback invoked for each value emitted by an observable.
+ *
+ * @template D - Type of emitted values.
+ */
 export type SubscribeOnNext<in D = unknown> = (data: D) => void;
+
+/**
+ * Callback invoked when an observable reports an error.
+ */
 export type SubscribeOnError = (error: Error) => void;
+
+/**
+ * Callback invoked when an observable completes.
+ */
 export type SubscribeOnComplete = () => void;
 
+/**
+ * Positional subscription callbacks in `next`, `error`, `complete` order.
+ *
+ * @template D - Type of values passed to the `next` callback.
+ */
 export type SubscribeCallbacks<D = unknown> = [
   onNext: SubscribeOnNext<D>,
   onError?: SubscribeOnError,
   onComplete?: SubscribeOnComplete,
 ];
+
+/**
+ * Supported overload arguments for {@link Observable.subscribe}.
+ *
+ * @template D - Type of values observed.
+ */
 export type SubscribeArgs<D = unknown> = [] | [PartialObserver<D>] | SubscribeCallbacks<D>;

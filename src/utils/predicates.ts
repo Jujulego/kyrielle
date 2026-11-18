@@ -71,14 +71,30 @@ export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D
 }
 
 /**
- * Tests if given value is a Subscribable object
+ * Tests whether a value implements the {@link Subscribable} contract.
+ *
+ * @template D - Type of values emitted by the subscribable.
+ * @param value - Value to test.
+ * @returns Whether `value` has a `subscribe` method.
+ *
+ * @see {@link isSubscribableHolder}
  */
 export function isSubscribable<D = unknown>(value: unknown): value is Subscribable<D> {
   return isNonNullObject(value) && hasMethod(value, 'subscribe');
 }
 
 /**
- * Tests if given value is an ObservableHolder object
+ * Tests whether a value holds a subscribable through the observable interop
+ * protocol.
+ *
+ * This accepts both `[Symbol.observable]()` and the legacy `@@observable`
+ * protocol.
+ *
+ * @template D - Type of values emitted by the held subscribable.
+ * @param value - Value to test.
+ * @returns Whether `value` exposes an observable interop method.
+ *
+ * @see {@link SubscribableHolder}
  */
 export function isSubscribableHolder<D = unknown>(value: unknown): value is SubscribableHolder<D> {
   if (!isNonNullObject(value)) {
