@@ -1,6 +1,6 @@
 import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
@@ -29,7 +29,7 @@ import {
   isMutable,
   isPromise,
 } from './utils/predicates.js';
-import { extractSubscribable$ } from './observables/extract-subscribable$.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types

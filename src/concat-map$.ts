@@ -1,8 +1,8 @@
-import { observable$, type SubscriberObserver } from './observable$.js';
+import { observable$, type SubscriberObserver } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
-import { extractSubscribable$ } from './observables/extract-subscribable$.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**

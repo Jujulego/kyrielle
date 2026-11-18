@@ -1,4 +1,4 @@
-import { observable$, type SubscriberObserver } from '@/src/observable$.js';
+import { observable$, type SubscriberObserver } from '@/src/rx/observable$.js';
 import type { Observer } from '@/src/types/inputs/Observer.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

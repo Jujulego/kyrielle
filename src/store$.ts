@@ -1,4 +1,4 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';

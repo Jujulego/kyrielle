@@ -1,6 +1,6 @@
 export * from './features/subscribable.js';
 
-export * from './observables/extract-subscribable$.js';
+export * from './rx/extract-subscribable$.js';
 
 export * from './predicates/has-observable-protocol$.js';
 export * from './predicates/is-subscribable$.js';
@@ -45,7 +45,7 @@ export * from './merge$.js';
 export * from './merge-map$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';
-export * from './observable$.js';
+export * from './rx/observable$.js';
 export * from './observer$.js';
 export * from './of$.js';
 export * from './off$.js';

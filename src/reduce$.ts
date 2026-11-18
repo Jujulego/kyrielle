@@ -1,4 +1,4 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
@@ -15,7 +15,7 @@ import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
-import { extractSubscribable$ } from './observables/extract-subscribable$.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types

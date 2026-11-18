@@ -1,6 +1,6 @@
 import { Repeater } from '@repeaterjs/repeater';
 import type { AnySubscribable } from './features/subscribable.js';
-import { extractSubscribable$ } from './observables/extract-subscribable$.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 
 /**
  * Wraps given observable into an async iterator.

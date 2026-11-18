@@ -1,4 +1,4 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { Subscribable } from './features/subscribable.js';
 import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
