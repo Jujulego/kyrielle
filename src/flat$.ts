@@ -2,6 +2,7 @@ import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type {
   AnyAsyncIterable,
@@ -19,7 +20,6 @@ import {
   isAwaitableIterator,
   isIterable,
   isPromise,
-  isSubscribable,
   isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
@@ -95,7 +95,7 @@ export function flat$<D, I extends AnyIterable<D>>() {
       }
     }
 
-    if (isSubscribable<I>(origin) || isSubscribableHolder<I>(origin)) {
+    if (isSubscribable$<I>(origin) || isSubscribableHolder<I>(origin)) {
       const observable = extractSubscribable(origin);
 
       builder.add(

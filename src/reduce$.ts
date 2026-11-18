@@ -1,5 +1,6 @@
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -17,7 +18,6 @@ import {
   isAwaitableIterator,
   isIterable,
   isPromise,
-  isSubscribable,
   isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
@@ -89,7 +89,7 @@ export function reduce$<D, const S>(
       }
     }
 
-    if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
+    if (isSubscribable$<D>(origin) || isSubscribableHolder<D>(origin)) {
       return observable$((observer, signal) => {
         boundedSubscription(extractSubscribable(origin), signal, {
           next(item) {

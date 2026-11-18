@@ -1,6 +1,7 @@
 import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './observable$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
 import type {
@@ -26,7 +27,6 @@ import {
   isIterable,
   isMutable,
   isPromise,
-  isSubscribable,
   isSubscribableHolder,
 } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
@@ -129,7 +129,7 @@ export function json$() {
       }
     }
 
-    if (isSubscribable<string>(origin) || isSubscribableHolder<string>(origin)) {
+    if (isSubscribable$<string>(origin) || isSubscribableHolder<string>(origin)) {
       const observable = extractSubscribable(origin);
       builder.add(
         observable$((observer, signal) => {

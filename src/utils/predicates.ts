@@ -1,8 +1,8 @@
+import type { SubscribableHolder } from '../features/subscribable.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
-import type { Subscribable, SubscribableHolder } from '../features/subscribable.js';
 import type { Mapping } from '../types/mapping.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
@@ -71,19 +71,6 @@ export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D
 }
 
 /**
- * Tests whether a value implements the {@link Subscribable} contract.
- *
- * @template D - Type of values emitted by the subscribable.
- * @param value - Value to test.
- * @returns Whether `value` has a `subscribe` method.
- *
- * @see {@link isSubscribableHolder}
- */
-export function isSubscribable<D = unknown>(value: unknown): value is Subscribable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'subscribe');
-}
-
-/**
  * Tests whether a value holds a subscribable through the observable interop
  * protocol.
  *
@@ -141,11 +128,11 @@ export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
 }
 
 // Utils
-function isNonNullObject(value: unknown): value is NonNullObject {
+export function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod<O extends NonNullObject, const K extends keyof O>(
+export function hasMethod<O extends NonNullObject, const K extends keyof O>(
   value: NonNullObject,
   name: K,
 ): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {
