@@ -1,5 +1,5 @@
 import { filter$ } from '@/src/filter$.js';
-import { observable$ } from '@/src/observable$.js';
+import { observable$ } from '@/src/rx/observable$.js';
 import { pipe$ } from '@/src/pipe$.js';
 import { source$ } from '@/src/source$.js';
 import { describe, expect, it, vi } from 'vitest';

@@ -1,6 +1,8 @@
 import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
+import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
 import type {
@@ -11,7 +13,7 @@ import type {
   MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AnySubscribable } from './features/subscribable.js';
 import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
 import type { Observable } from './types/outputs/Observable.js';
 import type { AsyncRef, Ref } from './types/outputs/Ref.js';
@@ -26,10 +28,8 @@ import {
   isIterable,
   isMutable,
   isPromise,
-  isSubscribable,
-  isSubscribableHolder,
 } from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -129,8 +129,8 @@ export function json$() {
       }
     }
 
-    if (isSubscribable<string>(origin) || isSubscribableHolder<string>(origin)) {
-      const observable = extractSubscribable(origin);
+    if (isSubscribable$<string>(origin) || hasObservableProtocol$<string>(origin)) {
+      const observable = extractSubscribable$(origin);
       builder.add(
         observable$((observer, signal) => {
           boundedSubscription(observable, signal, {

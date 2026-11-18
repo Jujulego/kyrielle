@@ -1,9 +1,10 @@
+import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { AnyAwaitableIterable } from './types/inputs/MinimalIterator.js';
 import type { Mutable } from './types/inputs/Mutable.js';
-import type { Subscribable, SubscribableHolder } from './types/inputs/Subscribable.js';
+import type { Subscribable, ObservableProtocol } from './features/subscribable.js';
 import type { Awaitable } from './types/utils.js';
-import { isAsyncIterable, isIterable, isSubscribableHolder } from './utils/predicates.js';
+import { isAsyncIterable, isIterable } from './utils/predicates.js';
 
 // Types
 export type ResourceFeature<D> =
@@ -23,7 +24,7 @@ export interface ResourceBuilder<D, R = unknown> {
    * Adds subscribable feature based on given holder.
    * @param holder
    */
-  add<F extends SubscribableHolder<D>>(
+  add<F extends ObservableProtocol<D>>(
     holder: F,
   ): ResourceBuilder<D, Omit<R, 'subscribe'> & Subscribable<D>>;
 
@@ -44,7 +45,7 @@ export function resource$<D>(): ResourceBuilder<D> {
 
   return {
     add(feature: unknown) {
-      if (isSubscribableHolder(feature)) {
+      if (hasObservableProtocol$(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
         Object.assign(resource, {
           [Symbol.observable ?? '@@observable']: () => resource,

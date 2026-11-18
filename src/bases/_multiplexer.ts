@@ -1,5 +1,6 @@
+import { isSubscribable$ } from '../predicates/is-subscribable$.js';
 import type { Observer } from '../types/inputs/Observer.js';
-import type { Subscribable } from '../types/inputs/Subscribable.js';
+import type { Subscribable } from '../features/subscribable.js';
 import type { AssertMapping, Mapping, MappingKey, PrependMapping } from '../types/mapping.js';
 import type { SubscribeArgs } from '../types/outputs/Observable.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
@@ -7,7 +8,7 @@ import type { StrictListenable } from '../types/outputs/StrictListenable.js';
 import type { Subscription } from '../types/outputs/Subscription.js';
 import type { MapValueIntersection } from '../types/utils.js';
 import { splitKey } from '../utils/key.js';
-import { isEmitter, isListenable, isMinimalObserver, isSubscribable } from '../utils/predicates.js';
+import { isEmitter, isListenable, isMinimalObserver } from '../utils/predicates.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 import { wrapUnsubscribable } from '../utils/subscription.js';
 
@@ -42,7 +43,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
         return origin.on(rest, parseSubscribeArgs(args));
       }
 
-      if (!rest && isSubscribable(origin)) {
+      if (!rest && isSubscribable$(origin)) {
         return wrapUnsubscribable(origin.subscribe(parseSubscribeArgs(args)));
       }
 

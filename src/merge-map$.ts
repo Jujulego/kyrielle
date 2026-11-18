@@ -1,8 +1,8 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
+import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { extractSubscribable$ } from './rx/extract-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -19,11 +19,11 @@ export function mergeMap$<T, R>(
     let completed = 1;
 
     return observable$((observer, signal) => {
-      boundedSubscription(extractSubscribable(origin), signal, {
+      boundedSubscription(extractSubscribable$(origin), signal, {
         next(item) {
           completed++;
 
-          boundedSubscription(extractSubscribable(fn(item)), signal, {
+          boundedSubscription(extractSubscribable$(fn(item)), signal, {
             next: (it) => observer.next(it),
             error: (err) => observer.error(err),
             complete: () => {

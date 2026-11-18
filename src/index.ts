@@ -1,9 +1,15 @@
+export * from './features/subscribable.js';
+
+export * from './predicates/has-observable-protocol$.js';
+export * from './predicates/is-subscribable$.js';
+
+export * from './rx/extract-subscribable$.js';
+
 export * from './types/inputs/Deferrable.js';
 export * from './types/inputs/Extendable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
 export * from './types/inputs/Observer.js';
-export * from './types/inputs/Subscribable.js';
 export * from './types/inputs/Unsubscribable.js';
 
 export * from './types/outputs/Mutator.js';
@@ -15,7 +21,6 @@ export * from './types/outputs/StrictListenable.js';
 export * from './types/outputs/StrictObserver.js';
 export * from './types/outputs/Subscription.js';
 
-export * from './utils/subscribable.js';
 export * from './utils/iterator.js';
 export * from './utils/predicates.js';
 
@@ -40,7 +45,7 @@ export * from './merge$.js';
 export * from './merge-map$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';
-export * from './observable$.js';
+export * from './rx/observable$.js';
 export * from './observer$.js';
 export * from './of$.js';
 export * from './off$.js';

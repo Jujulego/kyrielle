@@ -2,7 +2,6 @@ import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
 import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
-import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
 import type { Mapping } from '../types/mapping.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
@@ -71,28 +70,6 @@ export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D
 }
 
 /**
- * Tests if given value is a Subscribable object
- */
-export function isSubscribable<D = unknown>(value: unknown): value is Subscribable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'subscribe');
-}
-
-/**
- * Tests if given value is an ObservableHolder object
- */
-export function isSubscribableHolder<D = unknown>(value: unknown): value is SubscribableHolder<D> {
-  if (!isNonNullObject(value)) {
-    return false;
-  }
-
-  if (Symbol.observable && hasMethod(value, Symbol.observable)) {
-    return true;
-  }
-
-  return hasMethod(value, '@@observable');
-}
-
-/**
  * Tests if given value is an Iterator object
  *
  * @deprecated use {@link isAwaitableIterator} instead, it has a more precise typing
@@ -125,11 +102,11 @@ export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
 }
 
 // Utils
-function isNonNullObject(value: unknown): value is NonNullObject {
+export function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod<O extends NonNullObject, const K extends keyof O>(
+export function hasMethod<O extends NonNullObject, const K extends keyof O>(
   value: NonNullObject,
   name: K,
 ): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {

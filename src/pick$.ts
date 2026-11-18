@@ -1,4 +1,4 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { MappingKey } from './types/mapping.js';
 import type { Observable } from './types/outputs/Observable.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';

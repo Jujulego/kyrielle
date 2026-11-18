@@ -1,5 +1,5 @@
 import { type Group, group$ } from '@/src/group$.js';
-import { observable$ } from '@/src/observable$.js';
+import { observable$ } from '@/src/rx/observable$.js';
 import { type Source, source$ } from '@/src/source$.js';
 import type { Observer } from '@/src/types/inputs/Observer.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';

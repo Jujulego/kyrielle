@@ -1,13 +1,9 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { Mutable } from './types/inputs/Mutable.js';
-import type {
-  AnySubscribable,
-  Subscribable,
-  SubscribableValue,
-} from './types/inputs/Subscribable.js';
+import type { AnySubscribable, Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import type { Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
