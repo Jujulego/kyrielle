@@ -1,4 +1,3 @@
-import type { SubscribableHolder } from '../features/subscribable.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
@@ -68,31 +67,6 @@ export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> 
  */
 export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D> {
   return isNonNullObject(value) && hasMethod(value, 'defer');
-}
-
-/**
- * Tests whether a value holds a subscribable through the observable interop
- * protocol.
- *
- * This accepts both `[Symbol.observable]()` and the legacy `@@observable`
- * protocol.
- *
- * @template D - Type of values emitted by the held subscribable.
- * @param value - Value to test.
- * @returns Whether `value` exposes an observable interop method.
- *
- * @see {@link SubscribableHolder}
- */
-export function isSubscribableHolder<D = unknown>(value: unknown): value is SubscribableHolder<D> {
-  if (!isNonNullObject(value)) {
-    return false;
-  }
-
-  if (Symbol.observable && hasMethod(value, Symbol.observable)) {
-    return true;
-  }
-
-  return hasMethod(value, '@@observable');
 }
 
 /**

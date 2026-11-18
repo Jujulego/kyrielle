@@ -66,3 +66,4 @@ export * from './var$.js';
 export * from './waitFor$.js';
 export * from './watch$.js';
 export * from './yield$.js';
+export { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';

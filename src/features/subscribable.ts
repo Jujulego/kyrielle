@@ -10,7 +10,7 @@ import type { Unsubscribable } from '../types/inputs/Unsubscribable.js';
  * @template D - Type of values emitted by the subscribable.
  *
  * @since 1.0.0
- * @see {@link SubscribableHolder}
+ * @see {@link ObservableProtocol}
  * @see {@link AnySubscribable}
  * @see {@link SubscribableValue}
  */
@@ -42,9 +42,10 @@ export interface Subscribable<D = unknown> {
  *
  * @since 1.0.0
  * @see {@link Subscribable}
- * @see {@link extractSubscribable}
+ * @see {@link AnySubscribable}
+ * @see {@link SubscribableValue}
  */
-export interface SubscribableHolder<D = unknown> {
+export interface ObservableProtocol<D = unknown> {
   [Symbol.observable](): Subscribable<D>;
 }
 
@@ -56,9 +57,9 @@ export interface SubscribableHolder<D = unknown> {
  *
  * @since 1.0.0
  * @see {@link Subscribable}
- * @see {@link SubscribableHolder}
+ * @see {@link ObservableProtocol}
  */
-export type AnySubscribable<D = unknown> = Subscribable<D> | SubscribableHolder<D>;
+export type AnySubscribable<D = unknown> = Subscribable<D> | ObservableProtocol<D>;
 
 /**
  * Extracts the value type emitted by a subscribable or subscribable holder.
@@ -67,7 +68,7 @@ export type AnySubscribable<D = unknown> = Subscribable<D> | SubscribableHolder<
  *
  * @since 1.0.0
  * @see {@link Subscribable}
- * @see {@link SubscribableHolder}
+ * @see {@link ObservableProtocol}
  * @see {@link AnySubscribable}
  */
 export type SubscribableValue<T extends AnySubscribable> =

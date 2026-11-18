@@ -2,6 +2,7 @@ import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './observable$.js';
 import type { PipeStep } from './pipe$.js';
+import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type {
@@ -18,13 +19,7 @@ import type { Observable } from './types/outputs/Observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import type { PredicateFn } from './types/utils.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
-import {
-  isAsyncIterable,
-  isAwaitableIterator,
-  isIterable,
-  isPromise,
-  isSubscribableHolder,
-} from './utils/predicates.js';
+import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
 import { extractSubscribable } from './utils/subscribable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
@@ -109,7 +104,7 @@ export function filter$<D>(predicate: (val: D) => boolean) {
       }
     }
 
-    if (isSubscribable$<D>(origin) || isSubscribableHolder<D>(origin)) {
+    if (isSubscribable$<D>(origin) || hasObservableProtocol$<D>(origin)) {
       const observable = extractSubscribable(origin);
       builder.add(
         observable$<D>((observer, signal) => {

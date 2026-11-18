@@ -1,5 +1,5 @@
 import type { PartialObserver } from '../inputs/Observer.js';
-import type { Subscribable, SubscribableHolder } from '../../features/subscribable.js';
+import type { Subscribable, ObservableProtocol } from '../../features/subscribable.js';
 import type { Subscription } from './Subscription.js';
 
 /**
@@ -9,7 +9,7 @@ import type { Subscription } from './Subscription.js';
  *
  * @since 1.0.0
  */
-export interface Observable<out D = unknown> extends Subscribable<D>, SubscribableHolder<D> {
+export interface Observable<out D = unknown> extends Subscribable<D>, ObservableProtocol<D> {
   [Symbol.observable](): Observable<D>;
 
   /**

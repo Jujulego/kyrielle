@@ -1,5 +1,5 @@
 import type { AnySubscribable, Subscribable } from '../features/subscribable.js';
-import { isSubscribableHolder } from './predicates.js';
+import { hasObservableProtocol$ } from '../predicates/has-observable-protocol$.js';
 
 /**
  * Extracts the {@link Subscribable} from a subscribable or subscribable holder.
@@ -16,7 +16,7 @@ import { isSubscribableHolder } from './predicates.js';
  * @see {@link Subscribable}
  */
 export function extractSubscribable<D>(object: AnySubscribable<D>): Subscribable<D> {
-  if (isSubscribableHolder(object)) {
+  if (hasObservableProtocol$(object)) {
     return object[Symbol.observable ?? '@@observable']();
   }
 
