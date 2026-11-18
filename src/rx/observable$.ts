@@ -1,6 +1,7 @@
 import type { Observable, SubscribeArgs } from '../types/outputs/Observable.js';
 import type { StrictObserver } from '../types/outputs/StrictObserver.js';
 import type { Subscription } from '../types/outputs/Subscription.js';
+import type { Awaitable } from '../types/utils.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 import { buildSubscription } from '../utils/subscription.js';
 
@@ -95,29 +96,11 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 }
 
 // Types
-export interface SubscriberObserver<in D = unknown> {
-  /**
-   * Emits given value
-   * @param data
-   */
-  readonly next: (data: D) => void;
-
-  /**
-   * Emits given error
-   * @param err
-   */
-  readonly error: (err: unknown) => void;
-
-  /**
-   * Completes the observable and closes all subscriptions
-   */
-  readonly complete: () => void;
-}
-
-export type SubscriberFn<out D> = (
+export type SubscriberObserver<D = unknown> = Omit<StrictObserver<D>, 'start'>;
+export type SubscriberFn<D> = (
   observer: SubscriberObserver<D>,
   signal: AbortSignal,
-) => Promise<void> | void;
+) => Awaitable<void>;
 
 // Enum
 const enum State {
