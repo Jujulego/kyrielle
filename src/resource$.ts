@@ -1,4 +1,5 @@
 import { isObservable$ } from './predicates/is-observable$.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { AnyAwaitableIterable } from './types/inputs/MinimalIterator.js';
 import type { Mutable } from './types/inputs/Mutable.js';
@@ -46,9 +47,11 @@ export function resource$<D>(): ResourceBuilder<D> {
   return {
     add(feature: unknown) {
       if (isObservable$(feature)) {
-        Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
+        const observable = toSubscribable$(feature);
+        Object.assign(resource, observable);
         Object.assign(resource, {
           [Symbol.observable ?? '@@observable']: () => resource,
+          ['@@observable']: () => resource,
         });
       } else {
         Object.assign(resource, feature);
