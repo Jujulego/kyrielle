@@ -50,6 +50,22 @@ export interface ObservableProtocol<D = unknown> {
 }
 
 /**
+ * Object implementing the legacy observable interop protocol.
+ *
+ * Calling `['@@observable']()` returns the underlying {@link Subscribable}.
+ *
+ * @template D - Type of values emitted by the held subscribable.
+ *
+ * @since 1.0.0
+ * @see Subscribable
+ * @see AnySubscribable
+ * @see SubscribableValue
+ */
+export interface LegacyObservableProtocol<D = unknown> {
+  ['@@observable'](): Subscribable<D>;
+}
+
+/**
  * A subscribable or an object holding a subscribable through the observable
  * interop protocol.
  *
@@ -59,7 +75,8 @@ export interface ObservableProtocol<D = unknown> {
  * @see Subscribable
  * @see ObservableProtocol
  */
-export type AnySubscribable<D = unknown> = Subscribable<D> | ObservableProtocol<D>;
+export type AnySubscribable<D = unknown> =
+  Subscribable<D> | ObservableProtocol<D> | LegacyObservableProtocol<D>;
 
 /**
  * Extracts the value type emitted by a subscribable or subscribable holder.

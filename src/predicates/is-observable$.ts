@@ -1,4 +1,4 @@
-import type { ObservableProtocol } from '../features/subscribable.js';
+import type { LegacyObservableProtocol, ObservableProtocol } from '../features/subscribable.js';
 import { hasMethod, isNonNullObject } from '../utils/predicates.js';
 
 /**
@@ -15,7 +15,9 @@ import { hasMethod, isNonNullObject } from '../utils/predicates.js';
  * @since 3.0.0
  * @see ObservableProtocol
  */
-export function isObservable$<D = unknown>(value: unknown): value is ObservableProtocol<D> {
+export function isObservable$<D = unknown>(
+  value: unknown,
+): value is ObservableProtocol<D> | LegacyObservableProtocol<D> {
   if (!isNonNullObject(value)) {
     return false;
   }

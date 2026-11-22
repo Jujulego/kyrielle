@@ -1,5 +1,6 @@
 import type { AnySubscribable, Subscribable } from '../features/subscribable.js';
-import { isObservable$ } from '../predicates/is-observable$.js';
+import { assert } from '../utils/assert.js';
+import { hasMethod, isNonNullObject } from '../utils/predicates.js';
 
 /**
  * Extracts the {@link Subscribable} from a subscribable or subscribable holder.
@@ -16,11 +17,15 @@ import { isObservable$ } from '../predicates/is-observable$.js';
  * @see Subscribable
  */
 export function toSubscribable$<D>(object: AnySubscribable<D>): Subscribable<D> {
-  if (isObservable$(object)) {
-    return object[Symbol.observable ?? '@@observable']();
-  }
+  assert(isNonNullObject(object));
 
-  return object;
+  if (Symbol.observable && hasMethod(object, Symbol.observable)) {
+    return object[Symbol.observable]();
+  } else if (hasMethod(object, '@@observable')) {
+    return object['@@observable']();
+  } else {
+    return object as Subscribable<D>;
+  }
 }
 
 /**
