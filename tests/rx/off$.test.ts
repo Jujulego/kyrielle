@@ -1,4 +1,4 @@
-import { off$ } from '@/src/off$.js';
+import { off$ } from '@/src/rx/off$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 // Tests

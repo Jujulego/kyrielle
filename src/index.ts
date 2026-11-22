@@ -3,6 +3,8 @@ export * from './features/subscribable.js';
 export * from './predicates/is-observable$.js';
 export * from './predicates/is-subscribable$.js';
 
+export * from './rx/observable$.js';
+export * from './rx/off$.js';
 export * from './rx/to-subscribable$.js';
 
 export * from './types/inputs/Deferrable.js';
@@ -45,10 +47,8 @@ export * from './merge$.js';
 export * from './merge-map$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';
-export * from './rx/observable$.js';
 export * from './observer$.js';
 export * from './of$.js';
-export * from './off$.js';
 export * from './once$.js';
 export * from './pick$.js';
 export * from './pipe$.js';

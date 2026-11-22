@@ -1,4 +1,4 @@
-import type { Unsubscribable } from './features/unsubscribable.js';
+import type { Unsubscribable } from '../features/unsubscribable.js';
 
 /**
  * Represents a subscription group
