@@ -2,7 +2,7 @@ import type { PipeStep } from './pipe$.js';
 import { step$ } from './step$.js';
 import type { PartialObserver } from './types/inputs/Observer.js';
 import type { Subscribable } from './features/subscribable.js';
-import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
+import type { Unsubscribable } from './features/unsubscribable.js';
 
 /**
  * Given observer subscribes to result given observable.

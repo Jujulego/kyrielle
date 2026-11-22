@@ -1,6 +1,6 @@
 import { observable$ } from './rx/observable$.js';
 import type { Subscribable } from './features/subscribable.js';
-import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
+import type { Unsubscribable } from './features/unsubscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 
 /**

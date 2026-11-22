@@ -1,5 +1,5 @@
 import type { Subscribable } from '../features/subscribable.js';
-import type { Unsubscribable } from '../types/inputs/Unsubscribable.js';
+import type { Unsubscribable } from '../features/unsubscribable.js';
 import type { StrictObserver } from '../types/outputs/StrictObserver.js';
 import type { Subscription } from '../types/outputs/Subscription.js';
 

@@ -1,5 +1,5 @@
 import type { PartialObserver } from '../types/inputs/Observer.js';
-import type { Unsubscribable } from '../types/inputs/Unsubscribable.js';
+import type { Unsubscribable } from './unsubscribable.js';
 
 /**
  * Minimal push-based data source contract.
