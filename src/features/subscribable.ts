@@ -10,9 +10,9 @@ import type { Unsubscribable } from './unsubscribable.js';
  * @template D - Type of values emitted by the subscribable.
  *
  * @since 1.0.0
- * @see {@link ObservableProtocol}
- * @see {@link AnySubscribable}
- * @see {@link SubscribableValue}
+ * @see ObservableProtocol
+ * @see AnySubscribable
+ * @see SubscribableValue
  */
 export interface Subscribable<D = unknown> {
   /**
@@ -41,9 +41,9 @@ export interface Subscribable<D = unknown> {
  * @template D - Type of values emitted by the held subscribable.
  *
  * @since 1.0.0
- * @see {@link Subscribable}
- * @see {@link AnySubscribable}
- * @see {@link SubscribableValue}
+ * @see Subscribable
+ * @see AnySubscribable
+ * @see SubscribableValue
  */
 export interface ObservableProtocol<D = unknown> {
   [Symbol.observable](): Subscribable<D>;
@@ -56,8 +56,8 @@ export interface ObservableProtocol<D = unknown> {
  * @template D - Type of values emitted by the subscribable.
  *
  * @since 1.0.0
- * @see {@link Subscribable}
- * @see {@link ObservableProtocol}
+ * @see Subscribable
+ * @see ObservableProtocol
  */
 export type AnySubscribable<D = unknown> = Subscribable<D> | ObservableProtocol<D>;
 
@@ -67,9 +67,9 @@ export type AnySubscribable<D = unknown> = Subscribable<D> | ObservableProtocol<
  * @template T - Subscribable or subscribable holder to inspect.
  *
  * @since 1.0.0
- * @see {@link Subscribable}
- * @see {@link ObservableProtocol}
- * @see {@link AnySubscribable}
+ * @see Subscribable
+ * @see ObservableProtocol
+ * @see AnySubscribable
  */
 export type SubscribableValue<T extends AnySubscribable> =
   T extends AnySubscribable<infer D> ? D : never;

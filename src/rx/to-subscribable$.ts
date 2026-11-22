@@ -12,8 +12,8 @@ import { isObservable$ } from '../predicates/is-observable$.js';
  * @returns The underlying subscribable.
  *
  * @since 1.0.0
- * @see {@link AnySubscribable}
- * @see {@link Subscribable}
+ * @see AnySubscribable
+ * @see Subscribable
  */
 export function toSubscribable$<D>(object: AnySubscribable<D>): Subscribable<D> {
   if (isObservable$(object)) {

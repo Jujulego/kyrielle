@@ -24,8 +24,8 @@ const enum State {
  * @returns An observable that starts its subscriber function on demand.
  *
  * @since 1.0.0
- * @see {@link SubscriberFn}
- * @see {@link SubscriberObserver}
+ * @see SubscriberFn
+ * @see SubscriberObserver
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
   const observers = new Set<StrictObserver<D>>();
@@ -121,7 +121,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
  * @template D - Type of values emitted by the subscriber function.
  *
  * @since 1.0.0
- * @see {@link SubscriberFn}
+ * @see SubscriberFn
  */
 export type SubscriberObserver<D = unknown> = Omit<StrictObserver<D>, 'start'>;
 
@@ -141,8 +141,8 @@ export type SubscriberObserver<D = unknown> = Omit<StrictObserver<D>, 'start'>;
  * @returns A void or promise-like void result.
  *
  * @since 1.0.0
- * @see {@link observable$}
- * @see {@link SubscriberObserver}
+ * @see observable$
+ * @see SubscriberObserver
  */
 export type SubscriberFn<D> = (
   observer: SubscriberObserver<D>,
