@@ -1,4 +1,5 @@
 import type { Unsubscribable } from '../features/unsubscribable.js';
+import type { Addable } from '../types/inputs/Extendable.js';
 
 /**
  * Collection of subscriptions that can be canceled together.
@@ -10,7 +11,7 @@ import type { Unsubscribable } from '../features/unsubscribable.js';
  * @since 1.0.0
  * @see Unsubscribable
  */
-export interface SubscriptionGroup extends Unsubscribable, Disposable {
+export interface SubscriptionGroup extends Addable<Unsubscribable>, Disposable, Unsubscribable {
   /**
    * Adds subscriptions to this group.
    *
