@@ -2,7 +2,7 @@ import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
-import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
@@ -117,7 +117,7 @@ export function map$<A, R>(fn: (arg: A) => R) {
       }
     }
 
-    if (isSubscribable$<A>(origin) || hasObservableProtocol$<A>(origin)) {
+    if (isSubscribable$<A>(origin) || isObservable$<A>(origin)) {
       const observable = extractSubscribable$(origin);
       builder.add(
         observable$<R>((observer, signal) => {

@@ -1,4 +1,4 @@
-import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { AnyAwaitableIterable } from './types/inputs/MinimalIterator.js';
 import type { Mutable } from './types/inputs/Mutable.js';
@@ -45,7 +45,7 @@ export function resource$<D>(): ResourceBuilder<D> {
 
   return {
     add(feature: unknown) {
-      if (hasObservableProtocol$(feature)) {
+      if (isObservable$(feature)) {
         Object.assign(resource, feature[Symbol.observable ?? '@@observable']());
         Object.assign(resource, {
           [Symbol.observable ?? '@@observable']: () => resource,

@@ -9,7 +9,7 @@ import { hasMethod, isNonNullObject } from '../utils/predicates.js';
  * @returns Whether `value` has a `subscribe` method.
  *
  * @since 3.0.0
- * @see {@link isSubscribableHolder}
+ * @see isObservable$
  */
 export function isSubscribable$<D = unknown>(value: unknown): value is Subscribable<D> {
   return isNonNullObject(value) && hasMethod(value, 'subscribe');

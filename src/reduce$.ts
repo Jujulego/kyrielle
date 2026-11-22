@@ -1,6 +1,6 @@
 import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
-import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import type {
   AnyAsyncIterable,
@@ -84,7 +84,7 @@ export function reduce$<D, const S>(
       }
     }
 
-    if (isSubscribable$<D>(origin) || hasObservableProtocol$<D>(origin)) {
+    if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
       return observable$((observer, signal) => {
         boundedSubscription(extractSubscribable$(origin), signal, {
           next(item) {

@@ -1,6 +1,6 @@
 export * from './features/subscribable.js';
 
-export * from './predicates/has-observable-protocol$.js';
+export * from './predicates/is-observable$.js';
 export * from './predicates/is-subscribable$.js';
 
 export * from './rx/extract-subscribable$.js';

@@ -15,9 +15,7 @@ import { hasMethod, isNonNullObject } from '../utils/predicates.js';
  * @since 3.0.0
  * @see {@link ObservableProtocol}
  */
-export function hasObservableProtocol$<D = unknown>(
-  value: unknown,
-): value is ObservableProtocol<D> {
+export function isObservable$<D = unknown>(value: unknown): value is ObservableProtocol<D> {
   if (!isNonNullObject(value)) {
     return false;
   }

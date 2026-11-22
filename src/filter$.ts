@@ -2,7 +2,7 @@ import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
 import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
-import { hasObservableProtocol$ } from './predicates/has-observable-protocol$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
 import type {
@@ -104,7 +104,7 @@ export function filter$<D>(predicate: (val: D) => boolean) {
       }
     }
 
-    if (isSubscribable$<D>(origin) || hasObservableProtocol$<D>(origin)) {
+    if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
       const observable = extractSubscribable$(origin);
       builder.add(
         observable$<D>((observer, signal) => {
