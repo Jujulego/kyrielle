@@ -15,7 +15,7 @@ import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
-import { extractSubscribable$ } from './rx/extract-subscribable$.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -86,7 +86,7 @@ export function reduce$<D, const S>(
 
     if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
       return observable$((observer, signal) => {
-        boundedSubscription(extractSubscribable$(origin), signal, {
+        boundedSubscription(toSubscribable$(origin), signal, {
           next(item) {
             state = cb(state, item);
           },

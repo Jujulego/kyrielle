@@ -2,7 +2,7 @@ import { observable$, type SubscriberObserver } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { AnySubscribable } from './features/subscribable.js';
 import type { Observable } from './types/outputs/Observable.js';
-import { extractSubscribable$ } from './rx/extract-subscribable$.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -17,13 +17,13 @@ export function concatMap$<T, R>(
   fn: (item: T) => AnySubscribable<R>,
 ): PipeStep<AnySubscribable<T>, Observable<R>> {
   return (origin: AnySubscribable<T>) => {
-    origin = extractSubscribable$(origin);
+    origin = toSubscribable$(origin);
     const queue: T[] = [];
     let childRunning = false;
     let originCompleted = false;
 
     function childSubscription(item: T, observer: SubscriberObserver<R>, signal: AbortSignal) {
-      boundedSubscription(extractSubscribable$(fn(item)), signal, {
+      boundedSubscription(toSubscribable$(fn(item)), signal, {
         next: (it) => observer.next(it),
         error: (err) => observer.error(err),
         complete: () => {
@@ -43,7 +43,7 @@ export function concatMap$<T, R>(
     }
 
     return observable$((observer, signal) => {
-      boundedSubscription(extractSubscribable$(origin), signal, {
+      boundedSubscription(toSubscribable$(origin), signal, {
         next: (item) => {
           if (!childRunning) {
             childRunning = true;

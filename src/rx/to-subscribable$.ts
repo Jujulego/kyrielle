@@ -15,10 +15,15 @@ import { isObservable$ } from '../predicates/is-observable$.js';
  * @see {@link AnySubscribable}
  * @see {@link Subscribable}
  */
-export function extractSubscribable$<D>(object: AnySubscribable<D>): Subscribable<D> {
+export function toSubscribable$<D>(object: AnySubscribable<D>): Subscribable<D> {
   if (isObservable$(object)) {
     return object[Symbol.observable ?? '@@observable']();
   }
 
   return object;
 }
+
+/**
+ * @deprecated Renamed to {@link toSubscribable$}
+ */
+export const extractSubscribable = toSubscribable$;

@@ -19,7 +19,7 @@ import type { Observable } from './types/outputs/Observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
-import { extractSubscribable$ } from './rx/extract-subscribable$.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -95,7 +95,7 @@ export function scan$<D, const S>(cb: ScanCallback<D, S>, init: S) {
     }
 
     if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
-      const observable = extractSubscribable$(origin);
+      const observable = toSubscribable$(origin);
 
       builder.add(
         observable$<S>((observer, signal) => {
