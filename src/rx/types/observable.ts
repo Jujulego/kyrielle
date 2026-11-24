@@ -1,6 +1,6 @@
-import type { PartialObserver } from '../inputs/Observer.js';
-import type { Subscribable, ObservableProtocol } from '../../features/subscribable.js';
-import type { Subscription } from './Subscription.js';
+import type { Subscribable } from '../../features/subscribable.js';
+import type { PartialObserver } from '../../types/inputs/Observer.js';
+import type { Subscription } from '../../types/outputs/Subscription.js';
 
 /**
  * Lazy and composable push based data source.
@@ -9,8 +9,9 @@ import type { Subscription } from './Subscription.js';
  *
  * @since 1.0.0
  */
-export interface Observable<out D = unknown> extends Subscribable<D>, ObservableProtocol<D> {
+export interface Observable<D = unknown> extends Subscribable<D> {
   [Symbol.observable](): Observable<D>;
+  ['@@observable'](): Observable<D>;
 
   /**
    * Subscribe to the observable.

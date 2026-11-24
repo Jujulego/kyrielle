@@ -15,7 +15,7 @@ import type {
   MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
 import type { AnySubscribable } from './features/subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
 import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';

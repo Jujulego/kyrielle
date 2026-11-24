@@ -1,7 +1,7 @@
 import { _multiplexer, type _Multiplexer } from './bases/_multiplexer.js';
 import { merge$ } from './merge$.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Observable } from './rx/types/observable.js';
 
 /**
  * Builds a multiplexer routing events to origins within the given map, and an observable that emit every

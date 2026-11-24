@@ -1,6 +1,6 @@
 import type { Observer } from './types/inputs/Observer.js';
 import type { Mutator } from './types/outputs/Mutator.js';
-import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
+import type { Observable, SubscribeArgs } from './rx/types/observable.js';
 import type { Ref } from './types/outputs/Ref.js';
 import type { Subscription } from './types/outputs/Subscription.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';

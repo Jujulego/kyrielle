@@ -2,7 +2,7 @@ import { isSubscribable$ } from '../predicates/is-subscribable$.js';
 import type { Observer } from '../types/inputs/Observer.js';
 import type { Subscribable } from '../features/subscribable.js';
 import type { AssertMapping, Mapping, MappingKey, PrependMapping } from '../types/mapping.js';
-import type { SubscribeArgs } from '../types/outputs/Observable.js';
+import type { SubscribeArgs } from '../rx/types/observable.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
 import type { Subscription } from '../types/outputs/Subscription.js';

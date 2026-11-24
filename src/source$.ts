@@ -1,6 +1,6 @@
 import assert from 'assert';
 import type { Observer } from './types/inputs/Observer.js';
-import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
+import type { Observable, SubscribeArgs } from './rx/types/observable.js';
 import type { StrictObserver } from './types/outputs/StrictObserver.js';
 import type { Subscription } from './types/outputs/Subscription.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';

@@ -1,5 +1,5 @@
 import { observer$ } from '../observer$.js';
-import type { SubscribeArgs } from '../types/outputs/Observable.js';
+import type { SubscribeArgs } from '../rx/types/observable.js';
 import type { StrictObserver } from '../types/outputs/StrictObserver.js';
 import { noop } from './fn.js';
 import { isPartialObserver } from './predicates.js';

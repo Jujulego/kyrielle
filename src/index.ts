@@ -1,4 +1,5 @@
 export * from './features/subscribable.js';
+export * from './features/unsubscribable.js';
 
 export * from './predicates/is-observable$.js';
 export * from './predicates/is-subscribable$.js';
@@ -7,15 +8,15 @@ export * from './rx/observable$.js';
 export * from './rx/off$.js';
 export * from './rx/to-subscribable$.js';
 
+export * from './rx/types/observable.js';
+
 export * from './types/inputs/Deferrable.js';
 export * from './types/inputs/Extendable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
 export * from './types/inputs/Observer.js';
-export * from './features/unsubscribable.js';
 
 export * from './types/outputs/Mutator.js';
-export * from './types/outputs/Observable.js';
 export * from './types/outputs/Ref.js';
 export * from './types/outputs/SimpleIterator.js';
 export * from './types/outputs/StrictEmitter.js';

@@ -1,6 +1,10 @@
 import type { PartialObserver } from '../inputs/Observer.js';
 import type { Mapping, MappingKey } from '../mapping.js';
-import type { SubscribeOnComplete, SubscribeOnError, SubscribeOnNext } from './Observable.js';
+import type {
+  SubscribeOnComplete,
+  SubscribeOnError,
+  SubscribeOnNext,
+} from '../../rx/types/observable.js';
 import type { Subscription } from './Subscription.js';
 
 /**

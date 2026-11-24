@@ -2,7 +2,7 @@ import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import type { Subscribable } from './features/subscribable.js';
 import type { Unsubscribable } from './features/unsubscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Observable } from './rx/types/observable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**

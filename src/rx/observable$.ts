@@ -1,4 +1,4 @@
-import type { Observable, SubscribeArgs } from '../types/outputs/Observable.js';
+import type { Observable, SubscribeArgs } from './types/observable.js';
 import type { StrictObserver } from '../types/outputs/StrictObserver.js';
 import type { Subscription } from '../types/outputs/Subscription.js';
 import type { Awaitable } from '../types/utils.js';
@@ -76,6 +76,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
 
   // Build observable
   const observable = {
+    ['@@observable']: () => observable,
     [Symbol.observable ?? '@@observable']: () => observable,
     subscribe: (...args: SubscribeArgs<D>): Subscription => {
       // Parse args

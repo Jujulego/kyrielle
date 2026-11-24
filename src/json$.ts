@@ -15,7 +15,7 @@ import type {
 import type { AsyncMutable, Mutable } from './types/inputs/Mutable.js';
 import type { AnySubscribable } from './features/subscribable.js';
 import type { AsyncMutator, Mutator } from './types/outputs/Mutator.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { AsyncRef, Ref } from './types/outputs/Ref.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import type { Awaitable } from './types/utils.js';

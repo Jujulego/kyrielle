@@ -4,7 +4,7 @@ import { source$ } from './source$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { Mutable } from './types/inputs/Mutable.js';
 import type { Mutator } from './types/outputs/Mutator.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { Ref } from './types/outputs/Ref.js';
 import { isDeferrable, isMutable, isPromise } from './utils/predicates.js';
 
