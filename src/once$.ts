@@ -1,10 +1,10 @@
 import { observer$ } from './observer$.js';
-import type { PartialObserver } from './types/inputs/Observer.js';
+import type { PartialObserver } from './features/minimal-observer.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
-import type { StrictObserver } from './types/outputs/StrictObserver.js';
-import type { Subscription } from './types/outputs/Subscription.js';
+import type { Observer } from './rx/types/observer.js';
+import type { Subscription } from './rx/types/subscription.js';
 import { wrapUnsubscribable } from './utils/subscription.js';
 
 // Type
@@ -87,7 +87,7 @@ export function once$(
 }
 
 // Utils
-function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void): StrictObserver {
+function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void): Observer {
   let called = false;
 
   function wrap(cb: (arg: unknown) => void) {

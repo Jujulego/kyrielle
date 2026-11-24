@@ -1,6 +1,6 @@
 import type { Observable, SubscribeArgs } from './types/observable.js';
-import type { StrictObserver } from '../types/outputs/StrictObserver.js';
-import type { Subscription } from '../types/outputs/Subscription.js';
+import type { Observer } from './types/observer.js';
+import type { Subscription } from './types/subscription.js';
 import type { Awaitable } from '../types/utils.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 import { buildSubscription } from '../utils/subscription.js';
@@ -28,7 +28,7 @@ const enum State {
  * @see SubscriberObserver
  */
 export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
-  const observers = new Set<StrictObserver<D>>();
+  const observers = new Set<Observer<D>>();
   let state = State.Inactive;
   let controller: AbortController;
 
@@ -124,7 +124,7 @@ export function observable$<D>(fn: SubscriberFn<D>): Observable<D> {
  * @since 1.0.0
  * @see SubscriberFn
  */
-export type SubscriberObserver<D = unknown> = Omit<StrictObserver<D>, 'start'>;
+export type SubscriberObserver<D = unknown> = Omit<Observer<D>, 'start'>;
 
 /**
  * Function that produces values for an {@link observable$} instance.

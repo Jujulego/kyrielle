@@ -1,6 +1,6 @@
 import { observer$ } from '../observer$.js';
 import type { SubscribeArgs } from '../rx/types/observable.js';
-import type { StrictObserver } from '../types/outputs/StrictObserver.js';
+import type { Observer } from '../rx/types/observer.js';
 import { noop } from './fn.js';
 import { isPartialObserver } from './predicates.js';
 
@@ -8,7 +8,7 @@ import { isPartialObserver } from './predicates.js';
  * Builds a strict observer from subscribe args
  * @param args
  */
-export function parseSubscribeArgs<D>(args: SubscribeArgs<D>): StrictObserver<D> {
+export function parseSubscribeArgs<D>(args: SubscribeArgs<D>): Observer<D> {
   if (isPartialObserver<D>(args[0])) {
     return observer$(args[0]);
   }

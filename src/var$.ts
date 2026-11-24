@@ -1,8 +1,8 @@
-import type { Observer } from './types/inputs/Observer.js';
+import type { MinimalObserver } from './features/minimal-observer.js';
 import type { Mutator } from './types/outputs/Mutator.js';
 import type { Observable, SubscribeArgs } from './rx/types/observable.js';
 import type { Ref } from './types/outputs/Ref.js';
-import type { Subscription } from './types/outputs/Subscription.js';
+import type { Subscription } from './rx/types/subscription.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
@@ -22,7 +22,7 @@ export function var$<D>(): UninitializedVar<D>;
 export function var$<D>(initial: D): Var<D>;
 
 export function var$<D>(initial?: D): UninitializedVar<D> {
-  const observers = new Set<Observer<D>>();
+  const observers = new Set<MinimalObserver<D>>();
   let value = initial;
 
   const _var = {

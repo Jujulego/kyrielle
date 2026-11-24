@@ -1,4 +1,4 @@
-import type { PartialObserver } from '../types/inputs/Observer.js';
+import type { PartialObserver } from './minimal-observer.js';
 import type { Unsubscribable } from './unsubscribable.js';
 
 /**

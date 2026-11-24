@@ -1,7 +1,7 @@
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { pick$ } from '@/src/pick$.js';
 import { source$ } from '@/src/source$.js';
-import type { Subscription } from '@/src/types/outputs/Subscription.js';
+import type { Subscription } from '@/src/rx/types/subscription.js';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('pick$', () => {

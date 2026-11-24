@@ -1,11 +1,11 @@
-import type { PartialObserver } from '../inputs/Observer.js';
+import type { PartialObserver } from '../../features/minimal-observer.js';
 import type { Mapping, MappingKey } from '../mapping.js';
 import type {
   SubscribeOnComplete,
   SubscribeOnError,
   SubscribeOnNext,
 } from '../../rx/types/observable.js';
-import type { Subscription } from './Subscription.js';
+import type { Subscription } from '../../rx/types/subscription.js';
 
 /**
  * Object registering listeners for multiple events

@@ -2,15 +2,15 @@
 
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { source$ } from '@/src/source$.js';
-import type { Observer } from '@/src/types/inputs/Observer.js';
+import type { MinimalObserver } from '@/src/features/minimal-observer.js';
 import type { Subscribable } from '@/src/features/subscribable.js';
 import { assertType, describe, it } from 'vitest';
 
 describe('nested source', () => {
   const mlt = multiplexer$({
     life: source$<42>(),
-    next: { next(event: 'toto') {} } as Observer<'toto'>,
-    subs: { subscribe(obs: Observer<'toto'>) {} } as Subscribable<'toto'>,
+    next: { next(event: 'toto') {} } as MinimalObserver<'toto'>,
+    subs: { subscribe(obs: MinimalObserver<'toto'>) {} } as Subscribable<'toto'>,
   });
 
   it('should accept valid life events', () => {

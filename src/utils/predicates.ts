@@ -1,7 +1,7 @@
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
-import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
+import type { MinimalObserver, PartialObserver } from '../features/minimal-observer.js';
 import type { Mapping } from '../types/mapping.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
@@ -44,14 +44,16 @@ export function isPartialObserver<T = unknown>(value: unknown): value is Partial
 /**
  * Tests if given value is a minimal Observer object (with at least a next method)
  */
-export function isMinimalObserver<T = unknown>(value: unknown): value is Pick<Observer<T>, 'next'> {
+export function isMinimalObserver<T = unknown>(
+  value: unknown,
+): value is Pick<MinimalObserver<T>, 'next'> {
   return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length > 0;
 }
 
 /**
  * Tests if given value is a fully defined Observer object
  */
-export function isObserver<T = unknown>(value: unknown): value is Observer<T> {
+export function isObserver<T = unknown>(value: unknown): value is MinimalObserver<T> {
   return isMinimalObserver(value) && hasMethod(value, 'error') && hasMethod(value, 'complete');
 }
 

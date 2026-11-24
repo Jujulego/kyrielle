@@ -1,6 +1,6 @@
 import type { Subscribable } from '../../features/subscribable.js';
-import type { PartialObserver } from '../../types/inputs/Observer.js';
-import type { Subscription } from '../../types/outputs/Subscription.js';
+import type { PartialObserver } from '../../features/minimal-observer.js';
+import type { Subscription } from './subscription.js';
 
 /**
  * Lazy and composable push based data source.

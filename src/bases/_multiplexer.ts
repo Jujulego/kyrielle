@@ -1,11 +1,11 @@
 import { isSubscribable$ } from '../predicates/is-subscribable$.js';
-import type { Observer } from '../types/inputs/Observer.js';
+import type { MinimalObserver } from '../features/minimal-observer.js';
 import type { Subscribable } from '../features/subscribable.js';
 import type { AssertMapping, Mapping, MappingKey, PrependMapping } from '../types/mapping.js';
 import type { SubscribeArgs } from '../rx/types/observable.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
-import type { Subscription } from '../types/outputs/Subscription.js';
+import type { Subscription } from '../rx/types/subscription.js';
 import type { MapValueIntersection } from '../types/utils.js';
 import { splitKey } from '../utils/key.js';
 import { isEmitter, isListenable, isMinimalObserver } from '../utils/predicates.js';
@@ -82,7 +82,7 @@ type InputMapping<M extends Mapping> = AssertMapping<
 
 type _InputRecord<K extends string, O> =
   | (O extends StrictEmitter<infer EM> ? PrependMapping<K, EM> : never)
-  | (O extends Observer<infer D> ? Record<K, D> : never);
+  | (O extends MinimalObserver<infer D> ? Record<K, D> : never);
 
 /**
  * Builds a mapping from output values of each source in the given source mapping

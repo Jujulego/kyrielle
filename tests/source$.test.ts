@@ -1,10 +1,10 @@
 import { type Source, source$ } from '@/src/source$.js';
-import type { Observer } from '@/src/types/inputs/Observer.js';
-import type { Subscription } from '@/src/types/outputs/Subscription.js';
+import type { MinimalObserver } from '@/src/features/minimal-observer.js';
+import type { Subscription } from '@/src/rx/types/subscription.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
-let observer: Observer<number>;
+let observer: MinimalObserver<number>;
 let source: Source<number>;
 let subscription: Subscription;
 
