@@ -1,4 +1,4 @@
-import { observer$ } from './observer$.js';
+import { observer$ } from './rx/observer$.js';
 import type { PartialObserver } from './features/minimal-observer.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';

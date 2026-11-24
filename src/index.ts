@@ -1,3 +1,4 @@
+export * from './features/minimal-observer.js';
 export * from './features/subscribable.js';
 export * from './features/unsubscribable.js';
 
@@ -5,24 +6,24 @@ export * from './predicates/is-observable$.js';
 export * from './predicates/is-subscribable$.js';
 
 export * from './rx/observable$.js';
+export * from './rx/observer$.js';
 export * from './rx/off$.js';
 export * from './rx/to-subscribable$.js';
 
 export * from './rx/types/observable.js';
+export * from './rx/types/observer.js';
+export * from './rx/types/subscription.js';
 
 export * from './types/inputs/Deferrable.js';
 export * from './types/inputs/Extendable.js';
 export * from './types/inputs/MinimalIterator.js';
 export * from './types/inputs/Mutable.js';
-export * from './features/minimal-observer.js';
 
 export * from './types/outputs/Mutator.js';
 export * from './types/outputs/Ref.js';
 export * from './types/outputs/SimpleIterator.js';
 export * from './types/outputs/StrictEmitter.js';
 export * from './types/outputs/StrictListenable.js';
-export * from './rx/types/observer.js';
-export * from './rx/types/subscription.js';
 
 export * from './utils/iterator.js';
 export * from './utils/predicates.js';
@@ -48,7 +49,6 @@ export * from './merge$.js';
 export * from './merge-map$.js';
 export * from './multiplexer$.js';
 export * from './mutable$.js';
-export * from './observer$.js';
 export * from './of$.js';
 export * from './once$.js';
 export * from './pick$.js';

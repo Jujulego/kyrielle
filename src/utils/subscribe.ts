@@ -1,4 +1,4 @@
-import { observer$ } from '../observer$.js';
+import { observer$ } from '../rx/observer$.js';
 import type { SubscribeArgs } from '../rx/types/observable.js';
 import type { Observer } from '../rx/types/observer.js';
 import { noop } from './fn.js';

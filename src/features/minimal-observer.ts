@@ -31,6 +31,7 @@ export interface MinimalObserver<D = unknown> {
   complete?(): void;
 }
 
+/** @deprecated */
 export type PartialObserver<D = unknown> = MinimalObserver<D>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
