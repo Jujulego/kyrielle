@@ -5,6 +5,7 @@ import type { PipeStep } from './pipe$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyIterable,
@@ -95,23 +96,27 @@ export function flat$<D, I extends AnyIterable<D>>() {
 
       builder.add(
         observable$<D>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (item) => {
-              const iterator = extractIterator(item);
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (item) => {
+                const iterator = extractIterator(item);
 
-              while (true) {
-                const { done, value } = iterator.next();
+                while (true) {
+                  const { done, value } = iterator.next();
 
-                if (done) {
-                  break;
-                } else {
-                  observer.next(value);
+                  if (done) {
+                    break;
+                  } else {
+                    observer.next(value);
+                  }
                 }
-              }
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

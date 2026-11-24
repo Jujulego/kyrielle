@@ -5,6 +5,7 @@ import type { PipeStep } from './pipe$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
 import type {
   AnyAsyncIterable,
@@ -121,13 +122,17 @@ export function map$<A, R>(fn: (arg: A) => R) {
       const observable = toSubscribable$(origin);
       builder.add(
         observable$<R>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (val) => {
-              observer.next(fn(val));
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (val) => {
+                observer.next(fn(val));
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

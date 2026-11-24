@@ -13,9 +13,9 @@ export function parseSubscribeArgs<D>(args: SubscribeArgs<D>): Observer<D> {
     return observer$(args[0]);
   }
 
-  return {
+  return observer$({
     next: args[0] ?? noop,
     error: args[1] ?? noop,
     complete: args[2] ?? noop,
-  };
+  });
 }

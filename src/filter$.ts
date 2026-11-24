@@ -5,6 +5,7 @@ import type { PipeStep } from './pipe$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -108,15 +109,19 @@ export function filter$<D>(predicate: (val: D) => boolean) {
       const observable = toSubscribable$(origin);
       builder.add(
         observable$<D>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (val) => {
-              if (predicate(val)) {
-                observer.next(val);
-              }
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (val) => {
+                if (predicate(val)) {
+                  observer.next(val);
+                }
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

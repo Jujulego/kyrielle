@@ -39,6 +39,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
       return value;
     },
     [Symbol.observable ?? '@@observable']: () => _var,
+    ['@@observable']: () => _var,
     subscribe: (...args: SubscribeArgs<D>): Subscription => {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({

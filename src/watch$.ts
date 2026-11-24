@@ -12,7 +12,7 @@ export type WatchCleanup = () => void;
 export type WatchCallback<in D = any> = (data: D) => WatchCleanup | void; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export interface WatchObserver<in D = unknown> extends PartialObserver<D> {
-  next?: ((data: D) => void | WatchCleanup) | undefined;
+  next(data: D): void | WatchCleanup;
   error?: ((error: unknown) => void | WatchCleanup) | undefined;
 }
 
@@ -31,7 +31,7 @@ export function watch$<O extends Subscribable>(
  */
 export function watch$<O extends Subscribable>(
   observable: O,
-  observer: Partial<WatchObserver<SubscribableValue<O>>>,
+  observer: WatchObserver<SubscribableValue<O>>,
 ): ReturnType<O['subscribe']>;
 
 /**
@@ -51,29 +51,29 @@ export function watch$<L extends StrictListenable, K extends MappingKey<ListenEv
 export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
   listenable: L,
   key: K,
-  observer: Partial<WatchObserver<ListenEventMap<L>[K]>>,
+  observer: WatchObserver<ListenEventMap<L>[K]>,
 ): ReturnType<L['on']>;
 
 export function watch$(
   ...args:
-    | [Subscribable, WatchCallback | Partial<WatchObserver>]
-    | [StrictListenable, string, WatchCallback | Partial<WatchObserver>]
+    | [Subscribable, WatchCallback | WatchObserver]
+    | [StrictListenable, string, WatchCallback | WatchObserver]
 ): Subscription {
   if (typeof args[1] === 'string') {
     const [listener, key, observer] = args as [
       StrictListenable,
       string,
-      WatchCallback | Partial<WatchObserver>,
+      WatchCallback | WatchObserver,
     ];
     return listener.on(key, prepareObserver(observer));
   } else {
-    const [observable, observer] = args as [Subscribable, WatchCallback | Partial<WatchObserver>];
+    const [observable, observer] = args as [Subscribable, WatchCallback | WatchObserver];
     return wrapUnsubscribable(observable.subscribe(prepareObserver(observer)));
   }
 }
 
 // Utils
-function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): Observer {
+function prepareObserver(arg: WatchCallback | WatchObserver): Observer {
   let cleanup: WatchCleanup | void;
 
   if (typeof arg === 'function') {
@@ -89,12 +89,10 @@ function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): Observer 
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next:
-        arg.next
-        && ((data: unknown) => {
-          if (cleanup) cleanup();
-          cleanup = arg.next!(data);
-        }),
+      next: (data: unknown) => {
+        if (cleanup) cleanup();
+        cleanup = arg.next(data);
+      },
       error:
         arg.error
         && ((error: unknown) => {

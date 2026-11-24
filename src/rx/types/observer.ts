@@ -1,5 +1,5 @@
 import type { MinimalObserver } from '../../features/minimal-observer.js';
-import type { Subscription } from './subscription.js';
+import type { Unsubscribable } from '../../features/unsubscribable.js';
 
 /**
  * Object receiving data from an observable.
@@ -13,7 +13,7 @@ export interface Observer<D = unknown> extends MinimalObserver<D> {
    * Called at the start of a subscription with the generated subscription object
    * @param subscription
    */
-  start(this: void, subscription: Subscription): void;
+  start(this: void, subscription: Unsubscribable): void;
 
   /**
    * Called with each emitted value

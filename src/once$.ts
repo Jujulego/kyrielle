@@ -1,5 +1,9 @@
 import { observer$ } from './rx/observer$.js';
-import type { PartialObserver } from './features/minimal-observer.js';
+import type {
+  MinimalObserver,
+  ObserverNextCallback,
+  PartialObserver,
+} from './features/minimal-observer.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
@@ -7,8 +11,8 @@ import type { Observer } from './rx/types/observer.js';
 import type { Subscription } from './rx/types/subscription.js';
 import { wrapUnsubscribable } from './utils/subscription.js';
 
-// Type
-export type OnceCallback<in D = any> = (data: D) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type OnceCallback<D = any> = ObserverNextCallback<D>;
 
 /**
  * Register a callback that will be called only once
@@ -49,7 +53,7 @@ export function once$<L extends StrictListenable, K extends MappingKey<ListenEve
 export function once$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
   listenable: L,
   key: K,
-  observer: PartialObserver<ListenEventMap<L>[K]>,
+  observer: MinimalObserver<ListenEventMap<L>[K]>,
 ): ReturnType<L['on']>;
 
 /** @internal */
@@ -87,7 +91,7 @@ export function once$(
 }
 
 // Utils
-function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void): Observer {
+function prepareObserver(arg: OnceCallback | MinimalObserver, unsub: () => void): Observer {
   let called = false;
 
   function wrap(cb: (arg: unknown) => void) {
@@ -108,8 +112,8 @@ function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void)
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next: arg.next && wrap(arg.next),
-      error: arg.error && wrap(arg.error),
+      next: wrap(arg.next.bind(arg)),
+      error: arg.error && wrap(arg.error.bind(arg)),
       complete: arg.complete?.bind(arg),
     });
   }

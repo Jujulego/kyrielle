@@ -1,7 +1,8 @@
-import { observable$ } from './rx/observable$.js';
-import type { PipeStep } from './pipe$.js';
 import type { Subscribable } from './features/subscribable.js';
 import type { Unsubscribable } from './features/unsubscribable.js';
+import type { PipeStep } from './pipe$.js';
+import { observable$ } from './rx/observable$.js';
+import { observer$ } from './rx/observer$.js';
 import type { Observable } from './rx/types/observable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
@@ -22,30 +23,38 @@ export function switchMap$<T, R>(
     let childCompleted = false;
 
     return observable$((observer, signal) => {
-      boundedSubscription(origin, signal, {
-        next(item) {
-          previous?.unsubscribe();
-          previous = boundedSubscription(fn(item), signal, {
-            next: (it) => observer.next(it),
-            error: (err) => observer.error(err),
-            complete: () => {
-              childCompleted = true;
+      boundedSubscription(
+        origin,
+        signal,
+        observer$({
+          next(item) {
+            previous?.unsubscribe();
+            previous = boundedSubscription(
+              fn(item),
+              signal,
+              observer$({
+                next: observer.next,
+                error: observer.error,
+                complete: () => {
+                  childCompleted = true;
 
-              if (originCompleted) {
-                observer.complete();
-              }
-            },
-          });
-        },
-        error: (err) => observer.error(err),
-        complete: () => {
-          originCompleted = true;
+                  if (originCompleted) {
+                    observer.complete();
+                  }
+                },
+              }),
+            );
+          },
+          error: (err) => observer.error(err),
+          complete: () => {
+            originCompleted = true;
 
-          if (childCompleted) {
-            observer.complete();
-          }
-        },
-      });
+            if (childCompleted) {
+              observer.complete();
+            }
+          },
+        }),
+      );
     });
   };
 }

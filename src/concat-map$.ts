@@ -1,8 +1,9 @@
-import { observable$, type SubscriberObserver } from './rx/observable$.js';
-import type { PipeStep } from './pipe$.js';
 import type { AnySubscribable } from './features/subscribable.js';
-import type { Observable } from './rx/types/observable.js';
+import type { PipeStep } from './pipe$.js';
+import { observable$, type SubscriberObserver } from './rx/observable$.js';
+import { observer$ } from './rx/observer$.js';
 import { toSubscribable$ } from './rx/to-subscribable$.js';
+import type { Observable } from './rx/types/observable.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -23,44 +24,52 @@ export function concatMap$<T, R>(
     let originCompleted = false;
 
     function childSubscription(item: T, observer: SubscriberObserver<R>, signal: AbortSignal) {
-      boundedSubscription(toSubscribable$(fn(item)), signal, {
-        next: (it) => observer.next(it),
-        error: (err) => observer.error(err),
-        complete: () => {
-          const next = queue.pop();
+      boundedSubscription(
+        toSubscribable$(fn(item)),
+        signal,
+        observer$({
+          next: observer.next,
+          error: observer.error,
+          complete: () => {
+            const next = queue.pop();
 
-          if (next) {
-            childSubscription(next, observer, signal);
-          } else {
-            childRunning = false;
+            if (next) {
+              childSubscription(next, observer, signal);
+            } else {
+              childRunning = false;
 
-            if (originCompleted) {
-              observer.complete();
+              if (originCompleted) {
+                observer.complete();
+              }
             }
-          }
-        },
-      });
+          },
+        }),
+      );
     }
 
     return observable$((observer, signal) => {
-      boundedSubscription(toSubscribable$(origin), signal, {
-        next: (item) => {
-          if (!childRunning) {
-            childRunning = true;
-            childSubscription(item, observer, signal);
-          } else {
-            queue.unshift(item);
-          }
-        },
-        error: (err) => observer.error(err),
-        complete: () => {
-          originCompleted = true;
+      boundedSubscription(
+        toSubscribable$(origin),
+        signal,
+        observer$({
+          next: (item) => {
+            if (!childRunning) {
+              childRunning = true;
+              childSubscription(item, observer, signal);
+            } else {
+              queue.unshift(item);
+            }
+          },
+          error: observer.error,
+          complete: () => {
+            originCompleted = true;
 
-          if (!childRunning) {
-            observer.complete();
-          }
-        },
-      });
+            if (!childRunning) {
+              observer.complete();
+            }
+          },
+        }),
+      );
     });
   };
 }

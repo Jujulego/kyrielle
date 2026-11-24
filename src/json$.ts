@@ -4,6 +4,7 @@ import { observable$ } from './rx/observable$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type { AsyncDeferrable, Deferrable } from './types/inputs/Deferrable.js';
 import type {
   AnyAsyncIterable,
@@ -133,13 +134,17 @@ export function json$() {
       const observable = toSubscribable$(origin);
       builder.add(
         observable$((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (val) => {
-              observer.next(parser(val));
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (val) => {
+                observer.next(parser(val));
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

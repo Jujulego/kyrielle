@@ -54,7 +54,7 @@ export type SubscribeOnNext<in D = unknown> = (data: D) => void;
 /**
  * Callback invoked when an observable reports an error.
  */
-export type SubscribeOnError = (error: Error) => void;
+export type SubscribeOnError = (error: unknown) => void;
 
 /**
  * Callback invoked when an observable completes.

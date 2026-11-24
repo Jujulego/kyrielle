@@ -18,6 +18,7 @@ export function source$<D>(): Source<D> {
   // Build source
   const source = {
     [Symbol.observable ?? '@@observable']: () => source,
+    ['@@observable']: () => source,
     next: (data: D) => {
       assert(!isCompleted, 'Completed source cannot emit data');
 
@@ -29,7 +30,7 @@ export function source$<D>(): Source<D> {
       assert(!isCompleted, 'Completed source cannot emit error');
 
       for (const observer of observers) {
-        observer.error(err);
+        observer.error?.(err);
       }
     },
     complete: () => {
@@ -37,7 +38,7 @@ export function source$<D>(): Source<D> {
       isCompleted = true;
 
       for (const observer of observers) {
-        observer.complete();
+        observer.complete?.();
       }
 
       observers.clear();

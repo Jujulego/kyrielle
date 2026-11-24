@@ -5,6 +5,7 @@ import type { PipeStep } from './pipe$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -99,14 +100,18 @@ export function scan$<D, const S>(cb: ScanCallback<D, S>, init: S) {
 
       builder.add(
         observable$<S>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (item) => {
-              state = cb(state, item);
-              observer.next(state);
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (item) => {
+                state = cb(state, item);
+                observer.next(state);
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

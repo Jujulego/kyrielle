@@ -2,6 +2,7 @@ import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { isObservable$ } from './predicates/is-observable$.js';
 import { isSubscribable$ } from './predicates/is-subscribable$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -86,16 +87,20 @@ export function reduce$<D, const S>(
 
     if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
       return observable$((observer, signal) => {
-        boundedSubscription(toSubscribable$(origin), signal, {
-          next(item) {
-            state = cb(state, item);
-          },
-          error: (err) => observer.error(err),
-          complete: () => {
-            observer.next(state);
-            observer.complete();
-          },
-        });
+        boundedSubscription(
+          toSubscribable$(origin),
+          signal,
+          observer$({
+            next(item) {
+              state = cb(state, item);
+            },
+            error: observer.error,
+            complete: () => {
+              observer.next(state);
+              observer.complete();
+            },
+          }),
+        );
       });
     }
   };
