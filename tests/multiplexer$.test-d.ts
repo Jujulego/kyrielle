@@ -9,7 +9,7 @@ import { assertType, describe, it } from 'vitest';
 describe('nested source', () => {
   const mlt = multiplexer$({
     life: source$<42>(),
-    next: { next(event: 'toto') {} } as MinimalObserver<'toto'>,
+    next: { next(event: 'toto') {} },
     subs: { subscribe(obs: MinimalObserver<'toto'>) {} } as Subscribable<'toto'>,
   });
 
