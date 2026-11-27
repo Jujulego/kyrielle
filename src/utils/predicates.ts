@@ -1,4 +1,3 @@
-import type { ObserverNextCallback, PartialObserver } from '../features/partial-observer.js';
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
@@ -29,32 +28,6 @@ export function isListenable<M extends Mapping = Mapping>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isMutable<A = any, D = unknown>(value: unknown): value is Mutable<A, D> {
   return isNonNullObject(value) && hasMethod(value, 'mutate');
-}
-
-/**
- * Tests if given value is a partial Observer object
- */
-export function isPartialObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
-  return (
-    isNonNullObject(value)
-    && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'))
-  );
-}
-
-/**
- * Tests if given value is a minimal Observer object (with at least a next method)
- */
-export function isMinimalObserver<T = unknown>(
-  value: unknown,
-): value is { next: ObserverNextCallback<T> } {
-  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length > 0;
-}
-
-/**
- * Tests if given value is a fully defined Observer object
- */
-export function isObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
-  return isMinimalObserver(value) && hasMethod(value, 'error') && hasMethod(value, 'complete');
 }
 
 /**

@@ -2,7 +2,10 @@ export * from './features/partial-observer.js';
 export * from './features/subscribable.js';
 export * from './features/unsubscribable.js';
 
+export * from './predicates/is-minimal-observer$.js';
 export * from './predicates/is-observable$.js';
+export * from './predicates/is-observer$.js';
+export * from './predicates/is-partial-observer$.js';
 export * from './predicates/is-subscribable$.js';
 
 export * from './rx/observable$.js';

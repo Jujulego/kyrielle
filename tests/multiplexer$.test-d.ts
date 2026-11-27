@@ -1,9 +1,9 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
-import { multiplexer$ } from '@/src/multiplexer$.js';
-import { source$ } from '@/src/source$.js';
 import type { PartialObserver } from '@/src/features/partial-observer.js';
 import type { Subscribable } from '@/src/features/subscribable.js';
+import { multiplexer$ } from '@/src/multiplexer$.js';
+import { source$ } from '@/src/source$.js';
 import { assertType, describe, it } from 'vitest';
 
 describe('nested source', () => {

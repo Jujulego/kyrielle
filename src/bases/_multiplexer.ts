@@ -1,3 +1,4 @@
+import { isMinimalObserver$ } from '../predicates/is-minimal-observer$.js';
 import { isSubscribable$ } from '../predicates/is-subscribable$.js';
 import type { PartialObserver } from '../features/partial-observer.js';
 import type { Subscribable } from '../features/subscribable.js';
@@ -8,7 +9,7 @@ import type { StrictListenable } from '../types/outputs/StrictListenable.js';
 import type { Subscription } from '../rx/types/subscription.js';
 import type { MapValueIntersection } from '../types/utils.js';
 import { splitKey } from '../utils/key.js';
-import { isEmitter, isListenable, isMinimalObserver } from '../utils/predicates.js';
+import { isEmitter, isListenable } from '../utils/predicates.js';
 import { parseSubscribeArgs } from '../utils/subscribe.js';
 import { wrapUnsubscribable } from '../utils/subscription.js';
 
@@ -29,7 +30,7 @@ export function _multiplexer<M extends Mapping>(getOrigin: (key: string) => unkn
         return origin.emit(rest, event);
       }
 
-      if (!rest && isMinimalObserver(origin)) {
+      if (!rest && isMinimalObserver$(origin)) {
         return origin.next(event);
       }
 

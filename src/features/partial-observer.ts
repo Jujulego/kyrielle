@@ -11,24 +11,24 @@ export interface PartialObserver<D = unknown> {
    * Called at the start of a subscription with the generated subscription object
    * @param subscription
    */
-  start?: ObserverStartCallback | undefined;
+  readonly start?: ObserverStartCallback | undefined;
 
   /**
    * Called with each emitted value
    * @param data
    */
-  next?: ObserverNextCallback<D> | undefined;
+  readonly next?: ObserverNextCallback<D> | undefined;
 
   /**
    * Called when an error occurs in the observable
    * @param err
    */
-  error?: ObserverErrorCallback | undefined;
+  readonly error?: ObserverErrorCallback | undefined;
 
   /**
    * Called when the observable completes. No other data or error will then be received.
    */
-  complete?: ObserverCompleteCallback | undefined;
+  readonly complete?: ObserverCompleteCallback | undefined;
 }
 
 export type ObserverStartCallback = (subscription: Unsubscribable) => void;
