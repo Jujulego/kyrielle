@@ -1,14 +1,11 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type { Deferrable } from './types/inputs/Deferrable.js';
 import type { Mutable } from './types/inputs/Mutable.js';
-import type {
-  AnySubscribable,
-  Subscribable,
-  SubscribableValue,
-} from './types/inputs/Subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { AnySubscribable, Subscribable, SubscribableValue } from './features/subscribable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { Ref } from './types/outputs/Ref.js';
 import type { Awaitable } from './types/utils.js';
 import { isDeferrable, isPromise } from './utils/predicates.js';
@@ -44,15 +41,19 @@ export function store$<D>(reference: StoreRef<D>) {
     return resource$()
       .add(
         observable$<D>((obs, signal) => {
-          boundedSubscription(origin, signal, {
-            next(data) {
-              controller.abort();
-              reference.mutate(data);
-              obs.next(data);
-            },
-            error: (err) => obs.error(err),
-            complete: () => obs.complete(),
-          });
+          boundedSubscription(
+            origin,
+            signal,
+            observer$({
+              next(data) {
+                controller.abort();
+                reference.mutate(data);
+                obs.next(data);
+              },
+              error: obs.error,
+              complete: obs.complete,
+            }),
+          );
         }),
       )
       .add({ defer: reference.defer.bind(reference) })

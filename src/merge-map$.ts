@@ -1,8 +1,9 @@
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import type { AnySubscribable } from './features/subscribable.js';
+import { observer$ } from './rx/observer$.js';
+import type { Observable } from './rx/types/observable.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -19,31 +20,39 @@ export function mergeMap$<T, R>(
     let completed = 1;
 
     return observable$((observer, signal) => {
-      boundedSubscription(extractSubscribable(origin), signal, {
-        next(item) {
-          completed++;
+      boundedSubscription(
+        toSubscribable$(origin),
+        signal,
+        observer$({
+          next(item) {
+            completed++;
 
-          boundedSubscription(extractSubscribable(fn(item)), signal, {
-            next: (it) => observer.next(it),
-            error: (err) => observer.error(err),
-            complete: () => {
-              completed--;
+            boundedSubscription(
+              toSubscribable$(fn(item)),
+              signal,
+              observer$({
+                next: observer.next,
+                error: observer.error,
+                complete: () => {
+                  completed--;
 
-              if (completed === 0) {
-                observer.complete();
-              }
-            },
-          });
-        },
-        error: (err) => observer.error(err),
-        complete: () => {
-          completed--;
+                  if (completed === 0) {
+                    observer.complete();
+                  }
+                },
+              }),
+            );
+          },
+          error: observer.error,
+          complete: () => {
+            completed--;
 
-          if (completed === 0) {
-            observer.complete();
-          }
-        },
-      });
+            if (completed === 0) {
+              observer.complete();
+            }
+          },
+        }),
+      );
     });
   };
 }

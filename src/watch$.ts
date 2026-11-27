@@ -1,10 +1,10 @@
-import { observer$ } from './observer$.js';
-import type { PartialObserver } from './types/inputs/Observer.js';
-import type { Subscribable, SubscribableValue } from './types/inputs/Subscribable.js';
+import { observer$ } from './rx/observer$.js';
+import type { PartialObserver } from './features/partial-observer.js';
+import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
-import type { StrictObserver } from './types/outputs/StrictObserver.js';
-import type { Subscription } from './types/outputs/Subscription.js';
+import type { Observer } from './rx/types/observer.js';
+import type { Subscription } from './rx/types/subscription.js';
 import { wrapUnsubscribable } from './utils/subscription.js';
 
 // Type
@@ -31,7 +31,7 @@ export function watch$<O extends Subscribable>(
  */
 export function watch$<O extends Subscribable>(
   observable: O,
-  observer: Partial<WatchObserver<SubscribableValue<O>>>,
+  observer: WatchObserver<SubscribableValue<O>>,
 ): ReturnType<O['subscribe']>;
 
 /**
@@ -51,29 +51,29 @@ export function watch$<L extends StrictListenable, K extends MappingKey<ListenEv
 export function watch$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
   listenable: L,
   key: K,
-  observer: Partial<WatchObserver<ListenEventMap<L>[K]>>,
+  observer: WatchObserver<ListenEventMap<L>[K]>,
 ): ReturnType<L['on']>;
 
 export function watch$(
   ...args:
-    | [Subscribable, WatchCallback | Partial<WatchObserver>]
-    | [StrictListenable, string, WatchCallback | Partial<WatchObserver>]
+    | [Subscribable, WatchCallback | WatchObserver]
+    | [StrictListenable, string, WatchCallback | WatchObserver]
 ): Subscription {
   if (typeof args[1] === 'string') {
     const [listener, key, observer] = args as [
       StrictListenable,
       string,
-      WatchCallback | Partial<WatchObserver>,
+      WatchCallback | WatchObserver,
     ];
     return listener.on(key, prepareObserver(observer));
   } else {
-    const [observable, observer] = args as [Subscribable, WatchCallback | Partial<WatchObserver>];
+    const [observable, observer] = args as [Subscribable, WatchCallback | WatchObserver];
     return wrapUnsubscribable(observable.subscribe(prepareObserver(observer)));
   }
 }
 
 // Utils
-function prepareObserver(arg: WatchCallback | Partial<WatchObserver>): StrictObserver {
+function prepareObserver(arg: WatchCallback | WatchObserver): Observer {
   let cleanup: WatchCleanup | void;
 
   if (typeof arg === 'function') {

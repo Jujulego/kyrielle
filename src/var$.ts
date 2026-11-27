@@ -1,8 +1,8 @@
-import type { Observer } from './types/inputs/Observer.js';
+import type { Observable, SubscribeArgs } from './rx/types/observable.js';
+import type { Observer } from './rx/types/observer.js';
+import type { Subscription } from './rx/types/subscription.js';
 import type { Mutator } from './types/outputs/Mutator.js';
-import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
 import type { Ref } from './types/outputs/Ref.js';
-import type { Subscription } from './types/outputs/Subscription.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
@@ -39,6 +39,7 @@ export function var$<D>(initial?: D): UninitializedVar<D> {
       return value;
     },
     [Symbol.observable ?? '@@observable']: () => _var,
+    ['@@observable']: () => _var,
     subscribe: (...args: SubscribeArgs<D>): Subscription => {
       const observer = parseSubscribeArgs(args);
       const subscription = buildSubscription({

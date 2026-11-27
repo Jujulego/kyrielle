@@ -1,8 +1,11 @@
 import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyIterable,
@@ -10,19 +13,12 @@ import type {
   IteratedValue,
   MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { AnySubscribable } from './features/subscribable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractAwaitableIterator, extractIterator } from './utils/iterator.js';
-import {
-  isAsyncIterable,
-  isAwaitableIterator,
-  isIterable,
-  isPromise,
-  isSubscribable,
-  isSubscribableHolder,
-} from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 /**
@@ -95,28 +91,32 @@ export function flat$<D, I extends AnyIterable<D>>() {
       }
     }
 
-    if (isSubscribable<I>(origin) || isSubscribableHolder<I>(origin)) {
-      const observable = extractSubscribable(origin);
+    if (isSubscribable$<I>(origin) || isObservable$<I>(origin)) {
+      const observable = toSubscribable$(origin);
 
       builder.add(
         observable$<D>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (item) => {
-              const iterator = extractIterator(item);
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (item) => {
+                const iterator = extractIterator(item);
 
-              while (true) {
-                const { done, value } = iterator.next();
+                while (true) {
+                  const { done, value } = iterator.next();
 
-                if (done) {
-                  break;
-                } else {
-                  observer.next(value);
+                  if (done) {
+                    break;
+                  } else {
+                    observer.next(value);
+                  }
                 }
-              }
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

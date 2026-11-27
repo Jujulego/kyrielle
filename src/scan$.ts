@@ -1,8 +1,11 @@
 import { asyncIterator$ } from './async-iterator$.js';
 import { iterator$ } from './iterator$.js';
-import { observable$ } from './observable$.js';
+import { observable$ } from './rx/observable$.js';
 import type { PipeStep } from './pipe$.js';
+import { isObservable$ } from './predicates/is-observable$.js';
+import { isSubscribable$ } from './predicates/is-subscribable$.js';
 import { resource$ } from './resource$.js';
+import { observer$ } from './rx/observer$.js';
 import type {
   AnyAsyncIterable,
   AnyAwaitableIterable,
@@ -12,19 +15,12 @@ import type {
   MinimalAsyncIterator,
   MinimalIterator,
 } from './types/inputs/MinimalIterator.js';
-import type { AnySubscribable } from './types/inputs/Subscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import type { AnySubscribable } from './features/subscribable.js';
+import type { Observable } from './rx/types/observable.js';
 import type { SimpleAsyncIterator, SimpleIterator } from './types/outputs/SimpleIterator.js';
 import { extractAwaitableIterator } from './utils/iterator.js';
-import {
-  isAsyncIterable,
-  isAwaitableIterator,
-  isIterable,
-  isPromise,
-  isSubscribable,
-  isSubscribableHolder,
-} from './utils/predicates.js';
-import { extractSubscribable } from './utils/subscribable.js';
+import { isAsyncIterable, isAwaitableIterator, isIterable, isPromise } from './utils/predicates.js';
+import { toSubscribable$ } from './rx/to-subscribable$.js';
 import { boundedSubscription } from './utils/subscription.js';
 
 // Types
@@ -99,19 +95,23 @@ export function scan$<D, const S>(cb: ScanCallback<D, S>, init: S) {
       }
     }
 
-    if (isSubscribable<D>(origin) || isSubscribableHolder<D>(origin)) {
-      const observable = extractSubscribable(origin);
+    if (isSubscribable$<D>(origin) || isObservable$<D>(origin)) {
+      const observable = toSubscribable$(origin);
 
       builder.add(
         observable$<S>((observer, signal) => {
-          boundedSubscription(observable, signal, {
-            next: (item) => {
-              state = cb(state, item);
-              observer.next(state);
-            },
-            error: (err) => observer.error(err),
-            complete: () => observer.complete(),
-          });
+          boundedSubscription(
+            observable,
+            signal,
+            observer$({
+              next: (item) => {
+                state = cb(state, item);
+                observer.next(state);
+              },
+              error: observer.error,
+              complete: observer.complete,
+            }),
+          );
         }),
       );
     }

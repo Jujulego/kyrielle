@@ -1,8 +1,7 @@
 import assert from 'assert';
-import type { Observer } from './types/inputs/Observer.js';
-import type { Observable, SubscribeArgs } from './types/outputs/Observable.js';
-import type { StrictObserver } from './types/outputs/StrictObserver.js';
-import type { Subscription } from './types/outputs/Subscription.js';
+import type { Observable, SubscribeArgs } from './rx/types/observable.js';
+import type { Observer } from './rx/types/observer.js';
+import type { Subscription } from './rx/types/subscription.js';
 import { parseSubscribeArgs } from './utils/subscribe.js';
 import { buildSubscription } from './utils/subscription.js';
 
@@ -18,6 +17,7 @@ export function source$<D>(): Source<D> {
   // Build source
   const source = {
     [Symbol.observable ?? '@@observable']: () => source,
+    ['@@observable']: () => source,
     next: (data: D) => {
       assert(!isCompleted, 'Completed source cannot emit data');
 
@@ -29,7 +29,7 @@ export function source$<D>(): Source<D> {
       assert(!isCompleted, 'Completed source cannot emit error');
 
       for (const observer of observers) {
-        observer.error(err);
+        observer.error?.(err);
       }
     },
     complete: () => {
@@ -37,7 +37,7 @@ export function source$<D>(): Source<D> {
       isCompleted = true;
 
       for (const observer of observers) {
-        observer.complete();
+        observer.complete?.();
       }
 
       observers.clear();
@@ -70,8 +70,7 @@ export function source$<D>(): Source<D> {
  *
  * @since 1.0.0
  */
-export interface Source<in out D = unknown>
-  extends Observable<D>, Omit<StrictObserver<D>, 'start'> {
+export interface Source<in out D = unknown> extends Observable<D>, Omit<Observer<D>, 'start'> {
   /**
    * Indicates if source is completed.
    * A completed source does not emit anymore, as no subscription and refuse any new ones.

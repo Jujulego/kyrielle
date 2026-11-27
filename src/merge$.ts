@@ -1,7 +1,7 @@
-import { observable$ } from './observable$.js';
-import type { Subscribable } from './types/inputs/Subscribable.js';
-import type { Unsubscribable } from './types/inputs/Unsubscribable.js';
-import type { Observable } from './types/outputs/Observable.js';
+import { observable$ } from './rx/observable$.js';
+import type { Subscribable } from './features/subscribable.js';
+import type { Unsubscribable } from './features/unsubscribable.js';
+import type { Observable } from './rx/types/observable.js';
 
 /**
  * Merges multiple observables into one.

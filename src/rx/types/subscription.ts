@@ -1,4 +1,4 @@
-import type { Unsubscribable } from '../inputs/Unsubscribable.js';
+import type { Unsubscribable } from '../../features/unsubscribable.js';
 
 /**
  * Represents a subscription to an observable.

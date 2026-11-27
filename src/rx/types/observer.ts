@@ -1,42 +1,34 @@
-import type { Observer } from '../inputs/Observer.js';
-import type { Subscription } from './Subscription.js';
+import type { PartialObserver } from '../../features/partial-observer.js';
+import type { Unsubscribable } from '../../features/unsubscribable.js';
 
 /**
  * Object receiving data from an observable.
  *
- * @since 2.0.0
- * @see Observer
+ * @since 3.0.0
+ * @see PartialObserver
  * @see observer$
  */
-export interface StrictObserver<in D = unknown> extends Observer<D> {
+export interface Observer<D = unknown> extends PartialObserver<D> {
   /**
    * Called at the start of a subscription with the generated subscription object
    * @param subscription
-   *
-   * @since 2.0.0
    */
-  start?(this: void, subscription: Subscription): void;
+  start(this: void, subscription: Unsubscribable): void;
 
   /**
    * Called with each emitted value
    * @param data
-   *
-   * @since 2.0.0
    */
   next(this: void, data: D): void;
 
   /**
    * Called when an error occurs in the observable
    * @param err
-   *
-   * @since 2.0.0
    */
   error(this: void, err: unknown): void;
 
   /**
    * Called when the observable completes. No other data or error will then be received.
-   *
-   * @since 2.0.0
    */
   complete(this: void): void;
 }

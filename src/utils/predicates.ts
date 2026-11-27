@@ -1,8 +1,6 @@
 import type { Deferrable } from '../types/inputs/Deferrable.js';
 import type { MinimalAsyncIterator, MinimalIterator } from '../types/inputs/MinimalIterator.js';
 import type { Mutable } from '../types/inputs/Mutable.js';
-import type { Observer, PartialObserver } from '../types/inputs/Observer.js';
-import type { Subscribable, SubscribableHolder } from '../types/inputs/Subscribable.js';
 import type { Mapping } from '../types/mapping.js';
 import type { StrictEmitter } from '../types/outputs/StrictEmitter.js';
 import type { StrictListenable } from '../types/outputs/StrictListenable.js';
@@ -33,30 +31,6 @@ export function isMutable<A = any, D = unknown>(value: unknown): value is Mutabl
 }
 
 /**
- * Tests if given value is a partial Observer object
- */
-export function isPartialObserver<T = unknown>(value: unknown): value is PartialObserver<T> {
-  return (
-    isNonNullObject(value)
-    && (hasMethod(value, 'next') || hasMethod(value, 'error') || hasMethod(value, 'complete'))
-  );
-}
-
-/**
- * Tests if given value is a minimal Observer object (with at least a next method)
- */
-export function isMinimalObserver<T = unknown>(value: unknown): value is Pick<Observer<T>, 'next'> {
-  return isNonNullObject(value) && hasMethod(value, 'next') && value.next.length > 0;
-}
-
-/**
- * Tests if given value is a fully defined Observer object
- */
-export function isObserver<T = unknown>(value: unknown): value is Observer<T> {
-  return isMinimalObserver(value) && hasMethod(value, 'error') && hasMethod(value, 'complete');
-}
-
-/**
  * Tests if given value is a PromiseLike object
  */
 export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> {
@@ -68,28 +42,6 @@ export function isPromise<T = unknown>(value: unknown): value is PromiseLike<T> 
  */
 export function isDeferrable<D = unknown>(value: unknown): value is Deferrable<D> {
   return isNonNullObject(value) && hasMethod(value, 'defer');
-}
-
-/**
- * Tests if given value is a Subscribable object
- */
-export function isSubscribable<D = unknown>(value: unknown): value is Subscribable<D> {
-  return isNonNullObject(value) && hasMethod(value, 'subscribe');
-}
-
-/**
- * Tests if given value is an ObservableHolder object
- */
-export function isSubscribableHolder<D = unknown>(value: unknown): value is SubscribableHolder<D> {
-  if (!isNonNullObject(value)) {
-    return false;
-  }
-
-  if (Symbol.observable && hasMethod(value, Symbol.observable)) {
-    return true;
-  }
-
-  return hasMethod(value, '@@observable');
 }
 
 /**
@@ -125,11 +77,11 @@ export function isIterable<D = unknown>(value: unknown): value is Iterable<D> {
 }
 
 // Utils
-function isNonNullObject(value: unknown): value is NonNullObject {
+export function isNonNullObject(value: unknown): value is NonNullObject {
   return typeof value === 'object' && value !== null;
 }
 
-function hasMethod<O extends NonNullObject, const K extends keyof O>(
+export function hasMethod<O extends NonNullObject, const K extends keyof O>(
   value: NonNullObject,
   name: K,
 ): value is O & Record<K, O[K] & ((...args: unknown[]) => unknown)> {

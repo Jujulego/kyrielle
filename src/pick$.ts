@@ -1,6 +1,6 @@
-import { observable$ } from './observable$.js';
+import { observable$, type SubscriberObserver } from './rx/observable$.js';
+import type { Observable } from './rx/types/observable.js';
 import type { MappingKey } from './types/mapping.js';
-import type { Observable } from './types/outputs/Observable.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
 
 /**
@@ -13,7 +13,7 @@ export function pick$<L extends StrictListenable, K extends MappingKey<ListenEve
   key: K,
 ): Observable<ListenEventMap<L>[K]> {
   return observable$((observer, signal) => {
-    const { unsubscribe } = listenable.on(key, observer);
+    const { unsubscribe } = listenable.on(key, observer as SubscriberObserver);
     signal.addEventListener('abort', unsubscribe, { once: true });
   });
 }

@@ -1,16 +1,16 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
+import type { PartialObserver } from '@/src/features/partial-observer.js';
+import type { Subscribable } from '@/src/features/subscribable.js';
 import { multiplexer$ } from '@/src/multiplexer$.js';
 import { source$ } from '@/src/source$.js';
-import type { Observer } from '@/src/types/inputs/Observer.js';
-import type { Subscribable } from '@/src/types/inputs/Subscribable.js';
 import { assertType, describe, it } from 'vitest';
 
 describe('nested source', () => {
   const mlt = multiplexer$({
     life: source$<42>(),
-    next: { next(event: 'toto') {} } as Observer<'toto'>,
-    subs: { subscribe(obs: Observer<'toto'>) {} } as Subscribable<'toto'>,
+    next: { next(event: 'toto') {} },
+    subs: { subscribe(obs: PartialObserver<'toto'>) {} } as Subscribable<'toto'>,
   });
 
   it('should accept valid life events', () => {

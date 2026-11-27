@@ -1,5 +1,5 @@
-import { observable$, type SubscriberObserver } from '@/src/observable$.js';
-import type { Observer } from '@/src/types/inputs/Observer.js';
+import { observable$, type SubscriberObserver } from '@/src/rx/observable$.js';
+import type { PartialObserver } from '@/src/features/partial-observer.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
@@ -45,7 +45,7 @@ describe('observable$', () => {
   });
 
   describe('subscribe', () => {
-    let observer: Observer;
+    let observer: PartialObserver;
 
     beforeEach(() => {
       observer = {

@@ -14,6 +14,7 @@ coverage
 dist
 eslint-results.sarif
 junit-report.xml
+node_modules
 
 *.log
 *.pid

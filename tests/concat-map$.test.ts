@@ -1,5 +1,5 @@
 import { concatMap$ } from '@/src/concat-map$.js';
-import { observable$ } from '@/src/observable$.js';
+import { observable$ } from '@/src/rx/observable$.js';
 
 import { of$ } from '@/src/of$.js';
 import { pipe$ } from '@/src/pipe$.js';

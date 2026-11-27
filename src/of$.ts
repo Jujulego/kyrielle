@@ -1,5 +1,5 @@
-import { observable$ } from './observable$.js';
-import type { Observable } from './types/outputs/Observable.js';
+import { observable$ } from './rx/observable$.js';
+import type { Observable } from './rx/types/observable.js';
 
 /**
  * Returns an observable emitting each value from given iterable.

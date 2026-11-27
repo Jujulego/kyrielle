@@ -1,6 +1,6 @@
 import { flow$ } from '@/src/flow$.js';
-import { observable$ } from '@/src/observable$.js';
-import { observer$ } from '@/src/observer$.js';
+import { observable$ } from '@/src/rx/observable$.js';
+import { observer$ } from '@/src/rx/observer$.js';
 import { describe, expect, it, vi } from 'vitest';
 
 // Tests

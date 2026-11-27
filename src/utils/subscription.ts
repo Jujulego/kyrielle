@@ -1,7 +1,7 @@
-import type { Subscribable } from '../types/inputs/Subscribable.js';
-import type { Unsubscribable } from '../types/inputs/Unsubscribable.js';
-import type { StrictObserver } from '../types/outputs/StrictObserver.js';
-import type { Subscription } from '../types/outputs/Subscription.js';
+import type { Subscribable } from '../features/subscribable.js';
+import type { Unsubscribable } from '../features/unsubscribable.js';
+import type { Observer } from '../rx/types/observer.js';
+import type { Subscription } from '../rx/types/subscription.js';
 
 export interface SubscriptionProps {
   /**
@@ -39,7 +39,7 @@ export function buildSubscription({ onUnsubscribe, isClosed }: SubscriptionProps
 export function boundedSubscription<T>(
   observable: Subscribable<T>,
   signal: AbortSignal,
-  observer: StrictObserver<T>,
+  observer: Observer<T>,
 ): Subscription {
   let internal: Subscription;
   let isClosed = false;
