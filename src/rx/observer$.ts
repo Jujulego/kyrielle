@@ -1,4 +1,4 @@
-import type { MinimalObserver } from '../features/minimal-observer.js';
+import type { PartialObserver } from '../features/partial-observer.js';
 import type { Observer } from './types/observer.js';
 import { noop } from '../utils/fn.js';
 
@@ -8,10 +8,10 @@ import { noop } from '../utils/fn.js';
  * @since 1.0.0
  * @see Observer
  */
-export function observer$<D>(input: MinimalObserver<D>): Observer<D> {
+export function observer$<D>(input: PartialObserver<D>): Observer<D> {
   return {
     start: input.start?.bind(input) ?? noop,
-    next: input.next.bind(input),
+    next: input.next?.bind(input) ?? noop,
     error: input.error?.bind(input) ?? noop,
     complete: input.complete?.bind(input) ?? noop,
   };

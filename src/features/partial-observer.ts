@@ -6,7 +6,7 @@ import type { Unsubscribable } from './unsubscribable.js';
  * @since 3.0.0
  * @see StrictObserver
  */
-export interface MinimalObserver<D = unknown> {
+export interface PartialObserver<D = unknown> {
   /**
    * Called at the start of a subscription with the generated subscription object
    * @param subscription
@@ -17,7 +17,7 @@ export interface MinimalObserver<D = unknown> {
    * Called with each emitted value
    * @param data
    */
-  next: ObserverNextCallback<D>;
+  next?: ObserverNextCallback<D> | undefined;
 
   /**
    * Called when an error occurs in the observable
@@ -36,8 +36,6 @@ export type ObserverStartCallback = (subscription: Unsubscribable) => void;
 export type ObserverNextCallback<D = any> = (data: D) => void;
 export type ObserverErrorCallback = (error: unknown) => void;
 export type ObserverCompleteCallback = () => void;
-
-export type PartialObserver<D = unknown> = Partial<MinimalObserver<D>>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObserver<D = any> = PartialObserver<D>;

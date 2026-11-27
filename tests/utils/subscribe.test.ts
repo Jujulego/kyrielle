@@ -1,4 +1,4 @@
-import type { MinimalObserver } from '@/src/features/minimal-observer.js';
+import type { PartialObserver } from '@/src/features/partial-observer.js';
 import { parseSubscribeArgs } from '@/src/utils/subscribe.js';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -13,7 +13,7 @@ describe('parseSubscribeArgs', () => {
   });
 
   it('should return given observer', () => {
-    const arg: MinimalObserver = {
+    const arg: PartialObserver = {
       next: vi.fn(),
       error: vi.fn(),
       complete: vi.fn(),

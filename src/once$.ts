@@ -1,14 +1,10 @@
-import { observer$ } from './rx/observer$.js';
-import type {
-  MinimalObserver,
-  ObserverNextCallback,
-  PartialObserver,
-} from './features/minimal-observer.js';
+import type { ObserverNextCallback, PartialObserver } from './features/partial-observer.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
-import type { MappingKey } from './types/mapping.js';
-import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
+import { observer$ } from './rx/observer$.js';
 import type { Observer } from './rx/types/observer.js';
 import type { Subscription } from './rx/types/subscription.js';
+import type { MappingKey } from './types/mapping.js';
+import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
 import { wrapUnsubscribable } from './utils/subscription.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +49,7 @@ export function once$<L extends StrictListenable, K extends MappingKey<ListenEve
 export function once$<L extends StrictListenable, K extends MappingKey<ListenEventMap<L>>>(
   listenable: L,
   key: K,
-  observer: MinimalObserver<ListenEventMap<L>[K]>,
+  observer: PartialObserver<ListenEventMap<L>[K]>,
 ): ReturnType<L['on']>;
 
 /** @internal */
@@ -91,7 +87,7 @@ export function once$(
 }
 
 // Utils
-function prepareObserver(arg: OnceCallback | MinimalObserver, unsub: () => void): Observer {
+function prepareObserver(arg: OnceCallback | PartialObserver, unsub: () => void): Observer {
   let called = false;
 
   function wrap(cb: (arg: unknown) => void) {
@@ -112,7 +108,7 @@ function prepareObserver(arg: OnceCallback | MinimalObserver, unsub: () => void)
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next: wrap(arg.next.bind(arg)),
+      next: arg.next && wrap(arg.next.bind(arg)),
       error: arg.error && wrap(arg.error.bind(arg)),
       complete: arg.complete?.bind(arg),
     });

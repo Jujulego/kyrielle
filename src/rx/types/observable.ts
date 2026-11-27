@@ -1,5 +1,10 @@
 import type { Subscribable } from '../../features/subscribable.js';
-import type { PartialObserver } from '../../features/minimal-observer.js';
+import type {
+  ObserverCompleteCallback,
+  ObserverErrorCallback,
+  ObserverNextCallback,
+  PartialObserver,
+} from '../../features/partial-observer.js';
 import type { Subscription } from './subscription.js';
 
 /**
@@ -38,28 +43,11 @@ export interface Observable<D = unknown> extends Subscribable<D> {
    */
   subscribe(
     this: void,
-    onNext: SubscribeOnNext<D>,
-    onError?: SubscribeOnError,
-    onComplete?: SubscribeOnComplete,
+    onNext: ObserverNextCallback<D>,
+    onError?: ObserverErrorCallback,
+    onComplete?: ObserverCompleteCallback,
   ): Subscription;
 }
-
-/**
- * Callback invoked for each value emitted by an observable.
- *
- * @template D - Type of emitted values.
- */
-export type SubscribeOnNext<in D = unknown> = (data: D) => void;
-
-/**
- * Callback invoked when an observable reports an error.
- */
-export type SubscribeOnError = (error: unknown) => void;
-
-/**
- * Callback invoked when an observable completes.
- */
-export type SubscribeOnComplete = () => void;
 
 /**
  * Positional subscription callbacks in `next`, `error`, `complete` order.
@@ -67,9 +55,9 @@ export type SubscribeOnComplete = () => void;
  * @template D - Type of values passed to the `next` callback.
  */
 export type SubscribeCallbacks<D = unknown> = [
-  onNext: SubscribeOnNext<D>,
-  onError?: SubscribeOnError,
-  onComplete?: SubscribeOnComplete,
+  onNext: ObserverNextCallback<D>,
+  onError?: ObserverErrorCallback,
+  onComplete?: ObserverCompleteCallback,
 ];
 
 /**

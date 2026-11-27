@@ -1,10 +1,10 @@
 import { type Source, source$ } from '@/src/source$.js';
-import type { MinimalObserver } from '@/src/features/minimal-observer.js';
+import type { PartialObserver } from '@/src/features/partial-observer.js';
 import type { Subscription } from '@/src/rx/types/subscription.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Tests
-let observer: MinimalObserver<number>;
+let observer: PartialObserver<number>;
 let source: Source<number>;
 let subscription: Subscription;
 

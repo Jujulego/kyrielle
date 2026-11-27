@@ -1,14 +1,14 @@
-import type { MinimalObserver } from '../../features/minimal-observer.js';
+import type { PartialObserver } from '../../features/partial-observer.js';
 import type { Unsubscribable } from '../../features/unsubscribable.js';
 
 /**
  * Object receiving data from an observable.
  *
  * @since 3.0.0
- * @see MinimalObserver
+ * @see PartialObserver
  * @see observer$
  */
-export interface Observer<D = unknown> extends MinimalObserver<D> {
+export interface Observer<D = unknown> extends PartialObserver<D> {
   /**
    * Called at the start of a subscription with the generated subscription object
    * @param subscription

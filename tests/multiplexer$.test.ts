@@ -1,6 +1,7 @@
 import { type Multiplexer, multiplexer$ } from '@/src/multiplexer$.js';
+import type { Observer } from '@/src/rx/types/observer.js';
 import { type Source, source$ } from '@/src/source$.js';
-import type { MinimalObserver } from '@/src/features/minimal-observer.js';
+import type { PartialObserver } from '@/src/features/partial-observer.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Setup
@@ -81,9 +82,7 @@ describe('multiplexer$', () => {
 
       expect(boo.subscribe).toHaveBeenCalledOnce();
 
-      (vi.mocked(boo.subscribe).mock.calls[0]![0] as unknown as MinimalObserver<boolean>).next(
-        true,
-      );
+      (vi.mocked(boo.subscribe).mock.calls[0]![0] as unknown as Observer<boolean>).next(true);
       expect(listener).toHaveBeenCalledWith(true);
     });
 

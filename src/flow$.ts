@@ -1,6 +1,6 @@
 import type { PipeStep } from './pipe$.js';
 import { step$ } from './step$.js';
-import type { PartialObserver } from './features/minimal-observer.js';
+import type { PartialObserver } from './features/partial-observer.js';
 import type { Subscribable } from './features/subscribable.js';
 import type { Unsubscribable } from './features/unsubscribable.js';
 

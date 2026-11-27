@@ -1,5 +1,4 @@
 import assert from 'assert';
-import type { MinimalObserver } from './features/minimal-observer.js';
 import type { Observable, SubscribeArgs } from './rx/types/observable.js';
 import type { Observer } from './rx/types/observer.js';
 import type { Subscription } from './rx/types/subscription.js';
@@ -12,7 +11,7 @@ import { buildSubscription } from './utils/subscription.js';
  * @since 1.0.0
  */
 export function source$<D>(): Source<D> {
-  const observers = new Set<MinimalObserver<D>>();
+  const observers = new Set<Observer<D>>();
   let isCompleted = false;
 
   // Build source

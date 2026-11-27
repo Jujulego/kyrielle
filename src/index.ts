@@ -1,4 +1,4 @@
-export * from './features/minimal-observer.js';
+export * from './features/partial-observer.js';
 export * from './features/subscribable.js';
 export * from './features/unsubscribable.js';
 

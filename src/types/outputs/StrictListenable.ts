@@ -1,11 +1,11 @@
-import type { PartialObserver } from '../../features/minimal-observer.js';
-import type { Mapping, MappingKey } from '../mapping.js';
 import type {
-  SubscribeOnComplete,
-  SubscribeOnError,
-  SubscribeOnNext,
-} from '../../rx/types/observable.js';
+  ObserverCompleteCallback,
+  ObserverErrorCallback,
+  ObserverNextCallback,
+  PartialObserver,
+} from '../../features/partial-observer.js';
 import type { Subscription } from '../../rx/types/subscription.js';
+import type { Mapping, MappingKey } from '../mapping.js';
 
 /**
  * Object registering listeners for multiple events
@@ -40,9 +40,9 @@ export interface StrictListenable<M extends Mapping = Mapping> {
   on<const K extends MappingKey<M>>(
     this: void,
     key: K,
-    onNext: SubscribeOnNext<M[K]>,
-    onError?: SubscribeOnError,
-    onComplete?: SubscribeOnComplete,
+    onNext: ObserverNextCallback<M[K]>,
+    onError?: ObserverErrorCallback,
+    onComplete?: ObserverCompleteCallback,
   ): Subscription;
 }
 

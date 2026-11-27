@@ -1,5 +1,5 @@
 import { observer$ } from './rx/observer$.js';
-import type { PartialObserver } from './features/minimal-observer.js';
+import type { PartialObserver } from './features/partial-observer.js';
 import type { Subscribable, SubscribableValue } from './features/subscribable.js';
 import type { MappingKey } from './types/mapping.js';
 import type { ListenEventMap, StrictListenable } from './types/outputs/StrictListenable.js';
@@ -12,7 +12,7 @@ export type WatchCleanup = () => void;
 export type WatchCallback<in D = any> = (data: D) => WatchCleanup | void; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export interface WatchObserver<in D = unknown> extends PartialObserver<D> {
-  next(data: D): void | WatchCleanup;
+  next?: ((data: D) => void | WatchCleanup) | undefined;
   error?: ((error: unknown) => void | WatchCleanup) | undefined;
 }
 
@@ -89,10 +89,12 @@ function prepareObserver(arg: WatchCallback | WatchObserver): Observer {
   } else {
     return observer$({
       start: arg.start?.bind(arg),
-      next: (data: unknown) => {
-        if (cleanup) cleanup();
-        cleanup = arg.next(data);
-      },
+      next:
+        arg.next
+        && ((data: unknown) => {
+          if (cleanup) cleanup();
+          cleanup = arg.next!(data);
+        }),
       error:
         arg.error
         && ((error: unknown) => {
